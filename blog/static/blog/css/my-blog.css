@@ -1,0 +1,38 @@
+.post-category {
+    margin: 0 0.1em;
+    padding: 0.2em 0.6em;
+    color: #fff;
+    background: #999;
+    font-size: 90%;
+}
+
+a.post-category:hover, a.post-category:focus {
+    color: #fff;
+}
+
+a.edit-post {
+    color: #A074AE;
+    text-decoration: underline;
+}
+
+img.hcenter {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+footer {
+  padding: 50px 0 65px;
+}
+footer .list-inline {
+  margin: 0;
+  padding: 0;
+}
+footer .copyright {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.login-panel {
+    margin-top: 25%;
+}

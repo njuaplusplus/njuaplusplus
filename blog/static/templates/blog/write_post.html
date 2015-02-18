@@ -1,0 +1,155 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}撰写博客 | 安好{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tell Baido not to tranform the website -->
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <!-- ****** faviconit.com favicons ****** -->
+    <link rel="shortcut icon" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="196x196" href="{% static 'favicons/favicon-192.png' %}">
+    <link rel="icon" type="image/png" sizes="160x160" href="{% static 'favicons/favicon-160.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicons/favicon-96.png' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicons/favicon-64.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'favicons/favicon-57.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'favicons/favicon-114.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicons/favicon-72.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'favicons/favicon-144.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicons/favicon-60.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicons/favicon-120.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'favicons/favicon-76.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicons/favicon-152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/favicon-180.png' %}">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="{% static 'favicons/favicon-144.png' %}">
+    <meta name="msapplication-config" content="{% static 'favicons/browserconfig.xml' %}">
+    <!-- ****** faviconit.com favicons ****** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Custom Fonts -->
+    <link href="{% static 'blog/css/font-awesome-4.1.0/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!--
+    <link href='http://fonts.useso.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    -->
+    <!-- Code Highlight -->
+    <link href="{% static 'blog/css/monokai.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/css/my-blog.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap-markdown/css/bootstrap-markdown.min.css' %}" rel="stylesheet">
+    <!-- select 2 -->
+    <link href="{% static 'select2/css/select2.css' %}" rel="stylesheet">
+    <link href="{% static 'select2/css/select2-bootstrap.css' %}" rel="stylesheet">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- For PageDown Datetimepicker -->
+    {{ article_form.media }}
+
+    {% block headBlock %}
+    {% endblock %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <h1 class="page-header">撰写博客</h1>
+                </div>
+                <!-- /.col-lg-8 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <form id="write-post-form" role="form" method="POST" ENCTYPE="multipart/form-data" action="{{ request.path }}">
+                    {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                博客
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                {% for field in article_form.visible_fields %}
+                                <div id="div_{{ field.html_name }}" 
+                                    class="form-group{% if field.errors %} has-error{% endif %}">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    <div class="text-muted pull-right">
+                                        <small>{{ field.help_text }}</small>
+                                    </div>
+                                    <div class="help-block">
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% for hidden in article_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            </div>
+                            <!-- /.panel-body -->
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary">保存</button>
+                            </div>
+                            <!-- /.panel-footer -->
+                        </div>
+                        <!-- /.panel -->
+                    </form>
+                    <!-- /form -->
+                </div>
+                <!-- /.col-lg-8 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                        <p class="copyright text-muted">Copyright &copy; njuaplusplus 2015</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="{% static 'bootstrap-markdown/js/markdown.js' %}"></script>
+        <script src="{% static 'bootstrap-markdown/js/he.js' %}"></script>
+        <script src="{% static 'bootstrap-markdown/js/to-markdown.js' %}"></script>
+        <script src="{% static 'bootstrap-markdown/js/bootstrap-markdown.js' %}"></script>
+        <script src="{% static 'bootstrap-markdown/js/bootstrap-markdown.zh.js' %}"></script>
+        <script src="{% static 'bootstrap-markdown/js/jquery.hotkeys.js' %}"></script>
+        <!-- Select2 JavaScript -->
+        <script src="{% static 'select2/js/select2.js' %}"></script>
+        <script src="{% static 'select2/js/select2_locale_zh-CN.js' %}"></script>
+
+        {% block extScriptFile %}{% endblock %}
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $("#id_content_markdown").markdown({autofocus:false,savable:false});
+            $("#id_images").select2({placeholder: "选择图片(多选)", dropdownAutoWidth: true});
+            $("#id_categories").select2({placeholder: "选择分类(多选)", dropdownAutoWidth: true});
+            $("div#div_categories div.text-muted.pull-right").remove();
+            $("div#div_images div.text-muted.pull-right").remove();
+                //$("[href='{{request.path}}']").parent().addClass("active");
+                {% block extScript %}{% endblock %}
+        });
+        </script>
+    </body>
+</html>

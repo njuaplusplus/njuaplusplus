@@ -1,0 +1,79 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+{% load duoshuo_tags %}
+{% load has_group %}
+
+{% block title %}{{ article.title }} | 博客 | 安好{% endblock %}
+
+{% block pageHeader %}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url(
+    {% if article.cover %}
+        {{ article.cover.url }}
+    {% else %}
+        {% static 'blog/img/post-bg.jpg' %}
+    {% endif %}
+        )">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>{{ article.title }}</h1>
+                        <h2 class="subheading">{{ article.excerpt }}</h2>
+                        <span class="meta">由 <a href="#">
+                                {% if article.author.first_name or article.author.last_name %}
+                                {{ article.author.last_name|addstr:article.author.first_name|truncatechars:9  }}
+                                {% else %}
+                                {{ article.author.username|truncatechars:9 }}
+                                {% endif %}
+                            </a> 发表于 {{ article.date_publish }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock pageHeader %}
+
+    <!-- Post Content -->
+{% block mainContent %}
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    分类: 
+                        {% for c in article.categories.all %}
+                        <a class="post-category" href="{% url 'blog:category_archive_view' slug=c.slug%}">{{ c.title }}</a>
+                        {% empty %}
+                        无
+                        {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    {{ article.get_content_markup|safe }}
+                </div>
+            </div>
+            {% if user|has_group:'authors' and user == article.author %}
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <a href="{% url 'blog:edit_post_view' post_id=article.id %}" style="font-size: 20px;">编辑本文</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {% my_sso_duoshuo_comments 'blog-'|addstr:article.id '博客-'|addstr:article.title request.build_absolute_uri request.path|escape %}
+            </div>
+        </div>
+    </div>
+{% endblock mainContent %}
+
+{% block extScript %}
+$("article div.container img").addClass("img-responsive hcenter");
+$("article div.container pre").addClass("hll");
+$("article div.container h2").addClass("section-heading");
+{% endblock extScript%}

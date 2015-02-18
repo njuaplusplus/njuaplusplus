@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+
+{% block title %} 错误 | 博客 | 安好 {% endblock %}
+
+{% block pageHeader %}
+<header class="intro-header" style="background-image: url({% static 'blog/img/home-bg.jpg' %})">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>您遇到问题!</h1>
+                        <hr class="small">
+                        <span class="subheading">错误: {{ error }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock pageHeader %}
+
+{% block mainContent %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>{{ message }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock mainContent %}
