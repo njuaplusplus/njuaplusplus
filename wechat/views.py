@@ -8,7 +8,9 @@ import hashlib, urllib2, json
 
 def index(request):
     if request.method == 'GET':
-        return HttpResponse(checkSignature(request))
+        if checkSignature(request):
+            echostr=request.GET.get('echostr',None)
+            return HttpResponse(echostr)
     else:
         if checkSignature(request):
             import xml.etree.ElementTree as ET
@@ -36,7 +38,6 @@ def checkSignature(request):
     signature=request.GET.get('signature',None)
     timestamp=request.GET.get('timestamp',None)
     nonce=request.GET.get('nonce',None)
-    echostr=request.GET.get('echostr',None)
 
     #这里的token我放在setting，可以根据自己需求修改
     token='njuaplusplus'
@@ -46,9 +47,9 @@ def checkSignature(request):
     tmpstr="%s%s%s"%tuple(tmplist)
     tmpstr=hashlib.sha1(tmpstr).hexdigest()
     if tmpstr==signature:
-        return echostr
+        return True
     else:
-        return None
+        return False
 
 def paraseMsgXml(rootElem):
     msg = {}
