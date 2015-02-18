@@ -3,9 +3,11 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
+from django.views.decorators.csrf import csrf_exempt
 
 import hashlib, urllib2, json
 
+@csrf_exempt
 def index(request):
     if request.method == 'GET':
         print 'Wechat receive GET request'
@@ -41,6 +43,8 @@ def index(request):
                 content = u'Contact me'
                 context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                 return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
+
+    return HttpResponse('Hello World')
 
 def checkSignature(request):
     signature=request.GET.get('signature',None)
