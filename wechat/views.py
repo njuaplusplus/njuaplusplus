@@ -8,10 +8,12 @@ import hashlib, urllib2, json
 
 def index(request):
     if request.method == 'GET':
+        print 'Wechat receive GET request'
         if checkSignature(request):
             echostr=request.GET.get('echostr',None)
             return HttpResponse(echostr)
     else:
+        print 'Wechat receive POST request'
         if checkSignature(request):
             import xml.etree.ElementTree as ET
             import time
@@ -26,6 +28,7 @@ def index(request):
             if msgType == 'event':
                 event = msg['Event']
                 if event == 'subscribe':
+                    print 'Event - subscribe'
                     content = u'就接收小视频而已..'
                     context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                     return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
@@ -33,6 +36,11 @@ def index(request):
                     content = u'......'
                     context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                     return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
+            elif msgType == 'text':
+                print 'Receive text'
+                content = u'Contact me'
+                context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
+                return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
 
 def checkSignature(request):
     signature=request.GET.get('signature',None)
@@ -47,8 +55,10 @@ def checkSignature(request):
     tmpstr="%s%s%s"%tuple(tmplist)
     tmpstr=hashlib.sha1(tmpstr).hexdigest()
     if tmpstr==signature:
+        print 'Check Signature Success'
         return True
     else:
+        print 'Check Signature Fail'
         return False
 
 def paraseMsgXml(rootElem):
