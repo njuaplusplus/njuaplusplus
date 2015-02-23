@@ -1,0 +1,127 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if IE 9]><html class="lt-ie10" lang="zh-cn" > <![endif]-->
+<html class="no-js" lang="zh-cn" >
+    <head>
+        <meta charset="utf-8">
+        <!-- If you delete this meta tag World War Z will become a reality -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test photos</title>
+        <!-- Tell Baido not to tranform the website -->
+        <meta http-equiv="Cache-Control" content="no-transform " />
+        <!-- ****** faviconit.com favicons ****** -->
+        <link rel="shortcut icon" href="{% static 'favicons/favicon.ico' %}">
+        <link rel="icon" sizes="16x16 32x32 64x64" href="{% static 'favicons/favicon.ico' %}">
+        <link rel="icon" type="image/png" sizes="196x196" href="{% static 'favicons/favicon-192.png' %}">
+        <link rel="icon" type="image/png" sizes="160x160" href="{% static 'favicons/favicon-160.png' %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicons/favicon-96.png' %}">
+        <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicons/favicon-64.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16.png' %}">
+        <link rel="apple-touch-icon" href="{% static 'favicons/favicon-57.png' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'favicons/favicon-114.png' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicons/favicon-72.png' %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'favicons/favicon-144.png' %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicons/favicon-60.png' %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicons/favicon-120.png' %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static 'favicons/favicon-76.png' %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicons/favicon-152.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/favicon-180.png' %}">
+        <meta name="msapplication-TileColor" content="#FFFFFF">
+        <meta name="msapplication-TileImage" content="{% static 'favicons/favicon-144.png' %}">
+        <meta name="msapplication-config" content="{% static 'favicons/browserconfig.xml' %}">
+        <!-- ****** faviconit.com favicons ****** -->
+        <!-- If you are using the CSS version, only link these 2 files, you may add app.css to use for your overrides if you like -->
+        <link rel="stylesheet" href="{% static 'photos/css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'photos/css/foundation.css' %}">
+
+        <!-- If you are using the gem version, you need this only -->
+        <link rel="stylesheet" href="{% static 'photos/css/app.css' %}">
+
+        <script src="{% static 'photos/js/vendor/modernizr.js' %}"></script>
+
+    </head>
+    <body>
+
+        <!-- body content here -->
+
+        <div class="row masonry-row">
+            <div class="large-12 columns">
+                <div class="masonryContainer">
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x300/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x600/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x700/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x400/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x200/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x300/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x600/random/auto/textmode:exact">
+                    </div>
+                    <div class="masonry-brick">
+                        <img data-src="holder.js/500x600/random/auto/textmode:exact">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="hide" id="page-nav">
+            <a href="{% url 'photos:index_page' page_num=next_page_num %}"></a>
+        </nav>
+
+
+        <script src="{% static 'photos/js/vendor/jquery.js' %}"></script>
+        <script src="{% static 'photos/js/vendor/fastclick.js' %}"></script>
+        <script src="{% static 'photos/js/foundation.min.js' %}"></script>
+        <script src="{% static 'photos/js/vendor/masonry.pkgd.js' %}"></script>
+        <script src="{% static 'photos/js/vendor/imagesloaded.pkgd.js' %}"></script>
+        <script src="{% static 'photos/js/vendor/holder.js' %}"></script>
+        <script src="{% static 'photos/js/vendor/jquery.infinitescroll.js' %}"></script>
+        <script>
+            $(document).foundation();
+
+            // initialize Masonry
+            var $container = $('.masonryContainer').masonry();
+            // layout Masonry again after all images have loaded
+            $container.imagesLoaded( function() {
+                $container.masonry({  
+                    itemSelector: '.masonry-brick'
+                });
+            });
+
+            $container.infinitescroll({
+                navSelector  : '#page-nav',    // selector for the paged navigation 
+                nextSelector : '#page-nav a',  // selector for the NEXT link (to page 2)
+                itemSelector : '.masonry-brick',     // selector for all items you'll retrieve
+                loading: {
+                    finishedMsg: 'No more pages to load.'
+                }
+            },
+            // trigger Masonry as a callback
+            function( newElements ) {
+                // hide new items while they are loading
+                var $newElems = $( newElements ).css({ opacity: 0 });
+                Holder.run();
+                // ensure that images load before adding to masonry layout
+                $newElems.imagesLoaded(function(){
+                    // show elems now they're ready
+                    $newElems.animate({ opacity: 1 });
+                    $container.masonry( 'appended', $newElems, true ); 
+                });
+            }
+            );
+
+        </script>
+    </body>
+</html>
