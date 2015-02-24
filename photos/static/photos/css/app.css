@@ -18,23 +18,46 @@ img.hcenter {
     margin-right: auto;
 }
 
-img.item {
+.photo-item {
   margin-top: 1em;
 }
 
-/* Infinite Scroll loader */
-#infscr-loading { 
-  text-align: center;
-  z-index: 100;
-  position: fixed;
-  left: 45%;
-  bottom: 40px;
-  width: 200px;
-  padding: 10px;
-  background: #000; 
-  opacity: 0.8;
-  color: #FFF;
-  -webkit-border-radius: 10px;
-     -moz-border-radius: 10px;
-          border-radius: 10px;
+/* min-width 641px, medium screens */
+@media only screen and (min-width: 40.063em) {
+    /* Infinite Scroll loader */
+    #infscr-loading { 
+      text-align: center;
+      z-index: 100;
+      position: fixed;
+      left: 45%;
+      bottom: 40px;
+      width: 200px;
+      padding: 10px;
+      background: #000; 
+      opacity: 0.8;
+      color: #FFF;
+      -webkit-border-radius: 10px;
+         -moz-border-radius: 10px;
+              border-radius: 10px;
+    }
 }
+
+/* max-width 640px, mobile-only styles, use when QAing mobile issues */
+@media only screen and (max-width: 40em) {
+    #infscr-loading { 
+      text-align: center;
+      z-index: 100;
+      position: fixed;
+      left: 0;
+      bottom: 40px;
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      opacity: 0.8;
+      color: #FFF;
+      -webkit-border-radius: 10px;
+         -moz-border-radius: 10px;
+              border-radius: 10px;
+    }
+}
+

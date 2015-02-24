@@ -46,11 +46,11 @@
         <!-- body content here -->
 
         <div class="row masonry-row">
-            <div class="large-12 columns">
-                <div class="masonryContainer">
+            <div class="small-12 columns">
+                <div class="photo-container">
                 {% for i in num_of_img %}
-                    <div class="masonry-brick">
-                        <img data-src="holder.js/500x300/{{ holderjs_theme }}/auto/textmode:exact">
+                    <div class="photo-item">
+                        <img class="img-responsive hcenter" data-src="holder.js/500x300/{{ holderjs_theme }}/auto/textmode:exact">
                     </div>
                 {% endfor %}
                 </div>
@@ -65,7 +65,6 @@
         <script src="{% static 'photos/js/vendor/jquery.js' %}"></script>
         <script src="{% static 'photos/js/vendor/fastclick.js' %}"></script>
         <script src="{% static 'photos/js/foundation.min.js' %}"></script>
-        <script src="{% static 'photos/js/vendor/masonry.pkgd.js' %}"></script>
         <script src="{% static 'photos/js/vendor/imagesloaded.pkgd.js' %}"></script>
         <script src="{% static 'photos/js/vendor/holder.js' %}"></script>
         <script src="{% static 'photos/js/vendor/jquery.infinitescroll.js' %}"></script>
@@ -73,18 +72,12 @@
             $(document).foundation();
 
             // initialize Masonry
-            var $container = $('.masonryContainer').masonry();
-            // layout Masonry again after all images have loaded
-            $container.imagesLoaded( function() {
-                $container.masonry({  
-                    itemSelector: '.masonry-brick'
-                });
-            });
+            var $container = $('.photo-container');
 
             $container.infinitescroll({
                 navSelector  : '#page-nav',    // selector for the paged navigation 
                 nextSelector : '#page-nav a',  // selector for the NEXT link (to page 2)
-                itemSelector : '.masonry-brick',     // selector for all items you'll retrieve
+                itemSelector : '.photo-item',     // selector for all items you'll retrieve
                 loading: {
                     finishedMsg: 'No more pages to load.'
                 }
@@ -98,7 +91,7 @@
                 $newElems.imagesLoaded(function(){
                     // show elems now they're ready
                     $newElems.animate({ opacity: 1 });
-                    $container.masonry( 'appended', $newElems ); 
+                    $container.append($newElems);
                 });
             }
             );
