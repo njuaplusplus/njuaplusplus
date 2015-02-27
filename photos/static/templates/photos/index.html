@@ -44,22 +44,26 @@
     <body>
 
         <!-- body content here -->
+    {% if photos %}
 
         <div class="row masonry-row">
             <div class="large-12 columns">
                 <div class="masonryContainer">
-                {% for i in num_of_img %}
+                {% for photo in photos %}
                     <div class="masonry-brick">
-                        <img data-src="holder.js/{{ i }}/{{ holderjs_theme }}/auto/textmode:exact">
+                        <img src="{{ photo.small_image.url }}">
                     </div>
                 {% endfor %}
                 </div>
             </div>
         </div>
 
+        {% if photos.has_next %}
         <nav class="hide" id="page-nav">
-            <a href="{% url 'photos:index_page' page_num=next_page_num %}"></a>
+            <a href="{% url 'photos:index_page' page_num=photos.next_page_number %}"></a>
         </nav>
+        {% endif %}
+    {% endif %}
 
 
         <script src="{% static 'photos/js/vendor/jquery.js' %}"></script>
@@ -67,7 +71,6 @@
         <script src="{% static 'photos/js/foundation.min.js' %}"></script>
         <script src="{% static 'photos/js/vendor/masonry.pkgd.js' %}"></script>
         <script src="{% static 'photos/js/vendor/imagesloaded.pkgd.js' %}"></script>
-        <script src="{% static 'photos/js/vendor/holder.js' %}"></script>
         <script src="{% static 'photos/js/vendor/jquery.infinitescroll.js' %}"></script>
         <script>
             $(document).foundation();
@@ -93,7 +96,6 @@
             function( newElements ) {
                 // hide new items while they are loading
                 var $newElems = $( newElements ).css({ opacity: 0 });
-                Holder.run();
                 // ensure that images load before adding to masonry layout
                 $newElems.imagesLoaded(function(){
                     // show elems now they're ready
