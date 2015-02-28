@@ -13,7 +13,7 @@ def index(request):
 
 def index_page(request, page_num):
     template = 'photos/index.html',
-    imgs_per_page = 20
+    imgs_per_page = 12
     if request.user_agent.is_mobile:
         template = 'photos/mobile/index.html'
         imgs_per_page = 6
