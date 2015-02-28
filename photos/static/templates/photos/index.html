@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load has_group %}
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="zh-cn" > <![endif]-->
 <html class="no-js" lang="zh-cn" >
@@ -50,22 +51,50 @@
             <div class="large-12 columns">
                 <div class="masonryContainer">
                 {% for photo in photos %}
-                    {% if photo.width == 1 %}
-                    <div class="masonry-brick w1">
-                        <img src="{{ photo.small_image.url }}">
-                    </div>
-                    {% elif photo.width == 2 %}
-                    <div class="masonry-brick w2">
-                        <img src="{{ photo.medium_image.url }}">
-                    </div>
-                    {% elif photo.width == 3 %}
-                    <div class="masonry-brick w3">
-                        <img src="{{ photo.large_image.url }}">
-                    </div>
+                    {% if user|has_group:'photos_admins' %}
+                        {% if photo.width == 1 %}
+                        <div class="masonry-brick w1">
+                            <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
+                            <img src="{{ photo.small_image.url }}">
+                            </a>
+                        </div>
+                        {% elif photo.width == 2 %}
+                        <div class="masonry-brick w2">
+                            <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
+                            <img src="{{ photo.medium_image.url }}">
+                            </a>
+                        </div>
+                        {% elif photo.width == 3 %}
+                        <div class="masonry-brick w3">
+                            <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
+                            <img src="{{ photo.large_image.url }}">
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="masonry-brick w4">
+                            <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
+                            <img src="{{ photo.xlarge_image.url }}">
+                            </a>
+                        </div>
+                        {% endif %}
                     {% else %}
-                    <div class="masonry-brick w4">
-                        <img src="{{ photo.xlarge_image.url }}">
-                    </div>
+                        {% if photo.width == 1 %}
+                        <div class="masonry-brick w1">
+                            <img src="{{ photo.small_image.url }}">
+                        </div>
+                        {% elif photo.width == 2 %}
+                        <div class="masonry-brick w2">
+                            <img src="{{ photo.medium_image.url }}">
+                        </div>
+                        {% elif photo.width == 3 %}
+                        <div class="masonry-brick w3">
+                            <img src="{{ photo.large_image.url }}">
+                        </div>
+                        {% else %}
+                        <div class="masonry-brick w4">
+                            <img src="{{ photo.xlarge_image.url }}">
+                        </div>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
                 </div>

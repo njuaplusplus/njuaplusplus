@@ -11,8 +11,14 @@ def index(request):
     return index_page(request, 1)
 
 def index_page(request, page_num):
+    template = 'photos/index.html',
+    imgs_per_page = 20
+    if request.user_agent.is_mobile:
+        template = 'photos/mobile/index.html'
+        imgs_per_page = 6
+
     photo_queryset = Photo.objects.all().order_by('-date_upload')
-    paginator = Paginator(photo_queryset, 6)
+    paginator = Paginator(photo_queryset, imgs_per_page)
     try:
         photos = paginator.page(page_num)
     except PageNotAnInteger:
@@ -22,9 +28,6 @@ def index_page(request, page_num):
         # If page is out of range (e.g. 9999), deliver last page of results.
         # photos = paginator.page(paginator.num_pages)
         photos = None
-    template = 'photos/index.html',
-    if request.user_agent.is_mobile:
-        template = 'photos/mobile/index.html'
     return render(
         request,
         template,
