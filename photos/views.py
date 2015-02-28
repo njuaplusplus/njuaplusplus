@@ -11,7 +11,7 @@ def index(request):
     return index_page(request, 1)
 
 def index_page(request, page_num):
-    photo_queryset = Photo.objects.all()
+    photo_queryset = Photo.objects.all().order_by('-date_upload')
     paginator = Paginator(photo_queryset, 6)
     try:
         photos = paginator.page(page_num)

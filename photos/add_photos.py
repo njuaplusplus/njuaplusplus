@@ -4,6 +4,7 @@
 from photos.models import *
 from django.contrib.auth.models import User
 from django.core.files import File
+from django.utils import timezone
 import os
 
 def add_photos(root_dir=r'/Users/aplusplus/Downloads/cphotos/'):
@@ -14,6 +15,6 @@ def add_photos(root_dir=r'/Users/aplusplus/Downloads/cphotos/'):
             if not f[0] == '.' and any(f.endswith(ext) for ext in img_extensions):
                 # print hymn.hymn_name, f
                 with open(filename) as inFile:
-                    photo = Photo(title=f, uploader=User.objects.get(username='aplusplus'))
+                    photo = Photo(title=f, uploader=User.objects.get(username='aplusplus'), date_upload=timezone.now())
                     photo.xlarge_image.save(f, File(inFile))
 

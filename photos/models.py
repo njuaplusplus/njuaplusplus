@@ -45,6 +45,10 @@ class Photo(models.Model):
         format='JPEG'
     )
     uploader = models.ForeignKey(User, verbose_name=_(u'上传者'))
+    date_upload = models.DateTimeField(
+        verbose_name = _(u'上传日期'),
+        help_text = _(u' ')
+    )
 
     def __unicode__(self):
         return u"t:%s w:%s" % (self.title, self.width)
