@@ -1,3 +1,6 @@
+body {
+  background-color: #575652;
+}
 .masonry-brick {
   margin: 1%;
 }
@@ -18,11 +21,9 @@
   width: 98%;
 }
 
-/*
 .row.masonry-row {
-  max-width: 100%;
+  max-width: 2226px;
 }
-*/
 
 .img-responsive {
   display: block;

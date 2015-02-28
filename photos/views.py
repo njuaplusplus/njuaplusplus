@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from photos.models import Photo
+import random
 
 # Create your views here.
 
@@ -28,10 +29,13 @@ def index_page(request, page_num):
         # If page is out of range (e.g. 9999), deliver last page of results.
         # photos = paginator.page(paginator.num_pages)
         photos = None
+
+    background_pattern = "photos/images/patterns/pattern%d.png" % random.randint(1, 34)
     return render(
         request,
         template,
         {
             'photos' : photos,
+            'background_pattern' : background_pattern,
         }
     )
