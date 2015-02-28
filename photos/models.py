@@ -25,23 +25,23 @@ class Photo(models.Model):
         verbose_name = _(u'大图'),
         help_text = _(u'长宽都要大于 2880'),
         upload_to='photos/images/%Y/%m/%d',
-        processors=[ResizeToFit(2880, 2880, False)],
+        processors=[ResizeToFit(2880, 65535, False)],
         format='JPEG',
         options={'quality': 80}
     )
     large_image = ImageSpecField (
         source = 'xlarge_image',
-        processors=[ResizeToFit(1920, 1920, False)],
+        processors=[ResizeToFit(1920, 65535, False)],
         format='JPEG'
     )
     medium_image = ImageSpecField (
         source = 'xlarge_image',
-        processors=[ResizeToFit(1024, 1024, False)],
+        processors=[ResizeToFit(1024, 65535, False)],
         format='JPEG'
     )
     small_image = ImageSpecField (
         source = 'xlarge_image',
-        processors=[ResizeToFit(512, 512, False)],
+        processors=[ResizeToFit(512, 65535, False)],
         format='JPEG'
     )
     uploader = models.ForeignKey(User, verbose_name=_(u'上传者'))
