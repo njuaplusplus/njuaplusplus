@@ -145,6 +145,8 @@
                     // show elems now they're ready
                     $newElems.animate({ opacity: 1 });
                     $container.masonry( 'appended', $newElems ); 
+                    // refresh the tooltip
+                    $(document).foundation('tooltip', 'reflow');
                 });
             }
             );
