@@ -36,7 +36,7 @@ class Photo(models.Model):
     )
     medium_image = ImageSpecField (
         source = 'xlarge_image',
-        processors=[ResizeToFit(1024, 65535, False)],
+        processors=[ResizeToFit(1280, 65535, False)],
         format='JPEG'
     )
     small_image = ImageSpecField (
