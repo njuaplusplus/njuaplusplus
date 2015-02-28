@@ -15,5 +15,5 @@ def add_photos(root_dir=r'/Users/aplusplus/Downloads/cphotos/'):
                 # print hymn.hymn_name, f
                 with open(filename) as inFile:
                     photo = Photo(title=f, uploader=User.objects.get(username='aplusplus'))
-                    photo.large_image.save(f, File(inFile))
+                    photo.xlarge_image.save(f, File(inFile))
 

@@ -1,5 +1,21 @@
 .masonry-brick {
-  width: 23%; margin: 1%;
+  margin: 1%;
+}
+
+.masonry-brick.w1 {
+  width: 23%;
+}
+
+.masonry-brick.w2 {
+  width: 48%;
+}
+
+.masonry-brick.w3 {
+  width: 73%;
+}
+
+.masonry-brick.w4 {
+  width: 98%;
 }
 
 .row.masonry-row {

@@ -50,9 +50,23 @@
             <div class="large-12 columns">
                 <div class="masonryContainer">
                 {% for photo in photos %}
-                    <div class="masonry-brick">
+                    {% if photo.width == 1 %}
+                    <div class="masonry-brick w1">
                         <img src="{{ photo.small_image.url }}">
                     </div>
+                    {% elif photo.width == 2 %}
+                    <div class="masonry-brick w2">
+                        <img src="{{ photo.medium_image.url }}">
+                    </div>
+                    {% elif photo.width == 3 %}
+                    <div class="masonry-brick w3">
+                        <img src="{{ photo.large_image.url }}">
+                    </div>
+                    {% else %}
+                    <div class="masonry-brick w4">
+                        <img src="{{ photo.xlarge_image.url }}">
+                    </div>
+                    {% endif %}
                 {% endfor %}
                 </div>
             </div>
@@ -80,7 +94,8 @@
             // layout Masonry again after all images have loaded
             $container.imagesLoaded( function() {
                 $container.masonry({  
-                    itemSelector: '.masonry-brick'
+                    itemSelector : '.masonry-brick',
+                    columnWidth : '.masonry-brick.w1'
                 });
             });
 
