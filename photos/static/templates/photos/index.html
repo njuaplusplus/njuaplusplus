@@ -129,6 +129,10 @@
         <script>
             $(document).foundation();
 
+            function preventTabletScroll(e) {
+                e.preventDefault();
+            }
+
             // initialize Masonry
             var $container = $('.masonryContainer').masonry();
             // layout Masonry again after all images have loaded
@@ -140,10 +144,16 @@
                 $('.fancybox').fancybox({
                     padding : 0,
                     beforeShow: function () {
+                        // Disable background of a tablet to scroll
+                        $('body').bind('touchmove.fb', preventTabletScroll);
                         /* Disable right click */
                         $.fancybox.wrap.bind("contextmenu", function (e) {
                                 return false; 
                         });
+                    },
+                    afterClose: function() {
+                        // Allow background of a tablet to scroll
+                        $('body').unbind('touchmove.fb', preventTabletScroll);
                     }
                 });
             });
