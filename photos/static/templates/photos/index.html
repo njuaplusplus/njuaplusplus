@@ -167,15 +167,6 @@
                     $container.masonry( 'appended', $newElems ); 
                     // refresh the tooltip
                     $(document).foundation('tooltip', 'reflow');
-                    $('.fancybox').fancybox({
-                        padding : 0,
-                        beforeShow: function () {
-                            /* Disable right click */
-                            $.fancybox.wrap.bind("contextmenu", function (e) {
-                                    return false; 
-                            });
-                        }
-                    });
                 });
             }
             );
