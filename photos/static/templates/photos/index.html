@@ -132,12 +132,20 @@
             // initialize Masonry
             var $container = $('.masonryContainer').masonry();
             // layout Masonry again after all images have loaded
-            $container.imagesLoaded( function() {
-                $container.masonry({  
+            $container.imagesLoaded(function() {
+                $container.masonry({
                     itemSelector : '.masonry-brick',
                     columnWidth : '.masonry-brick.w1'
                 });
-                $('.fancybox').fancybox();
+                $('.fancybox').fancybox({
+                    padding : 0,
+                    beforeShow: function () {
+                        /* Disable right click */
+                        $.fancybox.wrap.bind("contextmenu", function (e) {
+                                return false; 
+                        });
+                    }
+                });
             });
 
             $container.infinitescroll({
@@ -159,23 +167,18 @@
                     $container.masonry( 'appended', $newElems ); 
                     // refresh the tooltip
                     $(document).foundation('tooltip', 'reflow');
+                    $('.fancybox').fancybox({
+                        padding : 0,
+                        beforeShow: function () {
+                            /* Disable right click */
+                            $.fancybox.wrap.bind("contextmenu", function (e) {
+                                    return false; 
+                            });
+                        }
+                    });
                 });
             }
             );
-
-            $(document).on('open.fndtn.reveal', '[data-reveal]', function () {
-                var modal = $(this);
-                img = modal.find('img');
-                img.animate({ opacity: 0 });
-                imgWxH = modal.find('input').val().split('x');
-                maxW = $(window).width();
-                maxH = $(window).height() - modal.find('a').height();
-                ratio = Math.min(maxW/imgWxH[0], maxH/imgWxH[1]);
-                img.width(imgWxH[0]*ratio);
-                img.height(imgWxH[1]*ratio);
-                img.animate({ opacity: 1 });
-            });
-
         </script>
     </body>
 </html>
