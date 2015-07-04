@@ -185,7 +185,15 @@ class User_Profile(models.Model):
 def markdown_to_html(text, images):
     '''Compile the text into html
     '''
-    md = markdown.Markdown(extensions=['codehilite', 'attr_list'])
+    md = markdown.Markdown(
+        extensions=['codehilite', 'attr_list'],
+        extension_configs={
+            'codehilite': {
+                'linenums': True,
+                'noclasses': True,
+            }
+        }
+    )
     for img in images:
         md.references[img.title] = (img.image.url, img.title)
     print md.references
