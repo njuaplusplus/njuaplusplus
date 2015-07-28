@@ -54,6 +54,17 @@
                     {{ article.get_content_markup|safe }}
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                    <form action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+                        <input name="optEmail" type="hidden" value="aplusplus@qq.com" />
+                        <input name="payAmount" type="hidden" value="10" />
+                        <input id="title" name="title" type="hidden" value="博客赞助" />
+                        <input name="memo" type="hidden" value="备注" />
+                        <input name="pay" type="image" value="转账" src="{% static 'blog/img/donate.png' %}" />
+                    </form>
+                </div>
+            </div>
             {% if user|has_group:'authors' and user == article.author %}
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
