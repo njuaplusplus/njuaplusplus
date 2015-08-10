@@ -48,9 +48,10 @@ coverage.xml
 # Django stuff:
 *.log
 *.pot
-/njuaplusplus/
+/njuaplusplus/*
+!/njuaplusplus/wsgi.py
+!/njuaplusplus/urls.py
 /static/
-/manage.py
 /media/
 
 # Sphinx documentation
