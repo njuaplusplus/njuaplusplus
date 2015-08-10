@@ -17,8 +17,3 @@ urlpatterns = [
     url(r'^accounts/login/$', views.login_view, name='login_view'),
     url(r'^accounts/logout/$', views.logout_view, name='logout_view'),
 ]
-
-# Warning! Just use during development! Remove this for production use.
-from django.conf import settings
-from django.conf.urls.static import static
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
