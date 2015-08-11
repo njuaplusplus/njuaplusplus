@@ -50,6 +50,7 @@ coverage.xml
 *.pot
 /njuaplusplus/
 /static/
+/manage.py
 /media/
 
 # Sphinx documentation
