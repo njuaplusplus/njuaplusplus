@@ -1,0 +1,91 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}vbuilder{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tell Baido not to tranform the website -->
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <!-- ****** faviconit.com favicons ****** -->
+    <link rel="shortcut icon" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="196x196" href="{% static 'favicons/favicon-192.png' %}">
+    <link rel="icon" type="image/png" sizes="160x160" href="{% static 'favicons/favicon-160.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicons/favicon-96.png' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicons/favicon-64.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'favicons/favicon-57.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'favicons/favicon-114.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicons/favicon-72.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'favicons/favicon-144.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicons/favicon-60.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicons/favicon-120.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'favicons/favicon-76.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicons/favicon-152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/favicon-180.png' %}">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="{% static 'favicons/favicon-144.png' %}">
+    <meta name="msapplication-config" content="{% static 'favicons/browserconfig.xml' %}">
+    <!-- ****** faviconit.com favicons ****** -->
+
+    {% block headBlock %}
+    {% endblock %}
+    </head>
+    <body>
+        {% for q in closest_def_quizzes %}
+        {% if forloop.first %}
+        <h2>Choose the closest definition:</h2>
+        {% endif %}
+        <h3>{{ q.1 }}</h3>
+        <ul>
+            {% for c in q.2 %}
+            <li>{{ c }}</li>
+            {% endfor %}
+        </ul>
+        <form>
+            <input type="text" id="c{{ q.0 }}" name="c{{ q.0 }}">
+            <input type="button" onclick="if (document.getElementById('c{{ q.0 }}').value != '{{q.3}}') { alert('Wrong!');} else { alert('Right!'); }" value="Check">
+        </form>
+        {% endfor %}
+        {% for q in fillin_blank_quizzes %}
+        {% if forloop.first %}
+        <h2>Fill in each blank with the corredct letter:</h2>
+        {% endif %}
+        <ul>
+            {% for c in q.1 %}
+            <li>{{ c }}</li>
+            {% endfor %}
+        </ul>
+        <ul>
+            {% for s in q.2 %}
+            <li>{{ s }}</li>
+            {% endfor %}
+        </ul>
+        <form>
+            <input type="text" id="f{{ q.0 }}" name="f{{ q.0 }}">
+            <input type="button" onclick="if (document.getElementById('f{{ q.0 }}').value != '{{q.3}}') { alert('Wrong!');} else { alert('Right!'); }" value="Check">
+        </form>
+        {% endfor %}
+        {% for q in match_quizzes %}
+        {% if forloop.first %}
+        <h2>Match the definition on the left with the correct word on the right:</h2>
+        {% endif %}
+        <table>
+            {% for l, r in q.1 %}
+            <tr>
+                <td>{{ l }}</td>
+                <td>{{ r }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <form>
+            <input type="text" id="m{{ q.0 }}" name="m{{ q.0 }}">
+            <input type="button" onclick="if (document.getElementById('m{{ q.0 }}').value != '{{q.2}}') { alert('Wrong!');} else { alert('Right!'); }" value="Check">
+        </form>
+        {% endfor %}
+    </body>
+</html>
+

@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # coding=utf-8
 
 from django.db import models
@@ -13,7 +13,7 @@ from pagedown.widgets import PagedownWidget
 from datetimewidget.widgets import DateTimeWidget
 
 class Category(models.Model) :
-    """Category Model"""
+    '''Category Model'''
     title = models.CharField(
         verbose_name = _(u'名称'),
         help_text = _(u' '),
@@ -28,8 +28,8 @@ class Category(models.Model) :
 
     class Meta:
         app_label = _(u'blog')
-        verbose_name = _(u"Category")
-        verbose_name_plural = _(u"Categories")
+        verbose_name = _(u'Category')
+        verbose_name_plural = _(u'Categories')
         ordering = ['title',]
 
     def save(self, *args, **kwargs):
@@ -39,7 +39,7 @@ class Category(models.Model) :
         super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return "%s" % (self.title,)
+        return u'%s' % (self.title,)
 
 class MyImage(models.Model):
     ''' Image storage for the post'''
@@ -60,14 +60,14 @@ class MyImage(models.Model):
     )
     class Meta:
         app_label = _(u'blog')
-        verbose_name = _(u"Image")
-        verbose_name_plural = _(u"Images")
+        verbose_name = _(u'Image')
+        verbose_name_plural = _(u'Images')
         ordering = ['title',]
     def __unicode__(self):
-        return "%s" % (self.title,)
+        return u'%s' % (self.title,)
 
 class Article(models.Model) :
-    """Article Model"""
+    '''Article Model'''
     title = models.CharField(
         verbose_name = _(u'标题'),
         help_text = _(u' '),
@@ -95,7 +95,6 @@ class Article(models.Model) :
         MyImage,
         verbose_name = _(u'图片'),
         help_text = _(u'向文章中插入图片'),
-        null = True,
         blank = True
     )
     author = models.ForeignKey(User, verbose_name=_(u'作者'))
@@ -111,7 +110,6 @@ class Article(models.Model) :
         Category,
         verbose_name = _(u'分类'),
         help_text = _(u' '),
-        null = True,
         blank = True
     )
     date_publish = models.DateTimeField(
@@ -124,8 +122,8 @@ class Article(models.Model) :
 
     class Meta:
         app_label = _(u'blog')
-        verbose_name = _(u"Article")
-        verbose_name_plural = _(u"Articles")
+        verbose_name = _(u'Article')
+        verbose_name_plural = _(u'Articles')
         ordering = ['-date_publish']
 
     def save(self, *args, **kwargs):
@@ -149,7 +147,7 @@ class Article(models.Model) :
         return self.content_markup
 
     def __unicode__(self):
-        return "%s" % (self.title,)
+        return u'%s' % (self.title,)
 
 class ArticleForm(forms.ModelForm):
     class Meta:

@@ -52,6 +52,7 @@ coverage.xml
 /static/
 /manage.py
 /media/
+migrations/
 
 # Sphinx documentation
 docs/_build/
