@@ -1,9 +1,10 @@
 .post-category {
-    margin: 0 0.1em;
+    margin: 0.1em 0.1em;
     padding: 0.2em 0.6em;
     color: #fff;
     background: #999;
     font-size: 90%;
+    display: inline-block;
 }
 
 a.post-category:hover, a.post-category:focus {
