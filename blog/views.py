@@ -19,10 +19,31 @@ from duoshuo import DuoshuoAPI
 def index(request):
     return index_page(request, 1)
 
+def get_top_categories(num=None):
+    categories = Category.objects.all()
+    if num is None:
+        return sorted(
+                categories,
+                cmp=lambda x,y: cmp(x.article_set.count(), y.article_set.count()),
+                reverse=True
+        )
+    else:
+        return sorted(
+                categories,
+                cmp=lambda x,y: cmp(x.article_set.count(), y.article_set.count()),
+                reverse=True
+        )[:num]
+
+def evenly_divide_list(l, n=2):
+    """ Divide the list to n even parts.
+    """
+    mid = len(l)/2
+    return [l[:mid+1], l[mid+1:]]
+
 def index_page(request, page_num):
     """The news index"""
     # archive_dates = Article.objects.datetimes('date_publish','month', order='DESC')
-    # categories = Category.objects.all()
+    categories = evenly_divide_list(get_top_categories(8))
 
     article_queryset = Article.objects.all()
     paginator = Paginator(article_queryset, 5)
@@ -38,11 +59,11 @@ def index_page(request, page_num):
 
     return render(
         request,
-        "blog/index.html",
+        "blog/default/index.html",
         {
             "articles" : articles,
             # "archive_dates" : archive_dates,
-            # "categories" : categories
+            "categories" : categories
         }
     )
 
@@ -50,14 +71,14 @@ def single(request, slug) :
     """A single article"""
     article = get_object_or_404(Article, slug=slug)
     # archive_dates = Article.objects.datetimes('date_publish','month', order='DESC')
-    # categories = Category.objects.all()
+    categories = evenly_divide_list(get_top_categories(8))
     return render(
         request,
-        "blog/post.html",
+        "blog/default/post.html",
         {
             "article" : article,
             # "archive_dates" : archive_dates,
-            # "categories" : categories
+            "categories" : categories
         }
     )
 

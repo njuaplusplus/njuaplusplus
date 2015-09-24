@@ -1,0 +1,178 @@
+{% load staticfiles %}
+{% load has_group %}
+{% load duoshuo_tags %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}博客 | 安好{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tell Baido not to tranform the website -->
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <!-- ****** faviconit.com favicons ****** -->
+    <link rel="shortcut icon" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="196x196" href="{% static 'favicons/favicon-192.png' %}">
+    <link rel="icon" type="image/png" sizes="160x160" href="{% static 'favicons/favicon-160.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicons/favicon-96.png' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicons/favicon-64.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'favicons/favicon-57.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'favicons/favicon-114.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicons/favicon-72.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'favicons/favicon-144.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicons/favicon-60.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicons/favicon-120.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'favicons/favicon-76.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicons/favicon-152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/favicon-180.png' %}">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="{% static 'favicons/favicon-144.png' %}">
+    <meta name="msapplication-config" content="{% static 'favicons/browserconfig.xml' %}">
+    <!-- ****** faviconit.com favicons ****** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/blog-home.css' %}">
+
+    {% block headBlock %}
+    {% endblock %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="{% static 'blog/js/html5shiv.min.js' %}"></script>
+        <script src="{% static 'blog/js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'blog:index' %}" style="font-size: 24px;">一切安好</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="{% url 'blog:index' %}">首页</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user|has_group:'authors' %}
+                        <li>
+                            <a href="{% url 'blog:write_post_view' %}">撰写</a>
+                        </li>
+                        {% endif %}
+                        {% if not user.is_authenticated %}
+                            <li><a href="{% url 'blog:login_view' %}?next={{ request.path }}">登录</a></li>
+                        {% else %}
+                            <li><a href="#">
+                                {% if user.first_name or user.last_name %}
+                                {{ user.last_name|addstr:user.first_name|truncatechars:9  }}
+                                {% else %}
+                                {{ user.username|truncatechars:9 }}
+                                {% endif %}
+                            </a></li>
+                            <li><a href="{% url 'blog:logout_view' %}">注销</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+
+        <!-- Main Content -->
+        {% block mainContent %}
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+                <!-- Blog Entries Column -->
+                <div class="col-lg-8">
+                    {% block blogColumn %}
+                    {% endblock blogColumn %}
+                </div>
+                <!-- /.col-lg-8 -->
+                <!-- Blog Sidebar Widgets Column -->
+                <div class="col-lg-4">
+                    {% block sideBar %}
+                    <!-- Blog Search Well -->
+                    <div class="well">
+                        <h4>博客搜索</h4>
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            </span>
+                        </div>
+                        <!-- /.input-group -->
+                    </div>
+
+                    <!-- Blog Categories Well -->
+                    <div class="well">
+                        <h4>博客分类</h4>
+                        <div class="row">
+                            {% for col in categories %}
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled">
+                                    {% for c in col %}
+                                    <li><a href="{% url 'blog:category_archive_view' slug=c.slug%}">{{ c.title }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <!-- /.col-lg-6 -->
+                            {% endfor %}
+                        </div>
+                        <!-- /.row -->
+                    </div>
+
+                    <!-- Side Widget Well -->
+                    <div class="well">
+                        <h4>友情链接</h4>
+                        <p>联系我添加吧~</p>
+                    </div>
+                    {% endblock sideBar %}
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+
+            <hr>
+
+            <!-- Footer -->
+            <footer>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p>Copyright &copy; answ.me 2014</p>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </footer>
+
+        </div>
+        <!-- /.container -->
+        {% endblock mainContent %}
+
+        <!-- jQuery -->
+        <script src="{% static 'blog/js/jquery.js' %}"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+
+    </body>
+
+</html>
