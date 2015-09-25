@@ -29,6 +29,11 @@
     <p><span class="glyphicon glyphicon-time"></span>
         发布于 {{ article.date_publish }}
     </p>
+    <p>
+    {% for c in article.categories.all %}
+        <a href="{% url 'blog:category_archive_view' slug=c.slug %}"><span class="label label-default">{{ c.title }}</span></a>
+    {% endfor %}
+    </p>
 
     <hr>
 

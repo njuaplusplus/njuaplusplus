@@ -45,9 +45,6 @@ def evenly_divide_list(l, n=2):
 
 def index_page(request, page_num):
     """The news index"""
-    archive_dates = evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC'))
-    categories = evenly_divide_list(get_top_categories(8))
-
     article_queryset = Article.objects.all()
     paginator = Paginator(article_queryset, 5)
 
@@ -65,28 +62,28 @@ def index_page(request, page_num):
         "blog/default/index.html",
         {
             "articles"      : articles,
-            "archive_dates" : archive_dates,
-            "categories"    : categories,
+            "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
+            "categories"    : evenly_divide_list(get_top_categories(8)),
         }
     )
 
 def single(request, slug) :
     """A single article"""
     article = get_object_or_404(Article, slug=slug)
-    # archive_dates = Article.objects.datetimes('date_publish','month', order='DESC')
-    categories = evenly_divide_list(get_top_categories(8))
     return render(
         request,
         "blog/default/post.html",
         {
             "article" : article,
-            # "archive_dates" : archive_dates,
-            "categories" : categories
+            "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
+            "categories"    : evenly_divide_list(get_top_categories(8)),
         }
     )
 
 def date_archive(request, year, month):
     return date_archive_page(request, year, month, 1)
+
+import pytz
 
 def date_archive_page(request, year, month, page_num):
     """The blog date archive"""
@@ -96,9 +93,11 @@ def date_archive_page(request, year, month, page_num):
     month_range = calendar.monthrange(year, month)
     start = datetime.datetime(year=year, month=month, day=1)#.replace(tzinfo=utc)
     end = datetime.datetime(year=year, month=month, day=month_range[1])#.replace(tzinfo=utc)
+    start = pytz.timezone("Asia/Shanghai").localize(start, is_dst=None)
+    end = pytz.timezone("Asia/Shanghai").localize(end, is_dst=None)
 
     # Pagination
-    article_queryset = Article.objects.filter(date_publish__range=(start.date(), end.date()))
+    article_queryset = Article.objects.filter(date_publish__range=(start, end))
     paginator = Paginator(article_queryset, 5)
 
     try:

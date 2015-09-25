@@ -43,7 +43,7 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     分类: 
                         {% for c in article.categories.all %}
-                        <a class="post-category" href="{% url 'blog:category_archive_view' slug=c.slug%}">{{ c.title }}</a>
+                        <a class="post-category" href="{% url 'blog:category_archive_view' slug=c.slug %}">{{ c.title }}</a>
                         {% empty %}
                         无
                         {% endfor %}
