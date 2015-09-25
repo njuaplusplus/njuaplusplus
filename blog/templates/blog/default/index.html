@@ -29,7 +29,7 @@
     发布于 {{ article.date_publish }}
 </p>
 
-<hr>
+<div class="separator-dashed"></div>
 
 {% if article.cover %}
     <img class="img-responsive" src="{{ article.cover.url }}" alt="">
@@ -40,7 +40,7 @@
 </p>
 <a class="btn btn-primary" href="{% url 'blog:single_post' slug=article.slug %}">阅读更多 <span class="glyphicon glyphicon-chevron-right"></span></a>
 
-<hr>
+<div class="separator-dbl-strike"></div>
 {% endfor %}
 
 <!-- Pager -->

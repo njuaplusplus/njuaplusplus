@@ -35,3 +35,11 @@ article img {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* == separators == */
+.separator-dbl-strike { height: 4px; border-bottom: 4px double #DDD; margin: 20px 0; }
+.separator-dashed { height: 2px; border-bottom: 2px dashed #DDD; margin: 20px 0; }
+.separator-dotted { height: 7px; border-bottom: 2px dotted #DDD; margin: 20px 0; }
+.separator-zigzag { height: 4px; background: url(../img/zigzag.png) repeat-x center center transparent; margin: 20px 0; }
+.separator-fatty { height: 6px; background-color: rgba( 0, 0, 0, 0.05 ); margin: 20px 0; position: relative; }
+/* == END separators == */
