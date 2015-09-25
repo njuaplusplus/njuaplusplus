@@ -110,15 +110,17 @@
                     <!-- Blog Search Well -->
                     <div class="well">
                         <h4>博客搜索</h4>
-                        <div class="input-group">
-                            <input type="text" class="form-control">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                            </span>
-                        </div>
-                        <!-- /.input-group -->
+                        <form role="search" method="GET" action="{% url 'blog:search' %}">
+                            <div class="input-group">
+                                <input type="text"  name="queryString" class="form-control" placeholder="搜索博客">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /.input-group -->
+                        </form>
                     </div>
 
                     <!-- Blog Categories Well -->
