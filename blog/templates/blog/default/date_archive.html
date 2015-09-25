@@ -1,0 +1,62 @@
+{% extends 'blog/default/base.html' %}
+{% load duoshuo_tags %}
+
+{% block title %} 归档: {{ start|date:'Y 年 m 月' }} | 博客 | 安好 {% endblock %}
+
+{% block blogColumn %}
+<h1 class="page-header">
+    日期归档:
+    <small>{{ start|date:'Y 年 m 月' }}</small>
+</h1>
+
+{% for article in articles %}
+    <!-- Blog Post -->
+    <h2>
+        <a href="{% url 'blog:single_post' slug=article.slug %}">{{ article.title }}</a>
+    </h2>
+
+    <p class="lead">
+        由
+        <a href="#">
+            {% if article.author.first_name or article.author.last_name %}
+                {{ article.author.last_name|addstr:article.author.first_name|truncatechars:9  }}
+            {% else %}
+                {{ article.author.username|truncatechars:9 }}
+            {% endif %}
+        </a>
+    </p>
+    <p><span class="glyphicon glyphicon-time"></span>
+        发布于 {{ article.date_publish }}
+    </p>
+
+    <div class="separator-dashed"></div>
+
+    {% if article.cover %}
+        <img class="img-responsive" src="{{ article.cover.url }}" alt="">
+        <hr>
+    {% endif %}
+    <p>
+        {{ article.excerpt }}
+    </p>
+    <a class="btn btn-primary" href="{% url 'blog:single_post' slug=article.slug %}">阅读更多 <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+    <div class="separator-dbl-strike"></div>
+{% empty %}
+    <p>没有找到对应的文章T_T</p>
+{% endfor %}
+
+<!-- Pager -->
+<ul class="pager">
+    {% if articles.has_previous %}
+    <li class="previous">
+        <a href="{% url 'blog:index_page' page_num=articles.previous_page_number %}">&larr; 上一页</a>
+    </li>
+    {% endif %}
+    {% if articles.has_next %}
+    <li class="next">
+        <a href="{% url 'blog:index_page' page_num=articles.next_page_number %}">下一页 &rarr;</a>
+    </li>
+    {% endif %}
+</ul>
+{% endblock blogColumn %}
+
