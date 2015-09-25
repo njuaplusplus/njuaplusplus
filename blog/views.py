@@ -127,7 +127,6 @@ def category_archive(request, slug):
 
 def category_archive_page(request, slug, page_num):
     # archive_dates = Article.objects.datetimes('date_publish','month', order='DESC')
-    # categories = Category.objects.all()
     category = get_object_or_404(Category, slug=slug)
 
     # Pagination
@@ -144,12 +143,12 @@ def category_archive_page(request, slug, page_num):
         articles = paginator.page(paginator.num_pages)
     return render(
         request,
-        "blog/category_archive.html",
+        "blog/default/category_archive.html",
         {
-            "articles" : articles,
+            "articles"   : articles,
             # "archive_dates" : archive_dates,
-            # "categories" : categories,
-            "category" : category
+            'categories' : evenly_divide_list(get_top_categories(8)),
+            "category"   : category,
         }
     )
 

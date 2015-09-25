@@ -1,15 +1,15 @@
 {% extends 'blog/default/base.html' %}
 {% load duoshuo_tags %}
 
-{% block title %} 搜索 | 博客 | 安好 {% endblock %}
+{% block title %} 分类: {{ category.title }} | 博客 | 安好 {% endblock %}
 
 {% block blogColumn %}
 <h1 class="page-header">
-    搜索:
-    <small>{{ query_string }}</small>
+    分类归档:
+    <small>{{ category.title }}</small>
 </h1>
 
-{% for article in found_articles %}
+{% for article in articles %}
     <!-- Blog Post -->
     <h2>
         <a href="{% url 'blog:single_post' slug=article.slug %}">{{ article.title }}</a>
@@ -39,8 +39,23 @@
         {{ article.excerpt }}
     </p>
     <a class="btn btn-primary" href="{% url 'blog:single_post' slug=article.slug %}">阅读更多 <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+    <hr>
 {% empty %}
     <p>没有找到对应的文章T_T</p>
 {% endfor %}
 
+<!-- Pager -->
+<ul class="pager">
+    {% if articles.has_previous %}
+    <li class="previous">
+        <a href="{% url 'blog:index_page' page_num=articles.previous_page_number %}">&larr; 上一页</a>
+    </li>
+    {% endif %}
+    {% if articles.has_next %}
+    <li class="next">
+        <a href="{% url 'blog:index_page' page_num=articles.next_page_number %}">下一页 &rarr;</a>
+    </li>
+    {% endif %}
+</ul>
 {% endblock blogColumn %}
