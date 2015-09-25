@@ -39,6 +39,8 @@
         {{ article.excerpt }}
     </p>
     <a class="btn btn-primary" href="{% url 'blog:single_post' slug=article.slug %}">阅读更多 <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+    <hr>
 {% empty %}
     <p>没有找到对应的文章T_T</p>
 {% endfor %}

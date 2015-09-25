@@ -96,78 +96,95 @@
         <!-- Main Content -->
         {% block mainContent %}
         <!-- Page Content -->
-        <div class="container">
-            <div class="row">
-                <!-- Blog Entries Column -->
-                <div class="col-lg-8">
-                    {% block blogColumn %}
-                    {% endblock blogColumn %}
-                </div>
-                <!-- /.col-lg-8 -->
-                <!-- Blog Sidebar Widgets Column -->
-                <div class="col-lg-4">
-                    {% block sideBar %}
-                    <!-- Blog Search Well -->
-                    <div class="well">
-                        <h4>博客搜索</h4>
-                        <form role="search" method="GET" action="{% url 'blog:search' %}">
-                            <div class="input-group">
-                                <input type="text"  name="queryString" class="form-control" placeholder="搜索博客">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">
-                                        <span class="glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
-                            </div>
-                            <!-- /.input-group -->
-                        </form>
-                    </div>
-
-                    <!-- Blog Categories Well -->
-                    <div class="well">
-                        <h4>博客分类</h4>
-                        <div class="row">
-                            {% for col in categories %}
-                            <div class="col-lg-6">
-                                <ul class="list-unstyled">
-                                    {% for c in col %}
-                                    <li><a href="{% url 'blog:category_archive_view' slug=c.slug%}">{{ c.title }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <!-- /.col-lg-6 -->
-                            {% endfor %}
-                        </div>
-                        <!-- /.row -->
-                    </div>
-
-                    <!-- Side Widget Well -->
-                    <div class="well">
-                        <h4>友情链接</h4>
-                        <p>联系我添加吧~</p>
-                    </div>
-                    {% endblock sideBar %}
-                </div>
-                <!-- /.col-lg-4 -->
-            </div>
-            <!-- /.row -->
-
-            <hr>
-
-            <!-- Footer -->
-            <footer>
+        <div id="wrap">
+            <div class="container">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <p>Copyright &copy; answ.me 2014</p>
+                    <!-- Blog Entries Column -->
+                    <div class="col-lg-8">
+                        {% block blogColumn %}
+                        {% endblock blogColumn %}
                     </div>
-                    <!-- /.col-lg-12 -->
+                    <!-- /.col-lg-8 -->
+                    <!-- Blog Sidebar Widgets Column -->
+                    <div class="col-lg-4">
+                        {% block sideBar %}
+                        <!-- Blog Search Well -->
+                        <div class="well">
+                            <h4>博客搜索</h4>
+                            <form role="search" method="GET" action="{% url 'blog:search' %}">
+                                <div class="input-group">
+                                    <input type="text"  name="queryString" class="form-control" placeholder="搜索博客">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <!-- /.input-group -->
+                            </form>
+                        </div>
+
+                        <!-- Blog Categories Well -->
+                        <div class="well">
+                            <h4>博客分类</h4>
+                            <div class="row">
+                                {% for col in categories %}
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled">
+                                        {% for c in col %}
+                                        <li><a href="{% url 'blog:category_archive_view' slug=c.slug%}">{{ c.title }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <!-- /.col-lg-6 -->
+                                {% endfor %}
+                            </div>
+                            <!-- /.row -->
+                        </div>
+
+                        <!-- Side Widget Well -->
+                        <div class="well">
+                            <h4>友情链接</h4>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled">
+                                        <li><a href="http://gutianxiao.com/">Tiger Gu</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- /.col-lg-6 -->
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled">
+                                        <li><a href="http://cshuo.xyz/">C Shuo</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- /.col-lg-6 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        {% endblock sideBar %}
+                    </div>
+                    <!-- /.col-lg-4 -->
                 </div>
                 <!-- /.row -->
-            </footer>
-
+            </div>
+            <!-- /.container -->
         </div>
-        <!-- /.container -->
+        <!-- /#wrap -->
+        <!-- Footer -->
+        <footer>
+            <div class="container text-center">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="text-muted">Copyright &copy; answ.me 2014</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            </div>
+        </footer>
         {% endblock mainContent %}
 
         <!-- jQuery -->
