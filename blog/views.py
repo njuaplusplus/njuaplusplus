@@ -37,8 +37,11 @@ def get_top_categories(num=None):
 def evenly_divide_list(l, n=2):
     """ Divide the list to n even parts.
     """
-    mid = len(l)/2
-    return [l[:mid+1], l[mid+1:]]
+    mid = len(l) >> 1
+    if mid << 1 == len(l):
+        return [l[:mid], l[mid:]]
+    else:
+        return [l[:mid+1], l[mid+1:]]
 
 def index_page(request, page_num):
     """The news index"""

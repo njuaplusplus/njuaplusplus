@@ -7,56 +7,67 @@
 {% block blogColumn %}
 
 <!-- Blog Post -->
-<!-- Title -->
-<h1>{{ article.title }}</h1>
+<article>
+    <!-- Title -->
+    <h1>{{ article.title }}</h1>
 
-<!-- Author -->
-<p class="lead">
-    由
-    <a href="#">
-        {% if article.author.first_name or article.author.last_name %}
-            {{ article.author.last_name|addstr:article.author.first_name|truncatechars:9  }}
-        {% else %}
-            {{ article.author.username|truncatechars:9 }}
-        {% endif %}
-    </a>
-</p>
+    <!-- Author -->
+    <p class="lead">
+        由
+        <a href="#">
+            {% if article.author.first_name or article.author.last_name %}
+                {{ article.author.last_name|addstr:article.author.first_name|truncatechars:9  }}
+            {% else %}
+                {{ article.author.username|truncatechars:9 }}
+            {% endif %}
+        </a>
+    </p>
 
-<hr>
-
-<!-- Date/Time -->
-<p><span class="glyphicon glyphicon-time"></span>
-    发布于 {{ article.date_publish }}
-</p>
-
-<hr>
-
-{% if article.cover %}
-    <img class="img-responsive" src="{{ article.cover.url }}" alt="">
     <hr>
-{% endif %}
+
+    <!-- Date/Time -->
+    <p><span class="glyphicon glyphicon-time"></span>
+        发布于 {{ article.date_publish }}
+    </p>
+
+    <hr>
+
+    {% if article.cover %}
+        <img class="img-responsive" src="{{ article.cover.url }}" alt="">
+        <hr>
+    {% endif %}
 
 
-<p class="lead">
-    {{ article.excerpt }}
-</p>
+    <p class="lead">
+        {{ article.excerpt }}
+    </p>
 
-{{ article.get_content_markup|safe }}
+    {{ article.get_content_markup|safe }}
+    <div class="row">
+        <div class="col-lg-12 text-center">
 
-<form action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
-    <input name="optEmail" type="hidden" value="aplusplus@qq.com" />
-    <input name="payAmount" type="hidden" value="10" />
-    <input id="title" name="title" type="hidden" value="博客赞助" />
-    <input name="memo" type="hidden" value="备注" />
-    <input name="pay" type="image" value="转账" src="{% static 'blog/img/donate.png' %}" />
-</form>
+        <form action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+            <input name="optEmail" type="hidden" value="aplusplus@qq.com" />
+            <input name="payAmount" type="hidden" value="10" />
+            <input id="title" name="title" type="hidden" value="博客赞助" />
+            <input name="memo" type="hidden" value="备注" />
+            <input name="pay" type="image" value="转账" src="{% static 'blog/img/donate.png' %}" />
+        </form>
+        </div>
+    </div>
 
-{% if user|has_group:'authors' and user == article.author %}
-<p>
-    <a href="{% url 'blog:edit_post_view' post_id=article.id %}" style="font-size: 20px;">编辑本文</a>
-</p>
-{% endif %}
+    {% if user|has_group:'authors' and user == article.author %}
+    <p>
+        <a href="{% url 'blog:edit_post_view' post_id=article.id %}" style="font-size: 20px;">编辑本文</a>
+    </p>
+    {% endif %}
 
-{% my_sso_duoshuo_comments 'blog-'|addstr:article.id '博客-'|addstr:article.title request.build_absolute_uri request.path|escape %}
+    <div class="row">
+        <div class="col-lg-12">
+            {% my_sso_duoshuo_comments 'blog-'|addstr:article.id '博客-'|addstr:article.title request.build_absolute_uri request.path|escape %}
+        </div>
+    </div>
+
+</article>
 
 {% endblock blogColumn %}
