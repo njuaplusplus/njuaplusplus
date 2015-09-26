@@ -43,3 +43,258 @@ article img {
 .separator-zigzag { height: 4px; background: url(../img/zigzag.png) repeat-x center center transparent; margin: 20px 0; }
 .separator-fatty { height: 6px; background-color: rgba( 0, 0, 0, 0.05 ); margin: 20px 0; position: relative; }
 /* == END separators == */
+
+/* For codehilite */
+.codehilitetable, .linenos {
+    background: #2d2d2d;
+    color: #f2f0ec;
+}
+
+.codehilitetable {
+    font: 12px/20px "Source Code Pro",monospace;
+    overflow-x: auto;
+    display: block;
+    border-left: 3px solid #FF8000;
+    border-radius: 2px;
+    padding: .8em 0;
+}
+
+.codehilitetable tbody tr {
+    display: block;
+}
+
+.codehilitetable pre {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    background-color: inherit;
+    line-height: inherit;
+    color: inherit;
+    word-break: initial;
+    word-wrap: initial;
+}
+
+.c, .linenos {
+    color: #747369;
+}
+
+.codehilitetable, .linenos {
+    background: #2d2d2d;
+    color: #f2f0ec;
+}
+
+.linenos {
+    border-right: 1px solid #3d3d3d;
+    padding-right: 0.7em;
+    margin-right: 0.7em;
+    width: 3em;
+    text-align: right;
+    position: absolute;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.codehilite {
+    margin: 0 1em 0 3.5em;
+}
+
+
+.c, .linenos {
+    color: #747369;
+}
+.err {
+    color: #f2777a;
+}
+.k {
+    color: #c9c;
+}
+.l {
+    color: #f99157;
+}
+.n {
+    color: #f2f0ec;
+}
+.o {
+    color: #6cc;
+}
+.p {
+    color: #f2f0ec;
+}
+.cm {
+    color: #747369;
+}
+.cp {
+    color: #747369;
+}
+.c1 {
+    color: #747369;
+}
+.cs {
+    color: #747369;
+}
+.gd {
+    color: #f2777a;
+}
+.ge {
+    font-style: italic;
+}
+.gh {
+    color: #f2f0ec;
+    font-weight: bold;
+}
+.gi {
+    color: #9c9;
+}
+.gp {
+    color: #747369;
+    font-weight: bold;
+}
+.gs {
+    font-weight: bold;
+}
+.gu {
+    color: #6cc;
+    font-weight: bold;
+}
+.kc {
+    color: #c9c;
+}
+.kd {
+    color: #c9c;
+}
+.kn {
+    color: #6cc;
+}
+.kp {
+    color: #c9c;
+}
+.kr {
+    color: #c9c;
+}
+.kt {
+    color: #fc6;
+}
+.ld {
+    color: #9c9;
+}
+.m {
+    color: #f99157;
+}
+.s {
+    color: #9c9;
+}
+.na {
+    color: #69c;
+}
+.nb {
+    color: #f2f0ec;
+}
+.nc {
+    color: #fc6;
+}
+.no {
+    color: #f2777a;
+}
+.nd {
+    color: #6cc;
+}
+.ni {
+    color: #f2f0ec;
+}
+.ne {
+    color: #f2777a;
+}
+.nf {
+    color: #69c;
+}
+.nl {
+    color: #f2f0ec;
+}
+.nn {
+    color: #fc6;
+}
+.nx {
+    color: #69c;
+}
+.py {
+    color: #f2f0ec;
+}
+.nt {
+    color: #6cc;
+}
+.nv {
+    color: #f2777a;
+}
+.ow {
+    color: #6cc;
+}
+.w {
+    color: #f2f0ec;
+}
+.mf {
+    color: #f99157;
+}
+.mh {
+    color: #f99157;
+}
+.mi {
+    color: #f99157;
+}
+.mo {
+    color: #f99157;
+}
+.sb {
+    color: #9c9;
+}
+.sc {
+    color: #f2f0ec;
+}
+.sd {
+    color: #747369;
+}
+.s2 {
+    color: #9c9;
+}
+.se {
+    color: #f99157;
+}
+.sh {
+    color: #9c9;
+}
+.si {
+    color: #f99157;
+}
+.sx {
+    color: #9c9;
+}
+.sr {
+    color: #9c9;
+}
+.s1 {
+    color: #9c9;
+}
+.ss {
+    color: #9c9;
+}
+.bp {
+    color: #f2f0ec;
+}
+.vc {
+    color: #f2777a;
+}
+.vg {
+    color: #f2777a;
+}
+.vi {
+    color: #f2777a;
+}
+.il {
+    color: #f99157;
+}

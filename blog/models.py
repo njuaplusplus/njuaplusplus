@@ -187,8 +187,8 @@ def markdown_to_html(text, images):
         extensions=['codehilite', 'attr_list'],
         extension_configs={
             'codehilite': {
-                # 'linenums': True,
-                'noclasses': True,
+                'linenums': True,
+                # 'noclasses': True,
             }
         }
     )
