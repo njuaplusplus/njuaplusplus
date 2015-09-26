@@ -33,7 +33,7 @@
     <meta name="msapplication-config" content="{% static 'favicons/browserconfig.xml' %}">
     <!-- ****** faviconit.com favicons ****** -->
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'blog/css/clean-blog.css' %}">
     <!-- Custom Fonts -->
     <link href="{% static 'blog/css/font-awesome-4.1.0/css/font-awesome.min.css' %}" rel="stylesheet">
@@ -52,8 +52,8 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-        <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <script src="{% static 'blog/js/html5shiv.min.js' %}"></script>
+        <script src="{% static 'blog/js/respond.min.js' %}"></script>
     <![endif]-->
 
     </head>
@@ -165,9 +165,9 @@
         </footer>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'blog/js/jquery.js' %}"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
         <script src="{% static 'blog/js/clean-blog.js' %}"></script>
         {% block extScriptFile %}{% endblock %}
         <script type="text/javascript">
