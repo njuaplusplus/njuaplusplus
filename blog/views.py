@@ -63,7 +63,7 @@ def index_page(request, page_num):
         {
             "articles"      : articles,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            "categories"    : evenly_divide_list(get_top_categories(8)),
+            "categories"    : evenly_divide_list(get_top_categories()),
         }
     )
 
@@ -76,7 +76,7 @@ def single(request, slug) :
         {
             "article" : article,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            "categories"    : evenly_divide_list(get_top_categories(8)),
+            "categories"    : evenly_divide_list(get_top_categories()),
         }
     )
 
@@ -117,7 +117,7 @@ def date_archive_page(request, year, month, page_num):
             "end"           : end,
             "articles"      : articles,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            "categories"    : evenly_divide_list(get_top_categories(8)),
+            "categories"    : evenly_divide_list(get_top_categories()),
         }
     )
 
@@ -146,7 +146,7 @@ def category_archive_page(request, slug, page_num):
         {
             "articles"      : articles,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            'categories'    : evenly_divide_list(get_top_categories(8)),
+            'categories'    : evenly_divide_list(get_top_categories()),
             "category"      : category,
         }
     )
@@ -364,6 +364,6 @@ def search(request):
         {
             'query_string'   : query_string,
             'found_articles' : found_articles,
-            'categories'     : evenly_divide_list(get_top_categories(8)),
+            'categories'     : evenly_divide_list(get_top_categories()),
         }
     )
