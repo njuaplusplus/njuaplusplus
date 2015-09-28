@@ -1,14 +1,21 @@
 jQuery(function($) {
     var $canvasContainer = $('#canvas-container');
     var $canvas = $('#canvas');
-    var devicePixelRatio = 1;
     var $nav = $('nav');
+    var $cloud2 = $('#cloud2');
+    var devicePixelRatio = 1;
 
     $nav.removeClass('navbar-fixed-top');
     $nav.addClass('navbar-static-top');
     $nav.css('margin-bottom',0);
 
     $canvas.on('wordclouddrawn', function(evt) {
+        if (!evt.originalEvent.detail.drawn) {
+            console.log(evt.originalEvent.detail.item + ' has not been drawn!');
+            evt.preventDefault();
+            $canvasContainer.hide();
+            $cloud2.show();
+        }
 //        alert(evt.originalEvent.detail.drawn);
 //        console.log(evt);
     });

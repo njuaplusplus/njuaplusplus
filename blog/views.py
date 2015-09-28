@@ -135,7 +135,7 @@ def category(request):
             'category_list' : json.dumps(category_list, ensure_ascii=False),
             'category_urls' : json.dumps(category_urls, ensure_ascii=False),
             'archive_dates' : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            'categories'    : evenly_divide_list(get_top_categories(8)),
+            'categories'    : get_top_categories(),
         }
     )
 
