@@ -67,6 +67,9 @@
                         <li>
                             <a href="{% url 'blog:index' %}">首页</a>
                         </li>
+                        <li>
+                            <a href="{% url 'photos:index' %}">相册</a>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if user|has_group:'authors' %}
