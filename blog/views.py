@@ -15,6 +15,7 @@ import datetime
 import jwt
 import random
 from duoshuo import DuoshuoAPI
+import json
 
 def index(request):
     return index_page(request, 1)
@@ -63,7 +64,7 @@ def index_page(request, page_num):
         {
             "articles"      : articles,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            "categories"    : evenly_divide_list(get_top_categories()),
+            "categories"    : evenly_divide_list(get_top_categories(8)),
         }
     )
 
@@ -76,7 +77,7 @@ def single(request, slug) :
         {
             "article" : article,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            "categories"    : evenly_divide_list(get_top_categories()),
+            "categories"    : evenly_divide_list(get_top_categories(8)),
         }
     )
 
@@ -117,7 +118,24 @@ def date_archive_page(request, year, month, page_num):
             "end"           : end,
             "articles"      : articles,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            "categories"    : evenly_divide_list(get_top_categories()),
+            "categories"    : evenly_divide_list(get_top_categories(8)),
+        }
+    )
+
+def category(request):
+    categories = get_top_categories()
+    category_urls = {}
+    for c in categories:
+        category_urls[u'%s (%d)' % (c.title, c.article_set.count())] = reverse('blog:category_archive_view', args=(c.slug,))
+    category_list = [ [u'%s (%d)' % (c.title, c.article_set.count()), c.article_set.count()+1] for c in categories ]
+    return render(
+        request,
+        'blog/default/category.html',
+        {
+            'category_list' : json.dumps(category_list, ensure_ascii=False),
+            'category_urls' : json.dumps(category_urls, ensure_ascii=False),
+            'archive_dates' : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
+            'categories'    : evenly_divide_list(get_top_categories(8)),
         }
     )
 
@@ -146,7 +164,7 @@ def category_archive_page(request, slug, page_num):
         {
             "articles"      : articles,
             "archive_dates" : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
-            'categories'    : evenly_divide_list(get_top_categories()),
+            'categories'    : evenly_divide_list(get_top_categories(8)),
             "category"      : category,
         }
     )
@@ -364,6 +382,7 @@ def search(request):
         {
             'query_string'   : query_string,
             'found_articles' : found_articles,
-            'categories'     : evenly_divide_list(get_top_categories()),
+            'categories'     : evenly_divide_list(get_top_categories(8)),
+            'archive_dates' : evenly_divide_list(Article.objects.datetimes('date_publish','month', order='DESC')),
         }
     )

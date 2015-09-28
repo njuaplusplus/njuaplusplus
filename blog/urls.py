@@ -8,6 +8,7 @@ from blog import views
 urlpatterns = [
     url(r'^$', views.index, name="index"),
     url(r'^page/(?P<page_num>[\d]+)/$', views.index_page, name="index_page"),
+    url(r'^category/$', views.category, name="category_view"),
     url(r'^category/(?P<slug>[-\w]+)/$', views.category_archive, name="category_archive_view"),
     url(r'^category/(?P<slug>[-\w]+)/page/(?P<page_num>[\d]+)/$', views.category_archive_page, name="category_archive_page_view"),
     url(r'^archive/(?P<year>[\d]+)/(?P<month>[\d]+)/$', views.date_archive, name="date_archive_view"),

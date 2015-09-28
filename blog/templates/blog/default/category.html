@@ -1,0 +1,55 @@
+{% extends 'blog/default/base.html' %}
+{% load staticfiles %}
+
+{% block title %} 分类 | 博客 | 安好 {% endblock %}
+
+{% block headBlock %}
+  <style>
+  #canvas-container {
+    overflow-x: auto;
+    overflow-y: visible;
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .canvas {
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .canvas.hide {
+    display: none;
+  }
+
+  #html-canvas > span {
+    transition: text-shadow 1s ease, opacity 1s ease;
+    -webkit-transition: text-shadow 1s ease, opacity 1s ease;
+    -ms-transition: text-shadow 1s ease, opacity 1s ease;
+  }
+
+  #html-canvas > span:hover {
+    text-shadow: 0 0 10px, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+    opacity: 0.5;
+  }
+  </style>
+{% endblock headBlock %}
+
+{% block blogColumn %}
+<div class="col-lg-12" id="canvas-container">
+    <canvas id="canvas" class="canvas"></canvas>
+    <div id="html-canvas" class="canvas hide"></div>
+</div>
+{% endblock blogColumn %}
+
+{% block extScriptFile %}
+<script src="{% static 'blog/js/wordcloud2.js' %}"></script>
+<script src="{% static 'blog/js/index.js' %}"></script>
+<script>
+jQuery(function($) {
+    categoriesCloud({{ category_list|safe }}, {{ category_urls|safe }});
+    // categoriesCloud([["Test", 2], ["Sunday", 1], ["Worship", 1], ["哈哈", 1]], {"Test": "2"});
+    // categoriesCloud([['hehe', 16]], {{ category_urls|safe }});
+});
+</script>
+{% endblock extScriptFile %}
