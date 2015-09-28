@@ -9,8 +9,8 @@
     overflow-x: auto;
     overflow-y: visible;
     position: relative;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    /* margin-top: 51px;
+    margin-bottom: 20px; */
   }
   .canvas {
     display: block;
@@ -32,15 +32,22 @@
     text-shadow: 0 0 10px, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
     opacity: 0.5;
   }
+  #box {
+    pointer-events: none;
+    position: absolute;
+    box-shadow: 0 0 200px 200px rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    cursor: pointer;
+  }
   </style>
 {% endblock headBlock %}
 
-{% block blogColumn %}
-<div class="col-lg-12" id="canvas-container">
-    <canvas id="canvas" class="canvas"></canvas>
-    <div id="html-canvas" class="canvas hide"></div>
-</div>
-{% endblock blogColumn %}
+{% block mainContent %}
+                <div id="canvas-container">
+                    <canvas id="canvas" class="canvas"></canvas>
+                    <div id="html-canvas" class="canvas hide"></div>
+                </div>
+{% endblock mainContent %}
 
 {% block extScriptFile %}
 <script src="{% static 'blog/js/wordcloud2.js' %}"></script>
