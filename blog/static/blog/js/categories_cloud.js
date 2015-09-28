@@ -3,6 +3,7 @@ jQuery(function($) {
     var $canvas = $('#canvas');
     var $nav = $('nav');
     var $cloud2 = $('#cloud2');
+    var $wrapDiv = $('#wrap');
     var devicePixelRatio = 1;
 
     $nav.removeClass('navbar-fixed-top');
@@ -17,7 +18,8 @@ jQuery(function($) {
             $cloud2.show();
             $nav.removeClass('navbar-static-top');
             $nav.addClass('navbar-fixed-top');
-            $('#wrap').css('padding-top', $('nav').outerHeight(true))
+            $wrapDiv.css('padding-top', $('nav').outerHeight(true));
+            $wrapDiv.css('min-height', getHeight());
         }
 //        alert(evt.originalEvent.detail.drawn);
 //        console.log(evt);
