@@ -7,7 +7,7 @@ var categoriesCloud = function categoriesCloud(category_list, category_urls) {
     options = {
         list : category_list,
         gridSize: 18,
-        weightFactor: 32,
+        weightFactor: 16,
         color: 'random-dark',
         fontFamily: 'Times, serif',
         click: function(item) {
