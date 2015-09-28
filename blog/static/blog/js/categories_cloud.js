@@ -6,7 +6,7 @@ var categoriesCloud = function categoriesCloud(category_list, category_urls) {
     // var category_urls = jQuery.parseJSON(category_urls);
     options = {
         list : category_list,
-        gridSize: 18,
+        gridSize: 16,
         weightFactor: 16,
         color: 'random-dark',
         fontFamily: 'Times, serif',

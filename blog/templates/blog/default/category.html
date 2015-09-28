@@ -44,7 +44,7 @@
 
 {% block extScriptFile %}
 <script src="{% static 'blog/js/wordcloud2.js' %}"></script>
-<script src="{% static 'blog/js/index.js' %}"></script>
+<script src="{% static 'blog/js/categories_cloud.js' %}"></script>
 <script>
 jQuery(function($) {
     categoriesCloud({{ category_list|safe }}, {{ category_urls|safe }});
