@@ -15,6 +15,9 @@ jQuery(function($) {
             evt.preventDefault();
             $canvasContainer.hide();
             $cloud2.show();
+            $nav.removeClass('navbar-static-top');
+            $nav.addClass('navbar-fixed-top');
+            $('#wrap').css('padding-top', $('nav').outerHeight(true))
         }
 //        alert(evt.originalEvent.detail.drawn);
 //        console.log(evt);

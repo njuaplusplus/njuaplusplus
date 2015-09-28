@@ -39,6 +39,9 @@
     border-radius: 50px;
     cursor: pointer;
   }
+  #cloud2 {
+    display: none;
+  }
   </style>
 {% endblock headBlock %}
 
@@ -47,19 +50,33 @@
     <canvas id="canvas" class="canvas"></canvas>
     <div id="html-canvas" class="canvas hide"></div>
 </div>
-<div id="cloud2" hidden>
-    <div class="container">
+<div id="cloud2">
+    <div id="wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                {% for c in categories %}
+                    <a href="{% url 'blog:category_archive_view' slug=c.slug %}" rel="{{c.article_set.count|add:'1'}}">{{ c.title }} ({{ c.article_set.count }})</a>
+                {% endfor %}
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#wrap -->
+    <footer>
+        <div class="container text-center">
         <div class="row">
             <div class="col-lg-12">
-            {% for c in categories %}
-                <a href="{% url 'blog:category_archive_view' slug=c.slug %}" rel="{{c.article_set.count|add:'1'}}">{{ c.title }} ({{ c.article_set.count }})</a>
-            {% endfor %}
+                <p class="text-muted">Copyright &copy; answ.me 2014</p>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
-    </div>
-    <!-- /.container -->
+        </div>
+    </footer>
 </div>
 <!-- /#cloud2 -->
 {% endblock mainContent %}
