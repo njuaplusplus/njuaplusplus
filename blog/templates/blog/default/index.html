@@ -1,5 +1,6 @@
 {% extends 'blog/default/base.html' %}
 {% load duoshuo_tags %}
+{% load threadedcomments_tags %}
 
 {% block title %} 首页 | 博客 | 安好 {% endblock %}
 
@@ -25,8 +26,12 @@
             {% endif %}
         </a>
     </p>
-    <p><span class="glyphicon glyphicon-time"></span>
+    <p><i class="fa fa-clock-o fa-fw"></i>
         发布于 {{ article.date_publish }}
+    </p>
+    {% get_comment_count for article as comment_count %}
+    <p><i class="fa fa-comments-o fa-fw"></i>
+        {{ comment_count }} 个评论
     </p>
     <p>
     {% for c in article.categories.all %}
