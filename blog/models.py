@@ -11,11 +11,14 @@ from django import forms
 from pagedown.widgets import PagedownWidget
 # from bootstrap3_datetime.widgets import DateTimePicker
 from datetimewidget.widgets import DateTimeWidget
-# from fluent_comments.moderation import moderate_model, comments_are_open, comments_are_moderated
-# from fluent_comments.models import get_comments_for_model, CommentsRelation
 from django.core.urlresolvers import reverse
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from django_comments.moderation import CommentModerator, moderator
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.core.mail import send_mail
 
 class Category(models.Model) :
     '''Category Model'''
@@ -138,13 +141,6 @@ class Article(models.Model) :
         default = True
     )
 
-    # # Optional reverse relation, allow ORM querying:
-    # comments_set = CommentsRelation()
-    # # Optional, give direct access to moderation info via the model:
-    # comments = property(get_comments_for_model)
-    # comments_are_open = property(comments_are_open)
-    # comments_are_moderated = property(comments_are_moderated)
-
     def get_absolute_url(self):
         return reverse('blog:single_post', kwargs={'slug': self.slug})
 
@@ -176,13 +172,6 @@ class Article(models.Model) :
 
     def __unicode__(self):
         return u'%s' % (self.title,)
-
-# # Give the generic app support for moderation by django-fluent-comments:
-# moderate_model(
-#     Article,
-#     publication_date_field='date_publish',
-#     enable_comments_field='enable_comments'
-# )
 
 class ArticleForm(forms.ModelForm):
     class Meta:
@@ -243,3 +232,41 @@ def markdown_to_html(text, images):
         md.references[img.title] = (img.image.url, img.title)
     print md.references
     return md.convert(text)
+
+class ArticleModerator(CommentModerator):
+    email_notification = True
+    enable_field = 'enable_comments'
+
+    def email(self, comment, content_object, request):
+        """
+        Send email notification of a new comment to site staff when email
+        notifications have been requested.
+
+        """
+        if not self.email_notification:
+            return
+        recipient_list = [manager_tuple[1] for manager_tuple in settings.MANAGERS]
+        site = get_current_site(request)
+        subject = '[%s] New comment posted on "%s"' % (site.name, content_object)
+        message = render_to_string(
+            'comments/comment_notification_email.txt',
+            {
+                'site' : site,
+                'comment': comment,
+                'content_object': content_object,
+            }
+        )
+        # Add the users of the parent comments
+        pp = comment.parent
+        while pp:
+            mail_addr = comment.user_email
+            if not mail_addr and pp.user and pp.user.email:
+                mail_addr = pp.user.email
+            if mail_addr and mail_addr != 'user@example.com':
+                if not mail_addr in recipient_list:
+                    recipient_list.append(mail_addr)
+            pp = pp.parent
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, fail_silently=True)
+
+moderator.register(Article, ArticleModerator)

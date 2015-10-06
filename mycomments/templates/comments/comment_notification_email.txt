@@ -1,0 +1,9 @@
+A comment has been posted on {{ site.name }} {{ content_object }}.
+The comment reads as follows:
+
+Comment:
+{{ comment.comment }}
+
+----
+You have the following options available:
+  View comment    -- http://{{ site.domain }}{{ comment.get_absolute_url }}
