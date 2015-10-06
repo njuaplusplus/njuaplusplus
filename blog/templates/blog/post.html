@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load staticfiles %}
-{% load duoshuo_tags %}
-{% load has_group %}
+{% load answ_tags %}
+{% load threadedcomments_tags %}
 
 {% block title %}{{ article.title }} | 博客 | 安好{% endblock %}
 
@@ -77,7 +77,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {% my_sso_duoshuo_comments 'blog-'|addstr:article.id '博客-'|addstr:article.title request.build_absolute_uri request.path|escape %}
+                {% render_comment_list for article %}
+
+                <hr>
+
+                {% render_comment_form for article %}
             </div>
         </div>
     </div>

@@ -12,3 +12,9 @@ def has_group(user, group_name):
         return True
     else:
         return False
+
+@register.filter(name='addstr')
+def addstr(s1, s2):
+    ''' Concatenate s1 and s2
+    '''
+    return str(s1).strip().replace('"','-')+str(s2).strip().replace('"','-')
