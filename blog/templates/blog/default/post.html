@@ -2,10 +2,15 @@
 {% load staticfiles %}
 {% load duoshuo_tags %}
 {% load has_group %}
+{% load threadedcomments_tags %}
 
 {% block title %}{{ article.title }} | 博客 | 安好{% endblock %}
-{% block blogColumn %}
 
+{% block headBlock %}
+    <link rel="stylesheet" href="{% static 'mycomments/css/mycomments.css' %}">
+{% endblock headBlock %}
+
+{% block blogColumn %}
 <!-- Blog Post -->
 <article>
     <!-- Title -->
@@ -67,6 +72,14 @@
     </p>
     {% endif %}
 
+    <hr>
+
+    {% render_comment_list for article %}
+
+    <hr>
+
+    {% render_comment_form for article %}
+
     <div class="row">
         <div class="col-lg-12">
             {% my_sso_duoshuo_comments 'blog-'|addstr:article.id '博客-'|addstr:article.title request.build_absolute_uri request.path|escape %}
@@ -74,5 +87,8 @@
     </div>
 
 </article>
-
 {% endblock blogColumn %}
+
+{% block extScriptFile %}
+    <script src="{% static 'mycomments/js/mycomments.js' %}"></script>
+{% endblock extScriptFile %}

@@ -1,0 +1,17 @@
+{% extends "comments/base.html" %}
+{% load comments i18n crispy_forms_tags %}
+
+{% block title %}{% trans "Preview your comment" %}{% endblock %}
+{% block content %}
+<!-- Comments Form -->
+<div class="well">
+    <h4>Leave a Comment:</h4>
+    <form role="form" action="{% comment_form_target %}" method="post">{% csrf_token %}
+    {% if next %}
+        <div><input type="hidden" name="next" value="{{ next }}"/></div>
+    {% endif %}
+    {% crispy form %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock content %}

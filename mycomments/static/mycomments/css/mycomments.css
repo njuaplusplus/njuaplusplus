@@ -1,0 +1,12 @@
+#div_id_honeypot {
+    /* Hide the honeypot from django_comments by default */
+    display: none;
+}
+
+#cancel_reply {
+    display: none;
+}
+
+.media #cancel_reply {
+    display: inline;
+}

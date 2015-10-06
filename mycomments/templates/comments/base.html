@@ -1,0 +1,18 @@
+{% extends 'blog/default/base.html' %}
+{% load staticfiles %}
+
+{% block headBlock %}
+    <link rel="stylesheet" href="{% static 'mycomments/css/mycomments.css' %}">
+{% endblock headBlock %}
+
+{% block mainContent %}
+<div id="wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+            {% block content %}{% endblock content %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock mainContent %}

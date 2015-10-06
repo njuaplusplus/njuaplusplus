@@ -11,6 +11,9 @@ from django import forms
 from pagedown.widgets import PagedownWidget
 # from bootstrap3_datetime.widgets import DateTimePicker
 from datetimewidget.widgets import DateTimeWidget
+# from fluent_comments.moderation import moderate_model, comments_are_open, comments_are_moderated
+# from fluent_comments.models import get_comments_for_model, CommentsRelation
+from django.core.urlresolvers import reverse
 
 class Category(models.Model) :
     '''Category Model'''
@@ -116,9 +119,32 @@ class Article(models.Model) :
         verbose_name = _(u'发布日期'),
         help_text = _(u' ')
     )
-    is_public = models.BooleanField(verbose_name = _(u'公开博客'))
-    is_approved = models.BooleanField(verbose_name = _(u'通过审核'))
-    is_markuped = models.BooleanField(verbose_name = _(u'已经编译'))
+    is_public = models.BooleanField(
+        verbose_name = _(u'公开博客'),
+        default = False
+    )
+    is_approved = models.BooleanField(
+        verbose_name = _(u'通过审核'),
+        default = False
+    )
+    is_markuped = models.BooleanField(
+        verbose_name = _(u'已经编译'),
+        default = False
+    )
+    enable_comments = models.BooleanField(
+        verbose_name = _(u'允许评论'),
+        default = True
+    )
+
+    # # Optional reverse relation, allow ORM querying:
+    # comments_set = CommentsRelation()
+    # # Optional, give direct access to moderation info via the model:
+    # comments = property(get_comments_for_model)
+    # comments_are_open = property(comments_are_open)
+    # comments_are_moderated = property(comments_are_moderated)
+
+    def get_absolute_url(self):
+        return reverse('blog:single_post', kwargs={'slug': self.slug})
 
     class Meta:
         app_label = _(u'blog')
@@ -148,6 +174,13 @@ class Article(models.Model) :
 
     def __unicode__(self):
         return u'%s' % (self.title,)
+
+# # Give the generic app support for moderation by django-fluent-comments:
+# moderate_model(
+#     Article,
+#     publication_date_field='date_publish',
+#     enable_comments_field='enable_comments'
+# )
 
 class ArticleForm(forms.ModelForm):
     class Meta:
