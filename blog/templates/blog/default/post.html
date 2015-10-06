@@ -91,4 +91,11 @@
 
 {% block extScriptFile %}
     <script src="{% static 'mycomments/js/mycomments.js' %}"></script>
+    {% if user.is_authenticated %}
+    <script>
+        jQuery(function($) {
+            setAuthenticatedUser();
+        });
+    </script>
+    {% endif %}
 {% endblock extScriptFile %}

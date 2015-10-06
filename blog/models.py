@@ -14,6 +14,8 @@ from datetimewidget.widgets import DateTimeWidget
 # from fluent_comments.moderation import moderate_model, comments_are_open, comments_are_moderated
 # from fluent_comments.models import get_comments_for_model, CommentsRelation
 from django.core.urlresolvers import reverse
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 class Category(models.Model) :
     '''Category Model'''
@@ -208,7 +210,19 @@ class User_Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     duoshuo_id = models.IntegerField(default=0)
     token = models.IntegerField(default=0)
-    avatar = models.URLField(blank=True, null=True)
+    avatar = models.ImageField(
+        verbose_name = _(u'本地头像图片'),
+        help_text = _(u'若留空, 则使用默认图片'),
+        upload_to='avatars/%Y/%m/%d',
+        null = True,
+        blank = True
+    )
+    avatar_thumbnail = ImageSpecField(
+        source='avatar',
+        processors=[ResizeToFill(64, 64)],
+        format='JPEG',
+        options={'quality': 80}
+    )
 
     def __unicode__(self):
         return self.user.username

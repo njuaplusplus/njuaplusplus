@@ -1,60 +1,13 @@
 {% load threadedcomments_tags %}
 {% load staticfiles %}
 
-{% comment %}
 <div class="comments_length">
     <p>{{ comment_list|length }} Comments</p>
 </div>
 
 <div class="comments">
     {% for comment in comment_list|fill_tree|annotate_tree %}
-        {% ifchanged comment.parent_id %}
-        {% else %}
-            {% if comment.parent_id %}
-                <!-- start not changed pid  -->
-                </div>
-                <!-- end not changed pid  -->
-            {% endif %}
-        {% endifchanged %}
-        {% if not comment.open and not comment.close %}
-            <!-- start not open and not close -->
-            </div>
-            <!-- end not open and not close -->
-        {% endif %}
-        {% if comment.open %}
-            <!-- start open  -->
-            <div class="media">
-            <!-- end open  -->
-        {% endif %}
-        <a class="pull-left" href="#">
-            <img class="media-object" src="{% static 'blog/img/placeholder_64x64.png' %}" alt="">
-        </a>
-        <div class="media-body" id="c{{ comment.id }}">{# c## is used by the absolute URL of the Comment model, so keep that as it is. #}
-            <h4 class="media-heading">{{ comment.user_name }}
-                <small>
-                    {{ comment.submit_date }}
-                    | <a href="#c{{ comment.id }}" data-comment-id="{{ comment.id }}" class="comment_reply_link">Reply</a>
-                </small>
-            </h4>
-                {{ comment.comment|linebreaks }}
-            {% for close in comment.close %}
-            <!-- start close  -->
-                </div></div>
-            <!-- end close  -->
-            {% endfor %}
-
-    {% endfor %}
-</div>
-{% endcomment %}
-
-
-<h1>new!!!!!</h1>
-<div class="comments_length">
-    <p>{{ comment_list|length }} Comments</p>
-</div>
-
-<div class="comments">
-    {% for comment in comment_list|fill_tree|annotate_tree %}
+        {% comment %}
         {% ifchanged comment.parent_id %}
             {% if comment.parent_id and not comment.open %}
                 <!-- start changed pid  -->
@@ -72,9 +25,21 @@
                 <!-- end not changed pid  -->
             {% endif %}
         {% endifchanged %}
+        The above logic can be simplified.
+        {% endcomment %}
+    {% if comment.parent_id and not comment.open %}
+        <!-- return to outer(non-root) level  -->
+        </div>
+        </div>
+        <!-- end return to outer(non-root) level  -->
+    {% endif %}
     <div class="media">
         <a class="pull-left" href="#">
+            {% if comment.user and comment.user.profile.avatar %}
+                <img class="media-object" src="{{ comment.user.profile.avatar_thumbnail.url }}" alt="">
+            {% else %}
             <img class="media-object" src="{% static 'blog/img/placeholder_64x64.png' %}" alt="">
+            {% endif %}
         </a>
         <div class="media-body" id="c{{ comment.id }}">{# c## is used by the absolute URL of the Comment model, so keep that as it is. #}
             <h4 class="media-heading">{{ comment.user_name }}

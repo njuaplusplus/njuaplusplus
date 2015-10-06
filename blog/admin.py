@@ -2,7 +2,7 @@
 # coding=utf-8
 
 from django.contrib import admin
-from blog.models import Category, Article, MyImage
+from blog.models import Category, Article, MyImage, User_Profile
 from django import forms
 from pagedown.widgets import AdminPagedownWidget
 
@@ -54,6 +54,19 @@ class MyImageAdmin(admin.ModelAdmin):
         ),
     )
 
+class User_ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', )
+    search_fields = ('user', )
+    fieldsets = (
+        (
+            None, 
+            {
+                'fields': ('user', 'avatar', )
+            }
+        ),
+    )
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(MyImage, MyImageAdmin)
+admin.site.register(User_Profile, User_ProfileAdmin)

@@ -19,3 +19,8 @@ jQuery(function($) {
     })
 });
 
+function setAuthenticatedUser() {
+    $('#div_id_name').hide();
+    $('#div_id_email').hide();
+    $('#div_id_url').hide();
+}
