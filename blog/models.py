@@ -247,7 +247,7 @@ class ArticleModerator(CommentModerator):
             return
         recipient_list = [manager_tuple[1] for manager_tuple in settings.MANAGERS]
         site = get_current_site(request)
-        subject = '[%s] New comment posted on "%s"' % (site.name, content_object)
+        subject = u'[%s] New comment posted on "%s"' % (site.name, content_object)
         message = render_to_string(
             'comments/comment_notification_email.txt',
             {
