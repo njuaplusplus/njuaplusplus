@@ -38,7 +38,7 @@
     </p>
     <p>
     {% for c in article.categories.all %}
-        <a href="{% url 'blog:category_archive_view' slug=c.slug %}"><span class="label label-default">{{ c.title }}</span></a>
+        <a href="{% url 'blog:category_archive_view' slug=c.slug %}"><span class="label label-default"><i class="fa fa-tag"></i> {{ c.title }}</span></a>
     {% endfor %}
     </p>
 
