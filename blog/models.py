@@ -259,7 +259,7 @@ class ArticleModerator(CommentModerator):
         # Add the users of the parent comments
         pp = comment.parent
         while pp:
-            mail_addr = comment.user_email
+            mail_addr = pp.user_email
             if not mail_addr and pp.user and pp.user.email:
                 mail_addr = pp.user.email
             if mail_addr and mail_addr != 'user@example.com':
