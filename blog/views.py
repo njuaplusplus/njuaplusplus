@@ -277,6 +277,7 @@ def get_query(query_string, search_fields):
 def search(request):
     query_string = request.GET.get('queryString', '')
     found_entries = None
+    found_articles = None
     if query_string:
         entry_query = get_query(query_string, ['title', 'excerpt', 'content_markdown',])
         found_articles = Article.objects.filter(entry_query)
