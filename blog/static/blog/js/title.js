@@ -1,6 +1,7 @@
 jQuery(function($) {
     var hidden = "hidden";
     var originTitle = document.title;
+    var newTitle = '回来看博客哟';
 
     // Standards:
     if (hidden in document)
@@ -28,14 +29,14 @@ jQuery(function($) {
         evt = evt || window.event;
         if (evt.type in evtMap) {
             if (evtMap[evt.type] == h) {
-                document.title = '回来看博客吧, 我会想你的😘 ';
+                document.title = newTitle;
             } else {
                 document.title = originTitle;
             }
         } else {
             document.body.className = this[hidden] ? "hidden" : "visible";
             if (this[hidden]) {
-                document.title = '回来看博客吧, 我会想你的😘 ';
+                document.title = newTitle;
             } else {
                 document.title = originTitle;
             }
