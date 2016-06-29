@@ -50,6 +50,6 @@ class Photo(models.Model):
         help_text = _(u' ')
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return u"t:%s w:%s" % (self.title, self.width)
 

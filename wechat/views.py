@@ -5,17 +5,17 @@ from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-import hashlib, urllib2, json
+import hashlib
 
 @csrf_exempt
 def index(request):
     if request.method == 'GET':
-        print 'Wechat receive GET request'
+        print('Wechat receive GET request')
         if checkSignature(request):
             echostr=request.GET.get('echostr',None)
             return HttpResponse(echostr)
     else:
-        print 'Wechat receive POST request'
+        print('Wechat receive POST request')
         if checkSignature(request):
             import xml.etree.ElementTree as ET
             import time
@@ -30,7 +30,7 @@ def index(request):
             if msgType == 'event':
                 event = msg['Event']
                 if event == 'subscribe':
-                    print 'Event - subscribe'
+                    print('Event - subscribe')
                     content = u'就接收小视频而已..'
                     context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                     return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
@@ -39,7 +39,7 @@ def index(request):
                     context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                     return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
             elif msgType == 'text':
-                print 'Receive text'
+                print('Receive text')
                 content = u'Contact me'
                 context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                 return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
@@ -59,10 +59,10 @@ def checkSignature(request):
     tmpstr="%s%s%s"%tuple(tmplist)
     tmpstr=hashlib.sha1(tmpstr).hexdigest()
     if tmpstr==signature:
-        print 'Check Signature Success'
+        print('Check Signature Success')
         return True
     else:
-        print 'Check Signature Fail'
+        print('Check Signature Fail')
         return False
 
 def paraseMsgXml(rootElem):

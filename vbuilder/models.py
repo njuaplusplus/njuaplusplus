@@ -29,7 +29,7 @@ class Root(models.Model):
         app_label = _(u'vbuilder')
         verbose_name = _(u'Root')
         verbose_name_plural = _(u'Roots')
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.root,)
 
 class NormalWord(models.Model):
@@ -66,7 +66,7 @@ class NormalWord(models.Model):
         app_label = _(u'vbuilder')
         verbose_name = _(u'Word')
         verbose_name_plural = _(u'Words')
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.word,)
 
 class ClosestDefQuiz(models.Model):
@@ -93,7 +93,7 @@ class ClosestDefQuiz(models.Model):
         app_label = _(u'vbuilder')
         verbose_name = _(u'Closest Defintion Quiz')
         verbose_name_plural = _(u'Closest Definition Quizzes')
-    def __unicode__(self):
+    def __str__(self):
         return u'%s %s' % (self.word, self.quiz)
 
 class FillInBlankQuiz(models.Model):
@@ -119,7 +119,7 @@ class FillInBlankQuiz(models.Model):
         app_label = _(u'vbuilder')
         verbose_name = _(u'Fill in Blank Quiz')
         verbose_name_plural = _(u'Fill in Blank Quizzes')
-    def __unicode__(self):
+    def __str__(self):
         return u'%s %s' % (self.words, self.quiz)
 
 class MatchQuiz(models.Model):
@@ -146,5 +146,5 @@ class MatchQuiz(models.Model):
         app_label = _(u'vbuilder')
         verbose_name = _(u'Match Quiz')
         verbose_name_plural = _(u'Match Quizzes')
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.left)

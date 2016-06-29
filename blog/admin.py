@@ -2,30 +2,33 @@
 # coding=utf-8
 
 from django.contrib import admin
-from blog.models import Category, Article, MyImage, User_Profile
+from .models import Category, Article, MyImage, User_Profile
 from django import forms
 from pagedown.widgets import AdminPagedownWidget
 
+
 class CategoryAdmin(admin.ModelAdmin):
     # prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', )
-    search_fields = ('title', )
+    list_display = ('title',)
+    search_fields = ('title',)
     fieldsets = (
         (
-            None, 
+            None,
             {
                 'fields': ('title', 'slug')
             }
         ),
     )
 
+
 class ArticleAdminForm(forms.ModelForm):
     class Meta:
         model = Article
         widgets = {
-            'content_markdown' : AdminPagedownWidget(),
+            'content_markdown': AdminPagedownWidget(),
         }
-        exclude = ['content_markup',]
+        exclude = ['content_markup', ]
+
 
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
@@ -35,38 +38,42 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ('categories',)
     fieldsets = (
         (
-            None, 
+            None,
             {
-                'fields': ('title', 'slug', 'cover', 'author', 'excerpt', 'content_markdown', 'images', 'categories', 'date_publish', 'is_public', 'is_approved', 'is_markuped',)
+                'fields': ('title', 'slug', 'cover', 'author', 'excerpt', 'content_markdown', 'images', 'categories',
+                           'date_publish', 'is_public', 'is_approved', 'is_markuped',)
             }
         ),
     )
+
 
 class MyImageAdmin(admin.ModelAdmin):
     list_display = ('title', 'image')
-    search_fields = ('title', )
+    search_fields = ('title',)
     fieldsets = (
         (
-            None, 
+            None,
             {
-                'fields': ('title', 'image', 'description', )
+                'fields': ('title', 'image', 'description',)
             }
         ),
     )
 
-class User_ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', )
-    search_fields = ('user', )
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    search_fields = ('user',)
     fieldsets = (
         (
-            None, 
+            None,
             {
-                'fields': ('user', 'avatar', )
+                'fields': ('user', 'avatar',)
             }
         ),
     )
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(MyImage, MyImageAdmin)
-admin.site.register(User_Profile, User_ProfileAdmin)
+admin.site.register(User_Profile, UserProfileAdmin)

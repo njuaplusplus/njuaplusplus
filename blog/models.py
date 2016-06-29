@@ -46,7 +46,7 @@ class Category(models.Model) :
             self.slug = uuslug(self.title, instance=self, max_length=32, word_boundary=True)
         super(Category, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.title,)
 
 class MyImage(models.Model):
@@ -71,7 +71,7 @@ class MyImage(models.Model):
         verbose_name = _(u'Image')
         verbose_name_plural = _(u'Images')
         ordering = ['title',]
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.title,)
 
 class Article(models.Model) :
@@ -170,7 +170,7 @@ class Article(models.Model) :
             self.save()
         return self.content_markup
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.title,)
 
 class ArticleForm(forms.ModelForm):
@@ -213,7 +213,7 @@ class User_Profile(models.Model):
         options={'quality': 80}
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
 
 def markdown_to_html(text, images):
@@ -230,7 +230,7 @@ def markdown_to_html(text, images):
     )
     for img in images:
         md.references[img.title] = (img.image.url, img.title)
-    print md.references
+    print(md.references)
     return md.convert(text)
 
 class ArticleModerator(CommentModerator):

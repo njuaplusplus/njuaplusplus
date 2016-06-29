@@ -15,26 +15,29 @@ import datetime
 import random
 import json
 
+
 def index(request):
     return index_page(request, 1)
+
 
 def get_top_categories(num=None):
     categories = Category.objects.all()
     if num is None:
         return sorted(
                 categories,
-                cmp=lambda x,y: cmp(x.article_set.count(), y.article_set.count()),
+                key=lambda x: x.article_set.count(),
                 reverse=True
         )
     else:
         return sorted(
                 categories,
-                cmp=lambda x,y: cmp(x.article_set.count(), y.article_set.count()),
+                key=lambda x: x.article_set.count(),
                 reverse=True
         )[:num]
 
-def evenly_divide_list(l, n=2):
-    """ Divide the list to n even parts.
+
+def evenly_divide_list(l):
+    """ Divide the list to 2 even parts.
     """
     mid = len(l) >> 1
     if mid << 1 == len(l):
@@ -176,7 +179,7 @@ def write_post_view(request):
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = request.user
-            print 'In write_post_view', article.id
+            print('In write_post_view', article.id)
             article.save()
             article_form.save_m2m()
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))

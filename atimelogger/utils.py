@@ -61,7 +61,7 @@ def init_types():
                 types[guid] = Type(guid=guid, name=t['name'])
 
     # for t in types.values():
-    #     print unicode(t)
+    #     print(unicode(t))
 
 
 def get_today_intervals():
@@ -99,14 +99,14 @@ def get_today_intervals():
                     )
             ))
     for interval in intervals:
-        print unicode(interval)
+        print(unicode(interval))
     return intervals
 
 
 def get_json(url, auth, params=None):
     r = requests.get(url, auth=auth, params=params)
     if r.status_code == 200:
-        print 'get_json Success!'
+        print('get_json Success!')
         return r.json()
     return None
 

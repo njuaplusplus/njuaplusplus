@@ -13,7 +13,7 @@ def add_photos(root_dir=r'/Users/aplusplus/Downloads/cphotos/'):
         filename = os.path.join(root_dir, f)
         if os.path.isfile(filename):
             if not f[0] == '.' and any(f.endswith(ext) for ext in img_extensions):
-                # print hymn.hymn_name, f
+                # print(hymn.hymn_name, f)
                 with open(filename) as inFile:
                     photo = Photo(title=f, uploader=User.objects.get(username='aplusplus'), date_upload=timezone.now())
                     photo.xlarge_image.save(f, File(inFile))
