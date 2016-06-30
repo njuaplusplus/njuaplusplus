@@ -2,9 +2,10 @@
 # coding=utf-8
 
 from crispy_forms.helper import FormHelper
-from threadedcomments.forms import ThreadedCommentForm as base_class
+from threadedcomments.forms import ThreadedCommentForm as BaseClass
 
-class MyCommentForm(base_class):
+
+class MyCommentForm(BaseClass):
     """My Customized Comment Form.
 
     Just add some features via crispy.
