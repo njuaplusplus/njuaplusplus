@@ -3,7 +3,7 @@
 
 from django.conf.urls import url
 
-from photos import views
+from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name="index"),

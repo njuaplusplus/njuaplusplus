@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 from django.shortcuts import render
-from vbuilder.models import *
+from .models import *
 
 
 def unit_quiz(request, unit):

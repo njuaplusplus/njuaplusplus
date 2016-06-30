@@ -2,7 +2,7 @@
 # coding=utf-8
 
 from django.contrib import admin
-from .models import Category, Article, MyImage, User_Profile
+from .models import Category, Article, MyImage, UserProfile
 from django import forms
 from pagedown.widgets import AdminPagedownWidget
 
@@ -76,4 +76,4 @@ class UserProfileAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(MyImage, MyImageAdmin)
-admin.site.register(User_Profile, UserProfileAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

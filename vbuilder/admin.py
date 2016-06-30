@@ -1,62 +1,67 @@
 #!/usr/bin/env python
 # coding=utf-8
 from django.contrib import admin
-from vbuilder.models import Root, NormalWord, ClosestDefQuiz, FillInBlankQuiz, MatchQuiz
+from .models import Root, NormalWord, ClosestDefQuiz, FillInBlankQuiz, MatchQuiz
+
 
 class RootAdmin(admin.ModelAdmin):
     list_display = ('unit', 'root', 'meaning',)
-    search_fields = ('root', )
+    search_fields = ('root',)
     fieldsets = (
         (
-            None, 
+            None,
             {
                 'fields': ('unit', 'root', 'meaning', 'description',)
             }
         ),
     )
 
+
 class NormalWordAdmin(admin.ModelAdmin):
     list_display = ('unit', 'word', 'meaning',)
-    search_fields = ('word', )
+    search_fields = ('word',)
     fieldsets = (
         (
-            None, 
+            None,
             {
                 'fields': ('unit', 'word', 'root', 'meaning', 'sentence', 'description',)
             }
         ),
     )
 
+
 class ClosestDefQuizAdmin(admin.ModelAdmin):
     list_display = ('unit', 'word', 'quiz', 'answer')
-    search_fields = ('word', )
+    search_fields = ('word',)
     fieldsets = (
         (
-            None, 
+            None,
             {
                 'fields': ('unit', 'word', 'quiz', 'answer',)
             }
         ),
     )
 
+
 class FillInBlankQuizAdmin(admin.ModelAdmin):
     list_display = ('unit', 'words', 'quiz', 'answer')
-    search_fields = ('words', )
+    search_fields = ('words',)
     fieldsets = (
         (
-            None, 
+            None,
             {
                 'fields': ('unit', 'words', 'quiz', 'answer',)
             }
         ),
     )
 
+
 class MatchQuizAdmin(admin.ModelAdmin):
     list_display = ('unit', 'left', 'right', 'answer')
-    search_fields = ('left', )
+    search_fields = ('left',)
     fieldsets = (
         (
-            None, 
+            None,
             {
                 'fields': ('unit', 'left', 'right', 'answer',)
             }

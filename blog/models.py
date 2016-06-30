@@ -19,26 +19,28 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
 
-class Category(models.Model) :
-    '''Category Model'''
+
+class Category(models.Model):
+    """Category Model"""
     title = models.CharField(
-        verbose_name = _(u'名称'),
-        help_text = _(u' '),
-        max_length = 255
+        verbose_name=_(u'名称'),
+        help_text=_(u' '),
+        max_length=255
     )
     slug = models.SlugField(
-        verbose_name = _(u'Slug'),
-        help_text = _(u'Uri identifier.'),
-        max_length = 255,
-        unique = True
+        verbose_name=_(u'Slug'),
+        help_text=_(u'Uri identifier.'),
+        max_length=255,
+        unique=True
     )
 
     class Meta:
         app_label = _(u'blog')
         verbose_name = _(u'Category')
         verbose_name_plural = _(u'Categories')
-        ordering = ['title',]
+        ordering = ['title', ]
 
     def save(self, *args, **kwargs):
         if not self.slug.strip():
@@ -49,96 +51,100 @@ class Category(models.Model) :
     def __str__(self):
         return u'%s' % (self.title,)
 
+
 class MyImage(models.Model):
-    ''' Image storage for the post'''
+    """ Image storage for the post"""
     image = models.ImageField(
-        verbose_name = _(u'图片'),
-        help_text = _(u' '),
+        verbose_name=_(u'图片'),
+        help_text=_(u' '),
         upload_to='blogs/images/%Y/%m/%d',
     )
     title = models.CharField(
-        verbose_name = _(u'标题'),
-        help_text = _(u' '),
-        max_length = 100
+        verbose_name=_(u'标题'),
+        help_text=_(u' '),
+        max_length=100
     )
     description = models.TextField(
-        verbose_name = _(u'描述'),
-        help_text = _(u' '),
-        blank = True
+        verbose_name=_(u'描述'),
+        help_text=_(u' '),
+        blank=True
     )
+
     class Meta:
         app_label = _(u'blog')
         verbose_name = _(u'Image')
         verbose_name_plural = _(u'Images')
-        ordering = ['title',]
+        ordering = ['title', ]
+
     def __str__(self):
         return u'%s' % (self.title,)
 
-class Article(models.Model) :
-    '''Article Model'''
+
+class Article(models.Model):
+    """Article Model"""
     title = models.CharField(
-        verbose_name = _(u'标题'),
-        help_text = _(u' '),
-        max_length = 255
+        verbose_name=_(u'标题'),
+        help_text=_(u' '),
+        max_length=255
     )
     slug = models.SlugField(
-        verbose_name = _(u'固定链接'),
-        help_text = _(u'本文章的短网址(Uri identifier).'),
-        max_length = 255,
-        unique = True
+        verbose_name=_(u'固定链接'),
+        help_text=_(u'本文章的短网址(Uri identifier).'),
+        max_length=255,
+        unique=True
     )
     cover = models.ImageField(
-        verbose_name = _(u'封面'),
-        help_text = _(u'若留空, 则使用默认图片'),
+        verbose_name=_(u'封面'),
+        help_text=_(u'若留空, 则使用默认图片'),
         upload_to='blogs/images/%Y/%m/%d',
-        null = True,
-        blank = True
+        null=True,
+        blank=True
     )
     excerpt = models.TextField(
-        verbose_name = _(u'摘要'),
-        help_text = _(u' '),
-        blank = True
+        verbose_name=_(u'摘要'),
+        help_text=_(u' '),
+        blank=True
     )
     images = models.ManyToManyField(
         MyImage,
-        verbose_name = _(u'图片'),
-        help_text = _(u'向文章中插入图片'),
-        blank = True
+        verbose_name=_(u'图片'),
+        help_text=_(u'向文章中插入图片'),
+        blank=True
     )
     author = models.ForeignKey(User, verbose_name=_(u'作者'))
     content_markdown = models.TextField(
-        verbose_name = _(u'内容 (Markdown)'),
-        help_text = _(u' '),
+        verbose_name=_(u'内容 (Markdown)'),
+        help_text=_(u' '),
     )
     content_markup = models.TextField(
-        verbose_name = _(u'内容 (Markup)'),
-        help_text = _(u' '),
+        verbose_name=_(u'内容 (Markup)'),
+        help_text=_(u' '),
     )
     categories = models.ManyToManyField(
         Category,
-        verbose_name = _(u'分类'),
-        help_text = _(u' '),
-        blank = True
+        verbose_name=_(u'分类'),
+        help_text=_(u' '),
+        blank=True
     )
     date_publish = models.DateTimeField(
-        verbose_name = _(u'发布日期'),
-        help_text = _(u' ')
+        verbose_name=_(u'发布日期'),
+        help_text=_(u' ')
     )
     is_public = models.BooleanField(
-        verbose_name = _(u'公开博客'),
-        default = False
+        verbose_name=_(u'公开博客'),
+        default=False
     )
     is_approved = models.BooleanField(
-        verbose_name = _(u'通过审核'),
-        default = False
+        verbose_name=_(u'通过审核'),
+        default=False
     )
     is_markuped = models.BooleanField(
-        verbose_name = _(u'已经编译'),
-        default = False
+        verbose_name=_(u'已经编译'),
+        default=False
     )
     enable_comments = models.BooleanField(
-        verbose_name = _(u'允许评论'),
-        default = True
+        verbose_name=_(u'允许评论'),
+        default=True
     )
 
     def get_absolute_url(self):
@@ -173,38 +179,35 @@ class Article(models.Model) :
     def __str__(self):
         return u'%s' % (self.title,)
 
+
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         dateTimeOptions = {
-            'todayBtn' : 'true',
+            'todayBtn': 'true',
         }
         widgets = {
             # 'content_markdown' : PagedownWidget(),
             # 'date_publish' : DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickSeconds": False, "language": 'zh-cn', }),
-            'date_publish' : DateTimeWidget(usel10n=True, bootstrap_version=3, options = dateTimeOptions),
-            'title' : forms.TextInput(attrs={'class':'form-control'}),
-            'slug' : forms.TextInput(attrs={'class':'form-control'}),
-            'excerpt' : forms.Textarea(attrs={'class':'form-control'}),
-            'categories' : forms.SelectMultiple(attrs={'class':'form-control'}),
-            'images' : forms.SelectMultiple(attrs={'class':'form-control'}),
+            'date_publish': DateTimeWidget(usel10n=True, bootstrap_version=3, options=dateTimeOptions),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control'}),
+            'excerpt': forms.Textarea(attrs={'class': 'form-control'}),
+            'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'images': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
-        exclude = ['content_markup', 'author', 'is_approved', 'is_markuped',]
+        exclude = ['content_markup', 'author', 'is_approved', 'is_markuped', ]
 
-from django.contrib.auth.models import User
 
-# Create your models here.
-
-class User_Profile(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
-    duoshuo_id = models.IntegerField(default=0)
     token = models.IntegerField(default=0)
     avatar = models.ImageField(
-        verbose_name = _(u'本地头像图片'),
-        help_text = _(u'若留空, 则使用默认图片'),
+        verbose_name=_(u'本地头像图片'),
+        help_text=_(u'若留空, 则使用默认图片'),
         upload_to='avatars/%Y/%m/%d',
-        null = True,
-        blank = True
+        null=True,
+        blank=True
     )
     avatar_thumbnail = ImageSpecField(
         source='avatar',
@@ -216,9 +219,10 @@ class User_Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 def markdown_to_html(text, images):
-    '''Compile the text into html
-    '''
+    """Compile the text into html
+    """
     md = markdown.Markdown(
         extensions=['codehilite', 'attr_list'],
         extension_configs={
@@ -230,8 +234,8 @@ def markdown_to_html(text, images):
     )
     for img in images:
         md.references[img.title] = (img.image.url, img.title)
-    print(md.references)
     return md.convert(text)
+
 
 class ArticleModerator(CommentModerator):
     email_notification = True
@@ -251,7 +255,7 @@ class ArticleModerator(CommentModerator):
         message = render_to_string(
             'comments/comment_notification_email.txt',
             {
-                'site' : site,
+                'site': site,
                 'comment': comment,
                 'content_object': content_object,
             }
@@ -268,5 +272,6 @@ class ArticleModerator(CommentModerator):
             pp = pp.parent
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, fail_silently=True)
+
 
 moderator.register(Article, ArticleModerator)

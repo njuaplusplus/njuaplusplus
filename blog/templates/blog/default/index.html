@@ -20,7 +20,7 @@
         由
         <a href="#">
             {% if article.author.first_name or article.author.last_name %}
-                {{ article.author.last_name|addstr:article.author.first_name|truncatechars:9  }}
+                {{ article.author.last_name|add_str:article.author.first_name|truncatechars:9  }}
             {% else %}
                 {{ article.author.username|truncatechars:9 }}
             {% endif %}

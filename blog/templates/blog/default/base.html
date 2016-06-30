@@ -85,7 +85,7 @@
                         {% else %}
                             <li><a href="#">
                                 {% if user.first_name or user.last_name %}
-                                {{ user.last_name|addstr:user.first_name|truncatechars:9  }}
+                                {{ user.last_name|add_str:user.first_name|truncatechars:9  }}
                                 {% else %}
                                 {{ user.username|truncatechars:9 }}
                                 {% endif %}

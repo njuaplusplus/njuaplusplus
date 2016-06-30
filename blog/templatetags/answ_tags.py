@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 
 register = template.Library()
 
+
 @register.filter(name='has_group')
 def has_group(user, group_name):
     if user.groups.filter(name=group_name):
@@ -13,8 +14,10 @@ def has_group(user, group_name):
     else:
         return False
 
-@register.filter(name='addstr')
-def addstr(s1, s2):
-    ''' Concatenate s1 and s2
-    '''
-    return str(s1).strip().replace('"','-')+str(s2).strip().replace('"','-')
+
+@register.filter(name='add_str')
+def add_str(s1, s2):
+    """
+    Concatenate s1 and s2
+    """
+    return str(s1).strip().replace('"', '-') + str(s2).strip().replace('"', '-')

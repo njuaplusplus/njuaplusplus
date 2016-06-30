@@ -3,13 +3,15 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from photos.models import Photo
+from .models import Photo
 import random
+
 
 # Create your views here.
 
 def index(request):
     return index_page(request, 1)
+
 
 def index_page(request, page_num):
     template = 'photos/index.html',
@@ -35,7 +37,7 @@ def index_page(request, page_num):
         request,
         template,
         {
-            'photos' : photos,
-            'background_pattern' : background_pattern,
+            'photos': photos,
+            'background_pattern': background_pattern,
         }
     )

@@ -1,11 +1,12 @@
 #!/usr/local/bin/python
 # coding=utf-8
 
-from photos.models import *
+from .models import *
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.utils import timezone
 import os
+
 
 def add_photos(root_dir=r'/Users/aplusplus/Downloads/cphotos/'):
     img_extensions = {".jpg", ".png", ".gif"}

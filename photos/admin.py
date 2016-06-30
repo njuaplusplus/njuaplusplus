@@ -1,7 +1,8 @@
 from django.contrib import admin
-from photos.models import Photo
+from .models import Photo
 
 # Register your models here.
+
 
 class PhotoAdmin(admin.ModelAdmin):
     # prepopulated_fields = {'slug': ('title',)}

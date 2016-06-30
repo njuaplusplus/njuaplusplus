@@ -3,7 +3,7 @@
 
 from django.conf.urls import url
 
-from vbuilder import views
+from . import views
 
 urlpatterns = [
     url(r'^quiz/(?P<unit>[\d]+)/$', views.unit_quiz, name='unit_quiz'),
