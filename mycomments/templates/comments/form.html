@@ -1,15 +1,25 @@
-{% load comments i18n crispy_forms_tags %}
+{% load comments i18n crispy_forms_tags staticfiles %}
 <!-- Comments Form -->
 <div id="wrap-form-comment">
     <div class="well" id="form-comment">
         <h4>Leave a Comment:</h4>
-        <form role="form" action="{% comment_form_target %}" method="post">{% csrf_token %}
+        <form role="form" id="comment-form-{{ form.target_object.pk }}" data-object-id="{{ form.target_object.pk }}"
+              action="{% comment_form_target %}" method="post" class="js-comments-form"
+              data-ajax-action="{% url 'comments-post-comment-ajax' %}">
+              {% csrf_token %}
         {% if next %}
-            <div><input type="hidden" name="next" value="{{ next }}"/></div>
+            <div> <input type="hidden" name="next" value="{{ next }}"/></div>
         {% endif %}
             {% crispy form %}
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" name="preview" class="btn btn-default">{% trans 'Preview' %}</button>
             <button id="cancel_reply" type="button" class="btn btn-default">Cancel Reply</button>
+            <a href="#c0" class="comment-cancel-reply-link">{% trans "cancel reply 1" %}</a>
+            <span class="comment-waiting" id="comment-waiting-{{ form.target_object.pk }}" style="display: none;">
+                <img src="{% static 'mycomments/img/ajax-wait.gif' %}" alt="" class="ajax-loader" />{% trans "Please wait . . ." %}
+            </span>
+            <span class="comment-added-message" id="comment-added-message-{{ form.target_object.pk }}" style="display: none;">{% trans "Your comment has been posted!" %}</span>
+            <div class="comment-moderated-message" id="comment-moderated-message-{{ form.target_object.pk }}" style="display: none;">{% trans "Your comment has been posted, it will be visible for other users after approval." %}</div>
         </form>
     </div>
 </div>
