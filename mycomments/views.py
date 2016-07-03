@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.conf import settings
 from django_comments.views.comments import CommentPostBadRequest
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
@@ -129,7 +130,7 @@ def _ajax_result(request, form, action, comment=None, object_id=None):
         json_return.update({
             'html': comment_html,
             'comment_id': comment.id,
-            'parent_id': None,
+            'parent_id': comment.parent_id,
             'is_moderated': not comment.is_public,   # is_public flags changes in comment_will_be_posted
         })
 
@@ -140,7 +141,7 @@ def _render_errors(field):
     """
     Render form errors in crispy-forms style.
     """
-    template = 'comments/field_errors.html'
+    template = '{0}/layout/field_errors.html'.format(getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap3'))
     return render_to_string(template, {
         'field': field,
         'form_show_errors': True,

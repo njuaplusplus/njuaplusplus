@@ -10,3 +10,7 @@
 .media #cancel_reply {
     display: inline;
 }
+
+.comment-waiting img.ajax-loader {
+    display: inline;
+}
