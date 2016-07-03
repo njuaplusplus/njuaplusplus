@@ -87,10 +87,17 @@
 
 {% block extScriptFile %}
     <script src="{% static 'mycomments/js/mycomments.js' %}"></script>
+    <script src="{% static 'mycomments/js/js.cookie.js' %}"></script>
     {% if user.is_authenticated %}
     <script>
         jQuery(function($) {
-            setAuthenticatedUser();
+            $.fn.ready(function() {
+                setAuthenticatedUser(
+                        '{{ user.get_full_name|default:request.user.get_username }}',
+                        '{{ user.email }}',
+                        '{{ user.url }}'
+                );
+            });
         });
     </script>
     {% endif %}

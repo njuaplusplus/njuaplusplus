@@ -24,6 +24,10 @@ jQuery(function($) {
         $('body').on('click', '.comment_reply_link', show_reply_form);
         $('#cancel_reply').click(cancel_reply_form);
 
+        $('#id_name').val(Cookies.get('comment_username') || '');
+        $('#id_email').val(Cookies.get('comment_user_email') || '');
+        $('#id_url').val(Cookies.get('comment_user_url') || '');
+
         // Find the element to use for scrolling.
         // This code is much shorter then jQuery.scrollTo()
         $('html, body').each(function()
@@ -50,7 +54,7 @@ jQuery(function($) {
                 scrollToComment(id, 1000);
         }
 
-    })
+    });
 
     function setActiveInput() {
         active_input = this.name;
@@ -116,14 +120,13 @@ jQuery(function($) {
                 removeErrors($form);
 
                 if (data['success']) {
-                    var $added;
                     if( preview )
-                        $added = commentPreview(data);
+                        commentPreview(data);
                     else
-                        $added = commentSuccess($form, data);
+                        commentSuccess($form, data);
 
                     if( onsuccess )
-                        args.onsuccess(data['comment_id'], data['object_id'], data['is_moderated'], $added);
+                        args.onsuccess(data['comment_id'], data['object_id'], data['is_moderated']);
                 }
                 else {
                     commentFailure(data);
@@ -230,6 +233,8 @@ jQuery(function($) {
             // Smooth introduction to the new comment.
             $new_comment.hide().show(600);
 
+        set_comment_user_cookies(data);
+
         return $new_comment;
     }
 
@@ -291,14 +296,29 @@ jQuery(function($) {
     }
 
     function reset_form() {
+        $('#id_name').val(Cookies.get('comment_username') || $('#id_name').val());
+        $('#id_email').val(Cookies.get('comment_user_email') || $('#id_name').val());
+        $('#id_url').val(Cookies.get('comment_user_url') || $('#id_name').val());
         $('#id_comment').val('');
         $('#id_parent').val('');
         $('#form-comment').appendTo($('#wrap-form-comment'));
     }
+    
+    function set_comment_user_cookies(data) {
+        Cookies.set('comment_username', data['comment_username'], { expires: 180, path: '/' });
+        Cookies.set('comment_user_email', data['comment_user_email'], { expires: 180, path: '/' });
+        Cookies.set('comment_user_url', data['comment_user_url'], { expires: 180, path: '/' });
+    }
 
 });
 
-function setAuthenticatedUser() {
+function setAuthenticatedUser(comment_username, comment_user_email, comment_user_url) {
+    Cookies.set('comment_username', comment_username, { expires: 180, path: '/' });
+    Cookies.set('comment_user_email', comment_user_email, { expires: 180, path: '/' });
+    Cookies.set('comment_user_url', comment_user_url, { expires: 180, path: '/' });
+    $('#id_name').val(comment_username);
+    $('#id_email').val(comment_user_email);
+    $('#id_url').val(comment_user_url);
     $('#div_id_name').hide();
     $('#div_id_email').hide();
     $('#div_id_url').hide();

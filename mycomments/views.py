@@ -117,6 +117,9 @@ def _ajax_result(request, form, action, comment=None, object_id=None):
         'action': action,
         'errors': json_errors,
         'object_id': object_id,
+        'comment_username': form.cleaned_data['name'],
+        'comment_user_email': form.cleaned_data['email'],
+        'comment_user_url': form.cleaned_data['url'],
     }
 
     if comment is not None:
