@@ -64,6 +64,8 @@ def post_comment_ajax(request, using=None):
     # If there are errors or if we requested a preview show the comment
     if preview:
         comment = form.get_comment_object() if not form.errors else None
+        if comment is not None and request.user.is_authenticated():
+            comment.user = request.user
         return _ajax_result(request, form, "preview", comment, object_id=object_pk)
     if form.errors:
         return _ajax_result(request, form, "post", object_id=object_pk)
