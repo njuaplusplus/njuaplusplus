@@ -14,3 +14,7 @@
 .comment-waiting img.ajax-loader {
     display: inline;
 }
+
+div.comment-preview .media-body {
+    background-color: #FFFFCC;
+}

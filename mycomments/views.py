@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 
 import django_comments
 from django_comments import signals
+from ipware.ip import get_real_ip
 
 @require_POST
 def post_comment_ajax(request, using=None):
@@ -69,7 +70,7 @@ def post_comment_ajax(request, using=None):
 
     # Otherwise create the comment
     comment = form.get_comment_object()
-    comment.ip_address = request.META.get("REMOTE_ADDR", None)
+    comment.ip_address = get_real_ip(request)
     if request.user.is_authenticated():
         comment.user = request.user
 

@@ -7,7 +7,9 @@
             <img class="media-object" src="{% static 'blog/img/placeholder_64x64.png' %}" alt="">
         {% endif %}
     </a>
-    <div class="media-body" id="c{{ comment.id }}">{# c## is used by the absolute URL of the Comment model, so keep that as it is. #}
+    <div class="media-body"
+            {% if not preview %} id="c{{ comment.id }}" {% endif %}>
+        {# c## is used by the absolute URL of the Comment model, so keep that as it is. #}
         <h4 class="media-heading">{{ comment.user_name }}
             <small>
                 {{ comment.submit_date }}
