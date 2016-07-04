@@ -5,7 +5,7 @@ jQuery(function($) {
 
     // Settings
     var COMMENT_SCROLL_TOP_OFFSET = 80;
-    var PREVIEW_SCROLL_TOP_OFFSET = 20;
+    var PREVIEW_SCROLL_TOP_OFFSET = 60;
     var ENABLE_COMMENT_SCROLL = true;
 
     $.fn.ready(function() {

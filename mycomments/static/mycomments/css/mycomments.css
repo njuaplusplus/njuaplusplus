@@ -15,6 +15,10 @@
     display: inline;
 }
 
+.wrap-comment-preview .media:first-child {
+    margin-top: 15px;
+}
+
 .comment-waiting img.ajax-loader {
     display: inline;
 }
