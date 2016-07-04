@@ -49,6 +49,7 @@
                 </small>
             </h4>
                 {{ comment.comment|linebreaks }}
+            <div class="wrap-comment-preview"></div>
             {% for close in comment.close %}
             <!-- start close  -->
             {# 从深层返回上层嵌套评论结束 #}
@@ -57,4 +58,5 @@
             {% endfor %}
 
     {% endfor %}
+    <div class="wrap-comment-preview"></div>
 </div>

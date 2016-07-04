@@ -200,16 +200,12 @@ jQuery(function($) {
         var parent_id = data['parent_id'];
 
         var $newCommentTarget = addCommentWrapper(data, true);
-        var $previewarea = $newCommentTarget;
+        var $previewarea = $newCommentTarget.children('div.wrap-comment-preview');
 
-        var had_preview = $previewarea.hasClass('has-preview-loaded');
-        var $form = $previewarea.find('#form-comment');
-        if ($form.length == 0) {
-            $previewarea.append(data['html']);
-        } else {
-            $form.before(data['html']);
-        }
-        $previewarea.addClass('has-preview-loaded');
+        var had_preview = $newCommentTarget.hasClass('has-preview-loaded');
+        $newCommentTarget.addClass('has-preview-loaded');
+        $('#form-comment').addClass('has-preview-loaded');
+        $previewarea.html(data['html']);
 
         if( ! had_preview )
             $previewarea.hide().show(600);
@@ -241,7 +237,7 @@ jQuery(function($) {
     function addComment(data) {
         // data contains the server-side response.
         var $newCommentTarget = addCommentWrapper(data, '');
-        $newCommentTarget.append(data['html']);
+        $newCommentTarget.children('div.wrap-comment-preview').before(data['html']);
         return $("#c" + parseInt(data['comment_id']));
     }
 
@@ -286,19 +282,20 @@ jQuery(function($) {
 
     function remove_preview_comment() {
         // And remove the preview (everywhere! on all comments)
-        var $previewLi = $('div.comment-preview');
-        if($previewLi.length == 0)
+        var $preview_area = $('div.comment-preview');
+        if($preview_area.length == 0)
             return false;
-        $previewLi.parent().removeClass('has-preview-loaded');
-        $previewLi.remove();
+        $preview_area.parent().parent().removeClass('has-preview-loaded');
+        $preview_area.remove();
+        $('#form-comment').removeClass('has-preview-loaded');
 
         return true
     }
 
     function reset_form() {
         $('#id_name').val(Cookies.get('comment_username') || $('#id_name').val());
-        $('#id_email').val(Cookies.get('comment_user_email') || $('#id_name').val());
-        $('#id_url').val(Cookies.get('comment_user_url') || $('#id_name').val());
+        $('#id_email').val(Cookies.get('comment_user_email') || $('#id_email').val());
+        $('#id_url').val(Cookies.get('comment_user_url') || $('#id_url').val());
         $('#id_comment').val('');
         $('#id_parent').val('');
         $('#form-comment').appendTo($('#wrap-form-comment'));

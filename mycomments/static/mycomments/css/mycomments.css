@@ -11,6 +11,10 @@
     display: inline;
 }
 
+.has-preview-loaded #cancel_reply {
+    display: inline;
+}
+
 .comment-waiting img.ajax-loader {
     display: inline;
 }

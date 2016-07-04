@@ -13,9 +13,14 @@
         <h4 class="media-heading">{{ comment.user_name }}
             <small>
                 {{ comment.submit_date }}
+                {% if not preview %}
                 | <a href="#c{{ comment.id }}" data-comment-id="{{ comment.id }}" class="comment_reply_link">Reply</a>
+                {% endif %}
             </small>
         </h4>
         {{ comment.comment|linebreaks }}
+        {% if not preview %}
+        <div class="wrap-comment-preview"></div>
+        {% endif %}
     </div>
 </div>
