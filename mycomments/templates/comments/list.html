@@ -28,6 +28,7 @@
         The above logic can be simplified.
         {% endcomment %}
     {% if comment.parent_id and not comment.open %}
+        <div class="wrap-comment-preview"></div>
         <!-- return to outer(non-root) level  -->
         </div>
         </div>
@@ -49,8 +50,8 @@
                 </small>
             </h4>
                 {{ comment.comment|linebreaks }}
-            <div class="wrap-comment-preview"></div>
             {% for close in comment.close %}
+            <div class="wrap-comment-preview"></div>
             <!-- start close  -->
             {# 从深层返回上层嵌套评论结束 #}
                 </div></div>

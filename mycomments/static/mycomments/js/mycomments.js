@@ -6,6 +6,7 @@ jQuery(function($) {
     // Settings
     var COMMENT_SCROLL_TOP_OFFSET = 80;
     var PREVIEW_SCROLL_TOP_OFFSET = 60;
+    var FORM_SCROLL_TOP_OFFSET = 60;
     var ENABLE_COMMENT_SCROLL = true;
 
     $.fn.ready(function() {
@@ -273,11 +274,13 @@ jQuery(function($) {
         remove_preview_comment();
         $('#id_parent').val(comment_id);
         $('#form-comment').appendTo($this.closest('.media-body'));
+        scrollToElement($('#form-comment'), 500, FORM_SCROLL_TOP_OFFSET);
     }
 
     function cancel_reply_form() {
         remove_preview_comment();
         reset_form();
+        scrollToElement($('#form-comment'), 500, FORM_SCROLL_TOP_OFFSET);
     }
 
     function remove_preview_comment() {

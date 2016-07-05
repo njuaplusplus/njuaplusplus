@@ -23,6 +23,10 @@
     display: inline;
 }
 
+.comments #form-comment {
+    margin-top: 10px;
+}
+
 div.comment-preview .media-body {
     background-color: #FFFFCC;
 }
