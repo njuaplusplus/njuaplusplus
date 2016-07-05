@@ -305,9 +305,15 @@ jQuery(function($) {
     }
     
     function set_comment_user_cookies(data) {
-        Cookies.set('comment_username', data['comment_username'], { expires: 180, path: '/' });
-        Cookies.set('comment_user_email', data['comment_user_email'], { expires: 180, path: '/' });
-        Cookies.set('comment_user_url', data['comment_user_url'], { expires: 180, path: '/' });
+        if (data['comment_username']) {
+            Cookies.set('comment_username', data['comment_username'], { expires: 180, path: '/' });
+        }
+        if (data['comment_user_email']) {
+            Cookies.set('comment_user_email', data['comment_user_email'], {expires: 180, path: '/'});
+        }
+        if (data['comment_user_url']) {
+            Cookies.set('comment_user_url', data['comment_user_url'], {expires: 180, path: '/'});
+        }
     }
 
 });
