@@ -3,7 +3,7 @@
 
 from django.conf.urls import url
 
-from blog import views
+from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name="index"),
@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^accounts/login/$', views.login_view, name='login_view'),
     url(r'^accounts/logout/$', views.logout_view, name='logout_view'),
+    url(r'^ip/$', views.ip),
 ]
