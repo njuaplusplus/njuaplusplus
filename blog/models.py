@@ -142,6 +142,10 @@ class Article(models.Model):
         verbose_name=_(u'已经编译'),
         default=False
     )
+    for_preview = models.BooleanField(
+        verbose_name=_(u'作为预览'),
+        default=False
+    )
     enable_comments = models.BooleanField(
         verbose_name=_(u'允许评论'),
         default=True
@@ -166,6 +170,8 @@ class Article(models.Model):
             self.is_public = False
         if self.is_markuped is None:
             self.is_markuped = False
+        if self.for_preview is None:
+            self.for_preview = False
         # self.content_markup = markdown.markdown(self.content_markdown, ['codehilite', 'attr_list'])
         super(Article, self).save(*args, **kwargs)
 
@@ -196,7 +202,7 @@ class ArticleForm(forms.ModelForm):
             'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'images': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
-        exclude = ['content_markup', 'author', 'is_approved', 'is_markuped', ]
+        exclude = ['content_markup', 'author', 'is_approved', 'is_markuped', 'for_preview', ]
 
 
 class UserProfile(models.Model):

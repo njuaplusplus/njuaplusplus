@@ -68,7 +68,7 @@ def evenly_divide_list(l):
 
 def index_page(request, page_num):
     """The news index"""
-    article_queryset = Article.objects.all()
+    article_queryset = Article.objects.filter(for_preview=False)
     paginator = Paginator(article_queryset, 5)
 
     try:
@@ -202,10 +202,12 @@ def write_post_view(request):
     if not request.user.groups.filter(name='authors'):
         return render(request, 'blog/error.html', {'error': '权限不够', 'message': '权限不够, 请联系管理员!',})
     if request.method == 'POST':
-        article_form = ArticleForm(request.POST, request.FILES)
+        article_form = ArticleForm(request.POST, request.FILES,
+                                   instance=Article.objects.filter(author=request.user, for_preview=True).first())
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = request.user
+            article.for_preview = False
             article.save()
             article_form.save_m2m()
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
@@ -217,16 +219,25 @@ def write_post_view(request):
 @login_required
 def preview_post_view(request):
     if request.method == 'POST' and request.is_ajax():
-        article_form = ArticleForm(request.POST, request.FILES)
+        article_form = ArticleForm(request.POST, request.FILES,
+                                   instance=Article.objects.filter(author=request.user, for_preview=True).first())
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = request.user
-            print(article.images)
-            print(markdown_to_html(article.content_markdown, article.images.all()))
-        else:
-            return _ajax_result(request, article_form)
-    else:
-        return HttpResponse('haha')
+            article.for_preview = True
+            article.is_markuped = False
+            article.save()
+            article_form.save_m2m()
+        return _ajax_result(request, article_form)
+    elif request.method == 'GET':
+        return render(
+            request,
+            "blog/default/post.html",
+            {
+                "article": Article.objects.filter(author=request.user, for_preview=True).first(),
+                "preview_post": True,
+            }
+        )
 
 
 def _ajax_result(request, form):
@@ -257,6 +268,7 @@ def _render_errors(field):
         'form_show_errors': True,
     })
 
+
 @login_required
 def edit_post_view(request, post_id):
     article = get_object_or_404(Article, pk=post_id)
@@ -273,7 +285,7 @@ def edit_post_view(request, post_id):
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
     else:
         article_form = ArticleForm(instance=article)
-    return render(request, 'blog/write_post.html', {'article_form': article_form,})
+    return render(request, 'blog/write_post.html', {'article_form': article_form, })
 
 
 def decide_next_url(next_url):

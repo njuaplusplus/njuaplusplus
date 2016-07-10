@@ -32,10 +32,12 @@
     <p><i class="fa fa-clock-o fa-fw"></i>
         发布于 {{ article.date_publish }}
     </p>
-    {% get_comment_count for article as comment_count %}
-    <p><i class="fa fa-comment-o fa-fw"></i>
-        {{ comment_count }} 个评论
-    </p>
+    {% if not preview_post %}
+        {% get_comment_count for article as comment_count %}
+        <p><i class="fa fa-comment-o fa-fw"></i>
+            {{ comment_count }} 个评论
+        </p>
+    {% endif %}
     <p>
     {% for c in article.categories.all %}
         <a href="{% url 'blog:category_archive_view' slug=c.slug %}"><span class="label label-default"><i class="fa fa-tag"></i> {{ c.title }}</span></a>
@@ -68,19 +70,17 @@
         </div>
     </div>
 
-    {% if user|has_group:'authors' and user == article.author %}
-    <p>
-        <a href="{% url 'blog:edit_post_view' post_id=article.id %}" style="font-size: 20px;">编辑本文</a>
-    </p>
+    {% if not preview_post %}
+        {% if user|has_group:'authors' and user == article.author %}
+        <p>
+            <a href="{% url 'blog:edit_post_view' post_id=article.id %}" style="font-size: 20px;">编辑本文</a>
+        </p>
+        {% endif %}
+        <hr>
+        {% render_comment_list for article %}
+        <hr>
+        {% render_comment_form for article %}
     {% endif %}
-
-    <hr>
-
-    {% render_comment_list for article %}
-
-    <hr>
-
-    {% render_comment_form for article %}
 
 </article>
 {% endblock blogColumn %}
