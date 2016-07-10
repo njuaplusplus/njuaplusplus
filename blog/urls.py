@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^archive/(?P<year>[\d]+)/(?P<month>[\d]+)/page/(?P<page_num>[\d]+)/$', views.date_archive_page, name="date_archive_page_view"),
     url(r'^post/(?P<slug>[-\w]+)/$', views.single, name="single_post"),
     url(r'^write-post/$', views.write_post_view, name="write_post_view"),
+    url(r'^preview-post/$', views.preview_post_view, name="preview_post_view"),
     url(r'^edit-post/(?P<post_id>\d+)/$', views.edit_post_view, name='edit_post_view'),
     url(r'^search/$', views.search, name='search'),
     url(r'^accounts/login/$', views.login_view, name='login_view'),

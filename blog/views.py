@@ -3,12 +3,12 @@
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import auth
 from django.contrib.auth.models import User
-from .models import Category, Article, ArticleForm, UserProfile
+from .models import Category, Article, ArticleForm, UserProfile, markdown_to_html
 import calendar, datetime
 from django.conf import settings  # use settings
 import datetime
@@ -17,6 +17,7 @@ import json
 import pytz
 import re
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 
 def ip(request):
@@ -210,8 +211,51 @@ def write_post_view(request):
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
     else:
         article_form = ArticleForm()
-    return render(request, 'blog/write_post.html', {'article_form': article_form,})
+    return render(request, 'blog/write_post.html', {'article_form': article_form, })
 
+
+@login_required
+def preview_post_view(request):
+    if request.method == 'POST' and request.is_ajax():
+        article_form = ArticleForm(request.POST, request.FILES)
+        if article_form.is_valid():
+            article = article_form.save(commit=False)
+            article.author = request.user
+            print(article.images)
+            print(markdown_to_html(article.content_markdown, article.images.all()))
+        else:
+            return _ajax_result(request, article_form)
+    else:
+        return HttpResponse('haha')
+
+
+def _ajax_result(request, form):
+    success = True
+    json_errors = {}
+
+    if form.errors:
+        for field_name in form.errors:
+            field = form[field_name]
+            json_errors[field_name] = _render_errors(field)
+        success = False
+
+    json_return = {
+        'success': success,
+        'errors': json_errors,
+    }
+
+    return JsonResponse(json_return)
+
+
+def _render_errors(field):
+    """
+    Render form errors in crispy-forms style.
+    """
+    template = '{0}/layout/field_errors.html'.format(getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap3'))
+    return render_to_string(template, {
+        'field': field,
+        'form_show_errors': True,
+    })
 
 @login_required
 def edit_post_view(request, post_id):

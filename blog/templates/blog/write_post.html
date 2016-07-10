@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles i18n %}
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head>
@@ -75,7 +75,8 @@
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <form id="write-post-form" role="form" method="POST" ENCTYPE="multipart/form-data" action="{{ request.path }}">
+                    <form id="write-post-form" role="form" method="POST" ENCTYPE="multipart/form-data"
+                          action="{{ request.path }}" data-ajax-action="{% url 'blog:preview_post_view' %}">
                     {% csrf_token %}
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -103,6 +104,7 @@
                             <!-- /.panel-body -->
                             <div class="panel-footer">
                                 <button type="submit" class="btn btn-primary">保存</button>
+                                <button type="submit" name="preview" class="btn btn-default">{% trans 'Preview' %}</button>
                             </div>
                             <!-- /.panel-footer -->
                         </div>
@@ -138,6 +140,7 @@
         <!-- Select2 JavaScript -->
         <script src="{% static 'select2/js/select2.js' %}"></script>
         <script src="{% static 'select2/js/select2_locale_zh-CN.js' %}"></script>
+        <script src="{% static 'blog/js/write-post.js' %}"></script>
 
         {% block extScriptFile %}{% endblock %}
         <script type="text/javascript">
