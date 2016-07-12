@@ -37,13 +37,28 @@
         <p><i class="fa fa-comment-o fa-fw"></i>
             {{ comment_count }} 个评论
         </p>
-    {% endif %}
-    <p>
-    {% for c in article.categories.all %}
-        <a href="{% url 'blog:category_archive_view' slug=c.slug %}"><span class="label label-default"><i class="fa fa-tag"></i> {{ c.title }}</span></a>
-    {% endfor %}
-    </p>
 
+        <p>
+        {% for c in article.categories.all %}
+            <a href="{% url 'blog:category_archive_view' slug=c.slug %}">
+                <span class="label label-default"><i class="fa fa-tag"></i> {{ c.title }}</span>
+            </a>
+        {% endfor %}
+        </p>
+    {% else %}
+        {% get_comment_count for article as comment_count %}
+        <p><i class="fa fa-comment-o fa-fw"></i>
+            xxx 个评论
+        </p>
+
+        <p>
+        {% for c in article_categories %}
+            <a href="{% url 'blog:category_archive_view' slug=c.slug %}">
+                <span class="label label-default"><i class="fa fa-tag"></i> {{ c.title }}</span>
+            </a>
+        {% endfor %}
+        </p>
+    {% endif %}
     <hr>
 
     {% if article.cover %}
@@ -56,7 +71,7 @@
         {{ article.excerpt }}
     </p>
 
-    {{ article.get_content_markup|safe }}
+    {{ article.content_markup|safe }}
     <div class="row">
         <div class="col-lg-12 text-center">
 

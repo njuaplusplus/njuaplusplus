@@ -2,13 +2,14 @@
 # coding=utf-8
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http.response import HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import auth
 from django.contrib.auth.models import User
-from .models import Category, Article, ArticleForm, UserProfile, markdown_to_html
+from .models import Category, Article, ArticleForm, MyImage, markdown_to_html
 import calendar, datetime
 from django.conf import settings  # use settings
 import datetime
@@ -68,7 +69,7 @@ def evenly_divide_list(l):
 
 def index_page(request, page_num):
     """The news index"""
-    article_queryset = Article.objects.filter(for_preview=False)
+    article_queryset = Article.objects.all()
     paginator = Paginator(article_queryset, 5)
 
     try:
@@ -202,8 +203,7 @@ def write_post_view(request):
     if not request.user.groups.filter(name='authors'):
         return render(request, 'blog/error.html', {'error': '权限不够', 'message': '权限不够, 请联系管理员!',})
     if request.method == 'POST':
-        article_form = ArticleForm(request.POST, request.FILES,
-                                   instance=Article.objects.filter(author=request.user, for_preview=True).first())
+        article_form = ArticleForm(request.POST, request.FILES)
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = request.user
@@ -213,31 +213,51 @@ def write_post_view(request):
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
     else:
         article_form = ArticleForm()
-    return render(request, 'blog/write_post.html', {'article_form': article_form, })
+    return render(
+        request,
+        'blog/write_post.html',
+        {
+            'article_form': article_form,
+            'my_images': MyImage.objects.all(),
+         }
+    )
 
 
 @login_required
 def preview_post_view(request):
     if request.method == 'POST' and request.is_ajax():
+        try:
+            article_id = int(request.POST.get('article-id', '-1'))
+        except ValueError:
+            article_id = -1
+
         article_form = ArticleForm(request.POST, request.FILES,
-                                   instance=Article.objects.filter(author=request.user, for_preview=True).first())
+                                   instance=Article.objects.filter(pk=article_id).first())
         if article_form.is_valid():
             article = article_form.save(commit=False)
-            article.author = request.user
-            article.for_preview = True
-            article.is_markuped = False
-            article.save()
-            article_form.save_m2m()
+            article.content_markup = markdown_to_html(article.content_markdown)
+            request.session['preview_article_html'] = render_to_string(
+                'blog/default/post.html',
+                {
+                    'article': article,
+                    'article_categories': [
+                        {
+                            'slug': x.slug,
+                            'title': x.title,
+                        }
+                        for x in article_form.cleaned_data['categories']
+                    ],
+                    'preview_post': True,
+                },
+                request=request
+            )
         return _ajax_result(request, article_form)
     elif request.method == 'GET':
-        return render(
-            request,
-            "blog/default/post.html",
-            {
-                "article": Article.objects.filter(author=request.user, for_preview=True).first(),
-                "preview_post": True,
-            }
-        )
+        article_html = request.session.get('preview_article_html', None)
+        if article_html:
+            return HttpResponse(article_html)
+        else:
+            return HttpResponseNotFound('<h1>Page not found</h1>')
 
 
 def _ajax_result(request, form):
@@ -246,8 +266,7 @@ def _ajax_result(request, form):
 
     if form.errors:
         for field_name in form.errors:
-            field = form[field_name]
-            json_errors[field_name] = _render_errors(field)
+            json_errors[field_name] = str(form[field_name].errors)
         success = False
 
     json_return = {
@@ -258,34 +277,29 @@ def _ajax_result(request, form):
     return JsonResponse(json_return)
 
 
-def _render_errors(field):
-    """
-    Render form errors in crispy-forms style.
-    """
-    template = '{0}/layout/field_errors.html'.format(getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap3'))
-    return render_to_string(template, {
-        'field': field,
-        'form_show_errors': True,
-    })
-
-
 @login_required
 def edit_post_view(request, post_id):
     article = get_object_or_404(Article, pk=post_id)
     if not request.user.groups.filter(name='admins') and not (
-        request.user.groups.filter(name='authors') and request.user == article.author):
+                request.user.groups.filter(name='authors') and request.user == article.author
+    ):
         return render(request, 'blog/error.html', {'error': '权限不够', 'message': '权限不够, 请联系管理员!',})
     if request.method == 'POST':
         article_form = ArticleForm(request.POST, request.FILES, instance=article)
         if article_form.is_valid():
-            article = article_form.save(commit=False)
-            article.is_markuped = False
-            article.save()
-            article_form.save_m2m()
+            article = article_form.save()
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
     else:
         article_form = ArticleForm(instance=article)
-    return render(request, 'blog/write_post.html', {'article_form': article_form, })
+    return render(
+        request,
+        'blog/write_post.html',
+        {
+            'article_form': article_form,
+            'article_id': post_id,
+            'my_images': MyImage.objects.all(),
+        }
+    )
 
 
 def decide_next_url(next_url):

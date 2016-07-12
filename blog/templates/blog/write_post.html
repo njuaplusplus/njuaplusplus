@@ -74,7 +74,7 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="col-lg-8 col-md-8">
                     <form id="write-post-form" role="form" method="POST" ENCTYPE="multipart/form-data"
                           action="{{ request.path }}" data-ajax-action="{% url 'blog:preview_post_view' %}">
                     {% csrf_token %}
@@ -92,14 +92,19 @@
                                     <div class="text-muted pull-right">
                                         <small>{{ field.help_text }}</small>
                                     </div>
+                                    {% if field.errors %}
                                     <div class="help-block">
                                         {{ field.errors }}
                                     </div>
+                                    {% endif %}
                                 </div>
                                 {% endfor %}
                                 {% for hidden in article_form.hidden_fields %}
                                     {{ hidden }}
                                 {% endfor %}
+                                {% if article_id %}
+                                    <input type="hidden" name="article-id" value="{{ article_id }}">
+                                {% endif %}
                             </div>
                             <!-- /.panel-body -->
                             <div class="panel-footer">
@@ -113,6 +118,12 @@
                     <!-- /form -->
                 </div>
                 <!-- /.col-lg-8 -->
+                <div class="col-lg-4 col-md-4">
+                    {% for image in my_images %}
+                        <img class="img-responsive insert_my_image" src="{{ image.image.url }}" alt="{{ image.title }}">
+                    {% endfor %}
+                </div>
+                <!-- /.col-lg-4 -->
             </div>
             <!-- /.row -->
         </div>

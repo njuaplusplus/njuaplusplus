@@ -6,7 +6,7 @@ jQuery(function ($) {
     var preview_tab = '';
 
      $.fn.ready(function() {
-
+         $('body').on('click', 'img.insert_my_image', insert_my_image);
          var write_post_form = $('#write-post-form');
          if (write_post_form.length > 0) {
              // Detect last active input.
@@ -15,6 +15,20 @@ jQuery(function ($) {
              write_post_form.submit(on_write_post_form_submit);
          }
      });
+    
+    function insert_my_image() {
+        var $this = $(this);
+        var text = '![' + $this.attr('alt') + '](' + $this.attr('src') + ' "' + $this.attr('alt') +'")';
+        insert_text($('#id_content_markdown'), text);
+    }
+    
+    function insert_text($textarea, text) {
+        var cursorPos = $textarea.prop('selectionStart');
+        var v = $textarea.val();
+        var textBefore = v.substring(0,  cursorPos);
+        var textAfter  = v.substring(cursorPos, v.length);
+        $textarea.val(textBefore + text + textAfter);
+    }
 
     function set_active_input() {
         active_input = this.name;
@@ -47,6 +61,8 @@ jQuery(function ($) {
             dataType: 'json',
             success: function(data) {
                 form.preview_busy = false;
+                remove_errors($form);
+                
                 if (data['success']) {
                     preview_success(data);
                 } else{
@@ -86,9 +102,17 @@ jQuery(function ($) {
                 var $field = $(form.elements[field_name]);
 
                 // Twitter bootstrap style
-                $field.after('<span class="js-errors">' + data['errors'][field_name] + '</span>');
-                $field.closest('.form-group').addClass('has-error');
+                var $closet_form_group = $field.closest('.form-group');
+                $closet_form_group.append(
+                    '<div class="help-block">' + data['errors'][field_name] + '</div>'
+                );
+                $closet_form_group.addClass('has-error');
             }
         }
+    }
+    
+    function remove_errors($form) {
+        $form.find('.has-error .help-block').remove();
+        $form.find('.form-group.has-error').removeClass('has-error');
     }
 });

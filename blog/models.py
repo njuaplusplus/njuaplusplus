@@ -105,12 +105,6 @@ class Article(models.Model):
         help_text=_(u' '),
         blank=True
     )
-    images = models.ManyToManyField(
-        MyImage,
-        verbose_name=_(u'图片'),
-        help_text=_(u'向文章中插入图片'),
-        blank=True
-    )
     author = models.ForeignKey(User, verbose_name=_(u'作者'))
     content_markdown = models.TextField(
         verbose_name=_(u'内容 (Markdown)'),
@@ -138,14 +132,6 @@ class Article(models.Model):
         verbose_name=_(u'通过审核'),
         default=False
     )
-    is_markuped = models.BooleanField(
-        verbose_name=_(u'已经编译'),
-        default=False
-    )
-    for_preview = models.BooleanField(
-        verbose_name=_(u'作为预览'),
-        default=False
-    )
     enable_comments = models.BooleanField(
         verbose_name=_(u'允许评论'),
         default=True
@@ -168,19 +154,8 @@ class Article(models.Model):
             self.is_approved = False
         if self.is_public is None:
             self.is_public = False
-        if self.is_markuped is None:
-            self.is_markuped = False
-        if self.for_preview is None:
-            self.for_preview = False
-        # self.content_markup = markdown.markdown(self.content_markdown, ['codehilite', 'attr_list'])
+        self.content_markup = markdown_to_html(self.content_markdown)
         super(Article, self).save(*args, **kwargs)
-
-    def get_content_markup(self):
-        if not self.is_markuped:
-            self.is_markuped = True
-            self.content_markup = markdown_to_html(self.content_markdown, self.images.all())
-            self.save()
-        return self.content_markup
 
     def __str__(self):
         return u'%s' % (self.title,)
@@ -200,9 +175,8 @@ class ArticleForm(forms.ModelForm):
             'slug': forms.TextInput(attrs={'class': 'form-control'}),
             'excerpt': forms.Textarea(attrs={'class': 'form-control'}),
             'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
-            'images': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
-        exclude = ['content_markup', 'author', 'is_approved', 'is_markuped', 'for_preview', ]
+        exclude = ['content_markup', 'author', 'is_approved', ]
 
 
 class UserProfile(models.Model):
@@ -226,7 +200,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-def markdown_to_html(text, images):
+def markdown_to_html(text):
     """Compile the text into html
     """
     md = markdown.Markdown(
@@ -238,8 +212,6 @@ def markdown_to_html(text, images):
             }
         }
     )
-    for img in images:
-        md.references[img.title] = (img.image.url, img.title)
     return md.convert(text)
 
 

@@ -33,15 +33,15 @@ class ArticleAdminForm(forms.ModelForm):
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
     # prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'date_publish', 'is_approved')
-    search_fields = ('title', 'content_markdown',)
-    list_filter = ('categories',)
+    list_display = ('title', 'date_publish', 'is_approved', 'enable_comments', )
+    search_fields = ('title', 'content_markdown', )
+    list_filter = ('categories', )
     fieldsets = (
         (
             None,
             {
-                'fields': ('title', 'slug', 'cover', 'author', 'excerpt', 'content_markdown', 'images', 'categories',
-                           'date_publish', 'is_public', 'is_approved', 'is_markuped',)
+                'fields': ('title', 'slug', 'cover', 'author', 'excerpt', 'content_markdown', 'categories',
+                           'date_publish', 'is_public', 'is_approved', 'enable_comments', )
             }
         ),
     )
