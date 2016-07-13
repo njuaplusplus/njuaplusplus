@@ -86,7 +86,7 @@ jQuery(function ($) {
     }
 
     function preview_success(data) {
-        if (preview_tab) {
+        if (preview_tab && preview_tab.location.reload) {
             preview_tab.location.reload();
         } else {
             preview_tab = window.open('/preview-post/');
