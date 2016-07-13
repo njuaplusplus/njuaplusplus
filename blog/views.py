@@ -235,6 +235,7 @@ def preview_post_view(request):
                                    instance=Article.objects.filter(pk=article_id).first())
         if article_form.is_valid():
             article = article_form.save(commit=False)
+            article.author = request.user
             article.content_markup = markdown_to_html(article.content_markdown)
             request.session['preview_article_html'] = render_to_string(
                 'blog/default/post.html',
