@@ -174,6 +174,7 @@ class ArticleForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'}),
             'excerpt': forms.Textarea(attrs={'class': 'form-control'}),
+            'content_markdown': forms.Textarea(attrs={'class': 'form-control'}),
             'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
         exclude = ['content_markup', 'author', 'is_approved', ]

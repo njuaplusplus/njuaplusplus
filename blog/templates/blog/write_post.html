@@ -41,7 +41,6 @@
     <!-- Code Highlight -->
     <link href="{% static 'blog/css/monokai.css' %}" rel="stylesheet">
     <link href="{% static 'blog/css/my-blog.css' %}" rel="stylesheet">
-    <link href="{% static 'bootstrap-markdown/css/bootstrap-markdown.min.css' %}" rel="stylesheet">
     <!-- select 2 -->
     <link href="{% static 'select2/css/select2.css' %}" rel="stylesheet">
     <link href="{% static 'select2/css/select2-bootstrap.css' %}" rel="stylesheet">
@@ -142,12 +141,6 @@
             </div>
         </footer>
 
-        <script src="{% static 'bootstrap-markdown/js/markdown.js' %}"></script>
-        <script src="{% static 'bootstrap-markdown/js/he.js' %}"></script>
-        <script src="{% static 'bootstrap-markdown/js/to-markdown.js' %}"></script>
-        <script src="{% static 'bootstrap-markdown/js/bootstrap-markdown.js' %}"></script>
-        <script src="{% static 'bootstrap-markdown/js/bootstrap-markdown.zh.js' %}"></script>
-        <script src="{% static 'bootstrap-markdown/js/jquery.hotkeys.js' %}"></script>
         <!-- Select2 JavaScript -->
         <script src="{% static 'select2/js/select2.js' %}"></script>
         <script src="{% static 'select2/js/select2_locale_zh-CN.js' %}"></script>
@@ -156,8 +149,6 @@
         {% block extScriptFile %}{% endblock %}
         <script type="text/javascript">
         $(document).ready(function(){
-            $("#id_content_markdown").markdown({autofocus:false,savable:false});
-            $("#id_images").select2({placeholder: "选择图片(多选)", dropdownAutoWidth: true});
             $("#id_categories").select2({placeholder: "选择分类(多选)", dropdownAutoWidth: true});
             $("div#div_categories div.text-muted.pull-right").remove();
             $("div#div_images div.text-muted.pull-right").remove();
