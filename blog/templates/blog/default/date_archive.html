@@ -18,7 +18,7 @@
 
     <p class="lead">
         由
-        <a href="#">
+        <a href="{% url 'blog:author_archive_view' username=article.author.username %}">
             {% if article.author.first_name or article.author.last_name %}
                 {{ article.author.last_name|add_str:article.author.first_name|truncatechars:9  }}
             {% else %}

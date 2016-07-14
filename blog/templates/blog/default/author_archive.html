@@ -2,15 +2,29 @@
 {% load answ_tags %}
 {% load threadedcomments_tags %}
 
-{% block title %} 首页 | 博客 | 安好 {% endblock %}
+{% block title %}
+作者:
+{% if author.first_name or author.last_name %}
+    {{ author.last_name|add_str:author.first_name|truncatechars:9  }}
+{% else %}
+    {{ author.username|truncatechars:9 }}
+{% endif %}
+| 博客 | 安好
+{% endblock %}
 
 {% block blogColumn %}
-    <h1 class="page-header">
-        安的博客
-        <small>一切安好, 便是晴天</small>
-    </h1>
+<h1 class="page-header">
+    作者归档:
+    <small>
+        {% if author.first_name or author.last_name %}
+            {{ author.last_name|add_str:author.first_name|truncatechars:9  }}
+        {% else %}
+            {{ author.username|truncatechars:9 }}
+        {% endif %}
+    </small>
+</h1>
 
-    {% for article in articles %}
+{% for article in articles %}
     <!-- Blog Post -->
     <h2>
         <a href="{% url 'blog:single_post' slug=article.slug %}">{{ article.title }}</a>
@@ -51,19 +65,22 @@
     <a class="btn btn-primary" href="{% url 'blog:single_post' slug=article.slug %}">阅读更多 <span class="glyphicon glyphicon-chevron-right"></span></a>
 
     <div class="separator-dbl-strike"></div>
-    {% endfor %}
+{% empty %}
+    <p>没有找到对应的文章T_T</p>
+{% endfor %}
 
-    <!-- Pager -->
-    <ul class="pager">
-        {% if articles.has_previous %}
-        <li class="previous">
-            <a href="{% url 'blog:index_page' page_num=articles.previous_page_number %}">&larr; 上一页</a>
-        </li>
-        {% endif %}
-        {% if articles.has_next %}
-        <li class="next">
-            <a href="{% url 'blog:index_page' page_num=articles.next_page_number %}">下一页 &rarr;</a>
-        </li>
-        {% endif %}
-    </ul>
+<!-- Pager -->
+<ul class="pager">
+    {% if articles.has_previous %}
+    <li class="previous">
+        <a href="{% url 'blog:author_archive_page_view' author=username page_num=articles.previous_page_number %}">&larr; 上一页</a>
+    </li>
+    {% endif %}
+    {% if articles.has_next %}
+    <li class="next">
+        <a href="{% url 'blog:author_archive_page_view' author=username page_num=articles.next_page_number %}">下一页 &rarr;</a>
+    </li>
+    {% endif %}
+</ul>
 {% endblock blogColumn %}
+

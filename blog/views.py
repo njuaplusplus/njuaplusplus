@@ -200,6 +200,39 @@ def category_archive_page(request, slug, page_num):
     )
 
 
+def author_archive(request, username):
+    return author_archive_page(request, username, 1)
+
+
+def author_archive_page(request, username, page_num):
+    author = get_object_or_404(User, username=username)
+
+    # Pagination
+    article_queryset = Article.objects.filter(author=author)
+    paginator = Paginator(article_queryset, 5)
+
+    try:
+        articles = paginator.page(page_num)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        articles = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        articles = paginator.page(paginator.num_pages)
+    return render(
+        request,
+        'blog/default/author_archive.html',
+        {
+            'articles': articles,
+            'author': author,
+            'username': username,
+            'archive_dates': evenly_divide_list(Article.objects.datetimes('date_publish', 'month', order='DESC')),
+            'categories': evenly_divide_list(get_top_categories(8)),
+            'category': category,
+        }
+    )
+
+
 @login_required
 def write_post_view(request):
     if not request.user.groups.filter(name='authors'):
