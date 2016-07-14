@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^accounts/login/$', views.login_view, name='login_view'),
     url(r'^accounts/logout/$', views.logout_view, name='logout_view'),
+    url(r'^upload-image/ajax/$', views.upload_image_ajax, name='upload-image-ajax')
     # url(r'^ip/$', views.ip),
 ]

@@ -2,14 +2,16 @@
 # coding=utf-8
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http.response import HttpResponseNotFound
+from django.http.response import HttpResponseNotFound, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import auth
 from django.contrib.auth.models import User
-from .models import Category, Article, ArticleForm, MyImage, markdown_to_html
+from django.views.decorators.http import require_POST
+
+from .models import Category, Article, ArticleForm, MyImage, MyImageForm, markdown_to_html
 import calendar, datetime
 from django.conf import settings  # use settings
 import datetime
@@ -213,12 +215,14 @@ def write_post_view(request):
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
     else:
         article_form = ArticleForm()
+        my_image_form = MyImageForm()
     return render(
         request,
         'blog/write_post.html',
         {
             'article_form': article_form,
             'my_images': MyImage.objects.all(),
+            'my_image_form': my_image_form,
          }
     )
 
@@ -261,7 +265,24 @@ def preview_post_view(request):
             return HttpResponseNotFound('<h1>Page not found</h1>')
 
 
-def _ajax_result(request, form):
+@login_required
+@require_POST
+def upload_image_ajax(request):
+    if not request.is_ajax():
+        return HttpResponseBadRequest("Expecting Ajax call")
+
+    my_image_form = MyImageForm(request.POST, request.FILES)
+    if my_image_form.is_valid():
+        my_image = my_image_form.save(commit=False)
+        print(my_image.image)
+        my_image.user = request.user
+        my_image.save()
+        return _ajax_result(request, my_image_form, my_image)
+    else:
+        return _ajax_result(request, my_image_form)
+
+
+def _ajax_result(request, form, image=None):
     success = True
     json_errors = {}
 
@@ -274,6 +295,12 @@ def _ajax_result(request, form):
         'success': success,
         'errors': json_errors,
     }
+
+    if image is not None:
+        json_return.update({
+            'image_url': image.image.url,
+            'image_title': image.title,
+        })
 
     return JsonResponse(json_return)
 
@@ -292,6 +319,7 @@ def edit_post_view(request, post_id):
             return HttpResponseRedirect(reverse('blog:single_post', args=(article.slug,)))
     else:
         article_form = ArticleForm(instance=article)
+        my_image_form = MyImageForm()
     return render(
         request,
         'blog/write_post.html',
@@ -299,6 +327,7 @@ def edit_post_view(request, post_id):
             'article_form': article_form,
             'article_id': post_id,
             'my_images': MyImage.objects.all(),
+            'my_image_form': my_image_form,
         }
     )
 

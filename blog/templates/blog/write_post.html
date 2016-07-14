@@ -118,9 +118,49 @@
                 </div>
                 <!-- /.col-lg-8 -->
                 <div class="col-lg-4 col-md-4">
-                    {% for image in my_images %}
-                        <img class="img-responsive insert_my_image" src="{{ image.image.url }}" alt="{{ image.title }}">
-                    {% endfor %}
+                    <form id="upload-image-form" role="form" method="POST" ENCTYPE="multipart/form-data"
+                          data-ajax-action="{% url 'blog:upload-image-ajax' %}">
+                    {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                上传图片
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                {% for field in my_image_form.visible_fields %}
+                                <div id="div_{{ field.html_name }}"
+                                    class="form-group{% if field.errors %} has-error{% endif %}">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    <div class="text-muted pull-right">
+                                        <small>{{ field.help_text }}</small>
+                                    </div>
+                                    {% if field.errors %}
+                                    <div class="help-block">
+                                        {{ field.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% for hidden in my_image_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            </div>
+                            <!-- /.panel-body -->
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary">上传</button>
+                            </div>
+                            <!-- /.panel-footer -->
+                        </div>
+                        <!-- /.panel -->
+                    </form>
+                    <!-- /form -->
+                    <div id="wrap-my-images">
+                        {% for image in my_images %}
+                            <img class="img-responsive insert_my_image" src="{{ image.image.url }}"
+                                 alt="{{ image.title }}" title="{{ image.title }}">
+                        {% endfor %}
+                    </div>
                 </div>
                 <!-- /.col-lg-4 -->
             </div>

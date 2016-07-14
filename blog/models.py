@@ -54,6 +54,15 @@ class Category(models.Model):
 
 class MyImage(models.Model):
     """ Image storage for the post"""
+    # Who uploaded this image.
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_('user'),
+        blank=True,
+        null=True,
+        related_name="%(class)s_image",
+        on_delete=models.SET_NULL
+    )
     image = models.ImageField(
         verbose_name=_(u'图片'),
         help_text=_(u' '),
@@ -68,6 +77,11 @@ class MyImage(models.Model):
         verbose_name=_(u'描述'),
         help_text=_(u' '),
         blank=True
+    )
+    # Whether this image is visible to others?
+    is_public = models.BooleanField(
+        verbose_name=_(u'公共可见'),
+        default=False
     )
 
     class Meta:
@@ -173,11 +187,21 @@ class ArticleForm(forms.ModelForm):
             'date_publish': DateTimeWidget(usel10n=True, bootstrap_version=3, options=dateTimeOptions),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'}),
-            'excerpt': forms.Textarea(attrs={'class': 'form-control'}),
-            'content_markdown': forms.Textarea(attrs={'class': 'form-control'}),
+            'excerpt': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'content_markdown': forms.Textarea(attrs={'class': 'form-control', 'rows': 20}),
             'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
         exclude = ['content_markup', 'author', 'is_approved', ]
+
+
+class MyImageForm(forms.ModelForm):
+    class Meta:
+        model = MyImage
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+        exclude = ['user', ]
 
 
 class UserProfile(models.Model):
