@@ -38,8 +38,6 @@
     <link href='http://fonts.useso.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     -->
-    <!-- Code Highlight -->
-    <link href="{% static 'blog/css/monokai.css' %}" rel="stylesheet">
     <link href="{% static 'blog/css/my-blog.css' %}" rel="stylesheet">
     <!-- select 2 -->
     <link href="{% static 'select2/css/select2.css' %}" rel="stylesheet">
@@ -66,7 +64,7 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="col-lg-12">
                     <h1 class="page-header">撰写博客</h1>
                 </div>
                 <!-- /.col-lg-8 -->
@@ -118,8 +116,45 @@
                 </div>
                 <!-- /.col-lg-8 -->
                 <div class="col-lg-4 col-md-4">
+                    <form id="add-category-form" role="form" method="POST"
+                          data-ajax-action="{% url 'blog:add_category_ajax' %}">
+                    {% csrf_token %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                添加分类
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                {% for field in add_category_form.visible_fields %}
+                                <div id="div_{{ field.html_name }}"
+                                    class="form-group{% if field.errors %} has-error{% endif %}">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    <div class="text-muted pull-right">
+                                        <small>{{ field.help_text }}</small>
+                                    </div>
+                                    {% if field.errors %}
+                                    <div class="help-block">
+                                        {{ field.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% for hidden in add_category_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            </div>
+                            <!-- /.panel-body -->
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary">添加</button>
+                            </div>
+                            <!-- /.panel-footer -->
+                        </div>
+                        <!-- /.panel -->
+                    </form>
+                    <!-- /form -->
                     <form id="upload-image-form" role="form" method="POST" ENCTYPE="multipart/form-data"
-                          data-ajax-action="{% url 'blog:upload-image-ajax' %}">
+                          data-ajax-action="{% url 'blog:upload_image_ajax' %}">
                     {% csrf_token %}
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -157,7 +192,7 @@
                     <!-- /form -->
                     <div id="wrap-my-images">
                         {% for image in my_images %}
-                            <img class="img-responsive insert_my_image" src="{{ image.image.url }}"
+                            <img class="img-responsive insert_my_image hcenter" src="{{ image.image.url }}"
                                  alt="{{ image.title }}" title="{{ image.title }}">
                         {% endfor %}
                     </div>
@@ -183,7 +218,7 @@
 
         <!-- Select2 JavaScript -->
         <script src="{% static 'select2/js/select2.js' %}"></script>
-        <script src="{% static 'select2/js/select2_locale_zh-CN.js' %}"></script>
+        <script src="{% static 'select2/js/i18n/zh-CN.js' %}"></script>
         <script src="{% static 'blog/js/write-post.js' %}"></script>
 
         {% block extScriptFile %}{% endblock %}

@@ -27,7 +27,8 @@ class Category(models.Model):
     title = models.CharField(
         verbose_name=_(u'名称'),
         help_text=_(u' '),
-        max_length=255
+        max_length=255,
+        unique=True
     )
     slug = models.SlugField(
         verbose_name=_(u'Slug'),
@@ -202,6 +203,16 @@ class MyImageForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
         exclude = ['user', ]
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        fields = '__all__'
 
 
 class UserProfile(models.Model):

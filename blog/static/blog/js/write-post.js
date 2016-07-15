@@ -7,16 +7,20 @@ jQuery(function ($) {
 
      $.fn.ready(function() {
          $('body').on('click', 'img.insert_my_image', insert_my_image);
-         var write_post_form = $('#write-post-form');
-         if (write_post_form.length > 0) {
+         var $write_post_form = $('#write-post-form');
+         if ($write_post_form.length > 0) {
              // Detect last active input.
              // Submit if return is hit, or any button other then preview is hit.
-             write_post_form.find(':input').focus(set_active_input).mousedown(set_active_input);
-             write_post_form.submit(on_write_post_form_submit);
+             $write_post_form.find(':input').focus(set_active_input).mousedown(set_active_input);
+             $write_post_form.submit(on_write_post_form_submit);
          }
-         var upload_image_form = $('#upload-image-form');
-         if (upload_image_form.length > 0) {
-             upload_image_form.submit(on_upload_image_form_submit);
+         var $upload_image_form = $('#upload-image-form');
+         if ($upload_image_form.length > 0) {
+             $upload_image_form.submit(on_upload_image_form_submit);
+         }
+         var $add_category_form = $('#add-category-form');
+         if ($add_category_form.length > 0) {
+             $add_category_form.submit(on_add_category_form_submit);
          }
      });
 
@@ -148,7 +152,7 @@ jQuery(function ($) {
                 remove_errors($form);
                 
                 if (data['success']) {
-                    upload_image_success(data);
+                    upload_image_success($form, data);
                 } else{
                     upload_image_failure(data);
                 }
@@ -168,10 +172,18 @@ jQuery(function ($) {
             }
         });
     }
+
+    function reset_upload_image_form($form) {
+        $($form[0].elements['image']).val('');
+        $($form[0].elements['title']).val('');
+        $($form[0].elements['description']).val('');
+        $($form[0].elements['is_public']).prop('checked', false);
+    }
     
-    function upload_image_success(data) {
+    function upload_image_success($form, data) {
+        reset_upload_image_form($form);
         var $wrap_my_images = $('#wrap-my-images');
-        $wrap_my_images.prepend('<img class="img-responsive insert_my_image" src="' +
+        $wrap_my_images.prepend('<img class="img-responsive insert_my_image hcenter" src="' +
             data['image_url'] + '" alt="' + data['image_title'] + '" title="' +  data['image_title'] +'">');
     }
 
@@ -192,4 +204,86 @@ jQuery(function ($) {
             }
         }
     }
+    
+    function on_add_category_form_submit(event) {
+        event.preventDefault();
+        add_category(event.target);
+        return false;
+    }
+    
+    function add_category(form) {
+        if (form.preview_busy) {
+            return false;
+        }
+
+        form.preview_busy = true;
+        var $form = $(form);
+        var data = $form.serialize();
+        var ajaxurl = $form.data('ajax-action');
+
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: data,
+            dataType: 'json',
+            success: function(data) {
+                form.preview_busy = false;
+                remove_errors($form);
+                
+                if (data['success']) {
+                    add_category_success($form, data);
+                } else{
+                    add_category_failure(data);
+                }
+            },
+            error: function(xhr) {
+                form.preview_busy = false;
+
+                var response = xhr.responseText;
+                if(response && window.console && response.indexOf('DJANGO_SETTINGS_MODULE') != -1) {
+                    console.error(response);
+                }
+
+                alert("Internal CMS error: failed to post comment data!");    // can't yet rely on $.ajaxError
+
+                // Submit as non-ajax instead
+                //$form.unbind('submit').submit();
+            }
+        });
+    }
+
+    function add_category_success($form, data) {
+        reset_add_category_form($form);
+        var $category_selector = $('#id_categories');
+        $category_selector.select2({
+            data: [{
+                id: data['category_id'],
+                text: data['category_title']
+            }]
+        });
+    }
+
+    function add_category_failure(data) {
+        var form = $('#add-category-form')[0];
+
+        // Show mew errors
+        for (var field_name in data['errors']) {
+            if(field_name) {
+                var $field = $(form.elements[field_name]);
+
+                // Twitter bootstrap style
+                var $closet_form_group = $field.closest('.form-group');
+                $closet_form_group.append(
+                    '<div class="help-block">' + data['errors'][field_name] + '</div>'
+                );
+                $closet_form_group.addClass('has-error');
+            }
+        }
+    }
+
+    function reset_add_category_form($form) {
+        $($form[0].elements['title']).val('');
+        $($form[0].elements['slug']).val('');
+    }
+    
 });

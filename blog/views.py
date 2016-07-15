@@ -11,6 +11,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 
+from blog.models import CategoryForm
 from .models import Category, Article, ArticleForm, MyImage, MyImageForm, markdown_to_html
 import calendar, datetime
 from django.conf import settings  # use settings
@@ -149,7 +150,7 @@ def date_archive_page(request, year, month, page_num):
     )
 
 
-def category(request):
+def category_view(request):
     categories = get_top_categories()
     category_urls = {}
     for c in categories:
@@ -228,7 +229,7 @@ def author_archive_page(request, username, page_num):
             'username': username,
             'archive_dates': evenly_divide_list(Article.objects.datetimes('date_publish', 'month', order='DESC')),
             'categories': evenly_divide_list(get_top_categories(8)),
-            'category': category,
+            'category': category_view,
         }
     )
 
@@ -249,6 +250,7 @@ def write_post_view(request):
     else:
         article_form = ArticleForm()
         my_image_form = MyImageForm()
+        add_category_form = CategoryForm()
     return render(
         request,
         'blog/write_post.html',
@@ -256,6 +258,7 @@ def write_post_view(request):
             'article_form': article_form,
             'my_images': MyImage.objects.all(),
             'my_image_form': my_image_form,
+            'add_category_form': add_category_form,
          }
     )
 
@@ -302,20 +305,33 @@ def preview_post_view(request):
 @require_POST
 def upload_image_ajax(request):
     if not request.is_ajax():
-        return HttpResponseBadRequest("Expecting Ajax call")
+        return HttpResponseBadRequest('Expecting Ajax call')
 
     my_image_form = MyImageForm(request.POST, request.FILES)
     if my_image_form.is_valid():
         my_image = my_image_form.save(commit=False)
-        print(my_image.image)
         my_image.user = request.user
         my_image.save()
-        return _ajax_result(request, my_image_form, my_image)
+        return _ajax_result(request, my_image_form, image=my_image)
     else:
         return _ajax_result(request, my_image_form)
 
 
-def _ajax_result(request, form, image=None):
+@login_required
+@require_POST
+def add_category_ajax(request):
+    if not request.is_ajax():
+        return HttpResponseBadRequest('Expecting Ajax call')
+
+    category_form = CategoryForm(request.POST)
+    if category_form.is_valid():
+        category = category_form.save()
+        return _ajax_result(request, category_form, category=category)
+    else:
+        return _ajax_result(request, category_form)
+
+
+def _ajax_result(request, form, image=None, category=None):
     success = True
     json_errors = {}
 
@@ -333,6 +349,12 @@ def _ajax_result(request, form, image=None):
         json_return.update({
             'image_url': image.image.url,
             'image_title': image.title,
+        })
+
+    if category is not None:
+        json_return.update({
+            'category_id': category.id,
+            'category_title': category.title,
         })
 
     return JsonResponse(json_return)
