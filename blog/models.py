@@ -18,7 +18,7 @@ from django_comments.moderation import CommentModerator, moderator
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 from django.contrib.auth.models import User
 
 
@@ -285,7 +285,11 @@ class ArticleModerator(CommentModerator):
                     recipient_list.append(mail_addr)
             pp = pp.parent
 
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, fail_silently=True)
+        data_tuple = (
+            (subject, message, settings.DEFAULT_FROM_EMAIL, [recipient, ]) for recipient in recipient_list
+        )
+
+        send_mass_mail(data_tuple, fail_silently=True)
 
 
 moderator.register(Article, ArticleModerator)
