@@ -112,7 +112,7 @@
 {% block extScriptFile %}
     <script src="{% static 'mycomments/js/mycomments.js' %}"></script>
     <script src="{% static 'mycomments/js/js.cookie.js' %}"></script>
-    {% if user.is_authenticated %}
+
     <script>
         jQuery(function($) {
             $.fn.ready(function() {
@@ -120,13 +120,15 @@
 			        $('#reward_board').addClass('hidden');
 			        $('#reward_guide').removeClass('hidden');
 		        });
+                {% if user.is_authenticated %}
                 setAuthenticatedUser(
                         '{{ user.get_full_name|default:request.user.get_username }}',
                         '{{ user.email }}',
                         '{{ user.url }}'
                 );
+                {% endif %}
             });
         });
     </script>
-    {% endif %}
+
 {% endblock extScriptFile %}
