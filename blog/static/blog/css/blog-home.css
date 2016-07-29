@@ -298,3 +298,39 @@ article img {
 .il {
     color: #f99157;
 }
+
+.reward_bar {
+    text-align: center;
+    margin-top: 5%
+}
+
+.reward_bar a.btn_reward {
+    display: inline-block;
+    width: 82px;
+    height: 82px;
+    background: url(../img/btn_reward.gif) no-repeat;
+    -webkit-transition: background 0s;
+    -moz-transition: background 0s;
+    -o-transition: background 0s;
+    -ms-transition: background 0s;
+    transition: background 0s
+}
+
+.reward_bar a.btn_reward:hover {
+    background-position: 0 -82px
+}
+
+.reward_bar .reward_txt {
+    display: block;
+    color: #9d9d9d;
+}
+
+#reward_guide img {
+    display: inline;
+    width: 164px;
+    height: auto;
+}
+
+.bold {
+    font-weight: bold;
+}

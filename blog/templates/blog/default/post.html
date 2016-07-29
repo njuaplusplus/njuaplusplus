@@ -74,14 +74,23 @@
     {{ article.content_markup|safe }}
     <div class="row">
         <div class="col-lg-12 text-center">
-
-        <form action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
-            <input name="optEmail" type="hidden" value="aplusplus@qq.com" />
-            <input name="payAmount" type="hidden" value="10" />
-            <input id="title" name="title" type="hidden" value="博客赞助" />
-            <input name="memo" type="hidden" value="备注" />
-            <input name="pay" type="image" value="转账" src="{% static 'blog/img/donate.png' %}" />
-        </form>
+            <div id="reward_board" class="reward_bar center">
+                <a id="btn_reward" class="btn_reward" href="javascript:;" title="Reword 打赏"></a>
+                <span class="reward_txt">↑<br>哎呦, 不错哦!</span>
+            </div>
+            <div id="reward_guide" class="reward_bar center hidden">
+                <p>
+                    <img src="{% static 'blog/img/alipay_reward.jpg' %}" title="支付宝打赏">
+                    <img src="{% static 'blog/img/wechat_reward.jpg' %}" title="微信打赏">
+                </p>
+                <p>
+                    用手机<span class="bold">
+                    <a href="https://mobile.alipay.com/index.htm" target="_blank" rel="external">支付宝钱包</a>
+			        /
+			        <a href="http://weixin.qq.com/" target="_blank" rel="external">微信</a></span>,
+                    扫一扫即可~谢谢您的鼓励
+                </p>
+            </div>
         </div>
     </div>
 
@@ -107,6 +116,10 @@
     <script>
         jQuery(function($) {
             $.fn.ready(function() {
+                $('#btn_reward').click(function(){
+			        $('#reward_board').addClass('hidden');
+			        $('#reward_guide').removeClass('hidden');
+		        });
                 setAuthenticatedUser(
                         '{{ user.get_full_name|default:request.user.get_username }}',
                         '{{ user.email }}',
