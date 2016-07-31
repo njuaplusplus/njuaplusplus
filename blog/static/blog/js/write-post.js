@@ -22,7 +22,19 @@ jQuery(function ($) {
          if ($add_category_form.length > 0) {
              $add_category_form.submit(on_add_category_form_submit);
          }
+
+         $('.my-panel-can-close .panel-heading').click(panel_open_or_close);
      });
+
+    function panel_open_or_close() {
+        var $panel = $(this).parent();
+        $panel.toggleClass('my-panel-closed');
+        $panel.children('.panel-body').toggleClass('hidden');
+        $panel.children('.panel-footer').toggleClass('hidden');
+        $(this).children('.my-menu-open').toggleClass('hidden');
+        $(this).children('.my-menu-close').toggleClass('hidden');
+
+    }
 
     function set_active_input() {
         active_input = this.name;

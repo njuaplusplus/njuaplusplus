@@ -236,6 +236,12 @@
         <script src="{% static 'blog/js/title.js' %}"></script>
         {% block extScriptFile %}{% endblock extScriptFile %}
 
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $("[href='{{request.path}}']").parent().addClass("active");
+        });
+        </script>
+
     </body>
 
 </html>

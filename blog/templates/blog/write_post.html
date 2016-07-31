@@ -119,12 +119,14 @@
                     <form id="add-category-form" role="form" method="POST"
                           data-ajax-action="{% url 'blog:add_category_ajax' %}">
                     {% csrf_token %}
-                        <div class="panel panel-default">
+                        <div class="panel panel-default my-panel-can-close my-panel-closed">
                             <div class="panel-heading">
                                 添加分类
+                                <span class="glyphicon glyphicon-menu-down pull-right my-menu-open" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-menu-up pull-right my-menu-close hidden" aria-hidden="true"></span>
                             </div>
                             <!-- /.panel-heading -->
-                            <div class="panel-body">
+                            <div class="panel-body hidden">
                                 {% for field in add_category_form.visible_fields %}
                                 <div id="div_{{ field.html_name }}"
                                     class="form-group{% if field.errors %} has-error{% endif %}">
@@ -145,7 +147,7 @@
                                 {% endfor %}
                             </div>
                             <!-- /.panel-body -->
-                            <div class="panel-footer">
+                            <div class="panel-footer hidden">
                                 <button type="submit" class="btn btn-primary">添加</button>
                             </div>
                             <!-- /.panel-footer -->
@@ -156,12 +158,14 @@
                     <form id="upload-image-form" role="form" method="POST" ENCTYPE="multipart/form-data"
                           data-ajax-action="{% url 'blog:upload_image_ajax' %}">
                     {% csrf_token %}
-                        <div class="panel panel-default">
+                        <div class="panel panel-default my-panel-can-close my-panel-closed">
                             <div class="panel-heading">
                                 上传图片
+                                <span class="glyphicon glyphicon-menu-down pull-right my-menu-open" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-menu-up pull-right my-menu-close hidden" aria-hidden="true"></span>
                             </div>
                             <!-- /.panel-heading -->
-                            <div class="panel-body">
+                            <div class="panel-body hidden">
                                 {% for field in my_image_form.visible_fields %}
                                 <div id="div_{{ field.html_name }}"
                                     class="form-group{% if field.errors %} has-error{% endif %}">
@@ -182,7 +186,7 @@
                                 {% endfor %}
                             </div>
                             <!-- /.panel-body -->
-                            <div class="panel-footer">
+                            <div class="panel-footer hidden">
                                 <button type="submit" class="btn btn-primary">上传</button>
                             </div>
                             <!-- /.panel-footer -->
@@ -227,8 +231,6 @@
             $("#id_categories").select2({placeholder: "选择分类(多选)", dropdownAutoWidth: true});
             $("div#div_categories div.text-muted.pull-right").remove();
             $("div#div_images div.text-muted.pull-right").remove();
-                //$("[href='{{request.path}}']").parent().addClass("active");
-                {% block extScript %}{% endblock %}
         });
         </script>
     </body>

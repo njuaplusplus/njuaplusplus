@@ -54,7 +54,7 @@ class MyImageAdmin(admin.ModelAdmin):
         (
             None,
             {
-                'fields': ('title', 'user', 'image', 'is_public', 'description', )
+                'fields': ('title', 'user', 'image', 'is_public', 'description', 'date_upload', )
             }
         ),
     )

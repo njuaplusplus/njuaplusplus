@@ -22,6 +22,7 @@ import pytz
 import re
 from django.db.models import Q
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 
 def ip(request):
@@ -251,16 +252,20 @@ def write_post_view(request):
         article_form = ArticleForm()
         my_image_form = MyImageForm()
         add_category_form = CategoryForm()
-    return render(
-        request,
-        'blog/write_post.html',
-        {
-            'article_form': article_form,
-            'my_images': MyImage.objects.all(),
-            'my_image_form': my_image_form,
-            'add_category_form': add_category_form,
-         }
-    )
+        if request.user.is_superuser:
+            my_images = MyImage.objects.all()[:3]
+        else:
+            my_images = [ x for x in MyImage.objects.all() if x.user == request.user or x.is_public][:3]
+        return render(
+            request,
+            'blog/write_post.html',
+            {
+                'article_form': article_form,
+                'my_images': my_images,
+                'my_image_form': my_image_form,
+                'add_category_form': add_category_form,
+             }
+        )
 
 
 @login_required
@@ -311,6 +316,7 @@ def upload_image_ajax(request):
     if my_image_form.is_valid():
         my_image = my_image_form.save(commit=False)
         my_image.user = request.user
+        my_image.date_upload = timezone.now()
         my_image.save()
         return _ajax_result(request, my_image_form, image=my_image)
     else:

@@ -84,12 +84,16 @@ class MyImage(models.Model):
         verbose_name=_(u'公共可见'),
         default=False
     )
+    date_upload = models.DateTimeField(
+        verbose_name=_(u'上传日期'),
+        help_text=_(u' ')
+    )
 
     class Meta:
         app_label = _(u'blog')
         verbose_name = _(u'Image')
         verbose_name_plural = _(u'Images')
-        ordering = ['title', ]
+        ordering = ['-date_upload', 'title', ]
 
     def __str__(self):
         return u'%s' % (self.title,)
@@ -202,7 +206,7 @@ class MyImageForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
-        exclude = ['user', ]
+        exclude = ['user', 'date_upload', ]
 
 
 class CategoryForm(forms.ModelForm):
