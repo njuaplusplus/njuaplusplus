@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
-
+from django.contrib.auth.forms import PasswordChangeForm
 from django.db import models
 from django.utils.translation import ugettext as _
 # from markdown import markdown
@@ -240,6 +240,12 @@ class UserProfile(models.Model):
         return self.user.username
 
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['avatar']
+
+
 def markdown_to_html(text):
     """Compile the text into html
     """
@@ -297,3 +303,14 @@ class ArticleModerator(CommentModerator):
 
 
 moderator.register(Article, ArticleModerator)
+
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    """
+    Just add some class to the widget of default PasswordChangeForm
+    """
+    def __init__(self, *args, **kwargs):
+        super(MyPasswordChangeForm, self).__init__(*args, **kwargs)
+        self.fields['old_password'].widget = forms.PasswordInput(attrs={'class':'form-control'})
+        self.fields['new_password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
+        self.fields['new_password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})

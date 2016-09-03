@@ -1,0 +1,123 @@
+{% extends 'blog/default/base.html' %}
+{% load answ_tags %}
+
+{% block title %}
+修改信息:
+{% if author.first_name or author.last_name %}
+    {{ author.last_name|add_str:author.first_name|truncatechars:9  }}
+{% else %}
+    {{ author.username|truncatechars:9 }}
+{% endif %}
+| 博客 | 安好
+{% endblock %}
+
+{% block mainContent %}
+<div id="wrap">
+    <div class="container">
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+                <form id="change-password-form" role="form" method="POST" action="{{ request.path }}">
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            修改密码
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            {% for field in user_form.visible_fields %}
+                            <div id="div_{{ field.html_name }}"
+                                class="form-group{% if field.errors %} has-error{% endif %}">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                <div class="text-muted pull-right">
+                                    <small>{{ field.help_text|safe }}</small>
+                                </div>
+                                {% if field.errors %}
+                                <div class="help-block">
+                                    {{ field.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% for hidden in user_form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            <input type="hidden" name="form_type" value="password">
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                        <!-- /.panel-footer -->
+                    </div>
+                    <!-- /.panel -->
+                </form>
+                <!-- /form -->
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+                <form id="change-avatar-form" role="form" method="POST" ENCTYPE="multipart/form-data"
+                          action="{{ request.path }}">
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            修改头像
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            {% for field in profile_form.visible_fields %}
+                            <div id="div_{{ field.html_name }}"
+                                class="form-group{% if field.errors %} has-error{% endif %}">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                <div class="text-muted pull-right">
+                                    <small>{{ field.help_text }}</small>
+                                </div>
+                                {% if field.errors %}
+                                <div class="help-block">
+                                    {{ field.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% for hidden in profile_form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            <input type="hidden" name="form_type" value="avatar">
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                        <!-- /.panel-footer -->
+                    </div>
+                    <!-- /.panel -->
+                </form>
+                <!-- /form -->
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#wrap -->
+<!-- Footer -->
+<footer>
+    <div class="container text-center">
+    <div class="row">
+        <div class="col-lg-12">
+            <p class="text-muted">Copyright &copy; answ.me</p>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    </div>
+</footer>
+{% endblock mainContent %}
+

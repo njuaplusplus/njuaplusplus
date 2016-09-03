@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding=utf-8
-
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http.response import HttpResponseNotFound, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
@@ -11,7 +10,8 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 
-from blog.models import CategoryForm
+from .models import UserProfile, MyPasswordChangeForm
+from .models import CategoryForm, UserProfileForm
 from .models import Category, Article, ArticleForm, MyImage, MyImageForm, markdown_to_html
 import calendar, datetime
 from django.conf import settings  # use settings
@@ -483,5 +483,39 @@ def search(request):
             'found_articles': found_articles,
             'categories': evenly_divide_list(get_top_categories(8)),
             'archive_dates': evenly_divide_list(Article.objects.datetimes('date_publish', 'month', order='DESC')),
+        }
+    )
+
+
+@login_required
+def user_profile_view(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type', None)
+        if form_type == 'password':
+            user_form = MyPasswordChangeForm(request.user, request.POST)
+            if user_form.is_valid():
+                user_form.save()
+                return HttpResponseRedirect(reverse('blog:user_profile_view'))
+            else:
+                user_profile = UserProfile.objects.filter(user=request.user).first()
+                profile_form = UserProfileForm(instance=user_profile)
+        elif form_type == 'avatar':
+            user_profile = UserProfile.objects.get_or_create(user=request.user)[0]
+            profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+            if profile_form.is_valid():
+                profile_form.save()
+                return HttpResponseRedirect(reverse('blog:user_profile_view'))
+            else:
+                user_form = MyPasswordChangeForm(request.user)
+    else:
+        user_profile = UserProfile.objects.filter(user=request.user).first()
+        profile_form = UserProfileForm(instance=user_profile)
+        user_form = MyPasswordChangeForm(request.user)
+    return render(
+        request,
+        'blog/default/user_profile.html',
+        {
+            'user_form':    user_form,
+            'profile_form': profile_form,
         }
     )
