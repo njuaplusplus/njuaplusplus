@@ -15,12 +15,12 @@ def unit_quiz(request, unit):
         ]
     if fillin_blank_quizzes:
         fillin_blank_quizzes = [
-            (x.id, x.words.splitlines(), x.quiz.replace(u'@', u'__').splitlines(), x.answer)
+            (x.id, x.words.splitlines(), x.quiz.replace('@', '__').splitlines(), x.answer)
             for x in fillin_blank_quizzes
         ]
     if match_quizzes:
         match_quizzes = [
-            (x.id, zip(x.left.splitlines(), x.right.splitlines()), x.answer)
+            (x.id, list(zip(x.left.splitlines(), x.right.splitlines())), x.answer)
             for x in match_quizzes
         ]
     return render(

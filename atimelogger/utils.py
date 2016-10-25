@@ -17,10 +17,10 @@ class Type:
         self.name = name
 
     def __str__(self):
-        return u'%s %s' % (self.name, self.guid)
+        return '%s %s' % (self.name, self.guid)
 
     def __unicode__(self):
-        return u'%s %s' % (self.name, self.guid)
+        return '%s %s' % (self.name, self.guid)
 
 
 class Activity:
@@ -44,10 +44,10 @@ class Interval:
         self.end = end
 
     def __str__(self):
-        return u'%s from %s to %s %s' % (self.guid, self.start, self.end, self.type)
+        return '%s from %s to %s %s' % (self.guid, self.start, self.end, self.type)
 
     def __unicode__(self):
-        return u'%s from %s to %s %s' % (self.guid, self.start, self.end, unicode(self.type))
+        return '%s from %s to %s %s' % (self.guid, self.start, self.end, str(self.type))
 
 
 def init_types():
@@ -99,7 +99,7 @@ def get_today_intervals():
                     )
             ))
     for interval in intervals:
-        print(unicode(interval))
+        print((str(interval)))
     return intervals
 
 

@@ -31,16 +31,16 @@ def index(request):
                 event = msg['Event']
                 if event == 'subscribe':
                     print('Event - subscribe')
-                    content = u'就接收小视频而已..'
+                    content = '就接收小视频而已..'
                     context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                     return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
                 elif event == 'unsubscribe':
-                    content = u'......'
+                    content = '......'
                     context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                     return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
             elif msgType == 'text':
                 print('Receive text')
-                content = u'Contact me'
+                content = 'Contact me'
                 context = { 'toUser': toUser, 'fromUser': fromUser, 'createTime': createTime, 'content': content}
                 return render_to_response('wechat/reply_text.xml', context, content_type="application/xml")
 

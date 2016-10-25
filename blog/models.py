@@ -25,22 +25,22 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     """Category Model"""
     title = models.CharField(
-        verbose_name=_(u'名称'),
-        help_text=_(u' '),
+        verbose_name=_('名称'),
+        help_text=_(' '),
         max_length=255,
         unique=True
     )
     slug = models.SlugField(
-        verbose_name=_(u'Slug'),
-        help_text=_(u'Uri identifier.'),
+        verbose_name=_('Slug'),
+        help_text=_('Uri identifier.'),
         max_length=255,
         unique=True
     )
 
     class Meta:
-        app_label = _(u'blog')
-        verbose_name = _(u'Category')
-        verbose_name_plural = _(u'Categories')
+        app_label = _('blog')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
         ordering = ['title', ]
 
     def save(self, *args, **kwargs):
@@ -50,7 +50,7 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
-        return u'%s' % (self.title,)
+        return '%s' % (self.title,)
 
 
 class MyImage(models.Model):
@@ -65,94 +65,94 @@ class MyImage(models.Model):
         on_delete=models.SET_NULL
     )
     image = models.ImageField(
-        verbose_name=_(u'图片'),
-        help_text=_(u' '),
+        verbose_name=_('图片'),
+        help_text=_(' '),
         upload_to='blogs/images/%Y/%m/%d',
     )
     title = models.CharField(
-        verbose_name=_(u'标题'),
-        help_text=_(u' '),
+        verbose_name=_('标题'),
+        help_text=_(' '),
         max_length=100
     )
     description = models.TextField(
-        verbose_name=_(u'描述'),
-        help_text=_(u' '),
+        verbose_name=_('描述'),
+        help_text=_(' '),
         blank=True
     )
     # Whether this image is visible to others?
     is_public = models.BooleanField(
-        verbose_name=_(u'公共可见'),
+        verbose_name=_('公共可见'),
         default=False
     )
     date_upload = models.DateTimeField(
-        verbose_name=_(u'上传日期'),
-        help_text=_(u' ')
+        verbose_name=_('上传日期'),
+        help_text=_(' ')
     )
 
     class Meta:
-        app_label = _(u'blog')
-        verbose_name = _(u'Image')
-        verbose_name_plural = _(u'Images')
+        app_label = _('blog')
+        verbose_name = _('Image')
+        verbose_name_plural = _('Images')
         ordering = ['-date_upload', 'title', ]
 
     def __str__(self):
-        return u'%s' % (self.title,)
+        return '%s' % (self.title,)
 
 
 class Article(models.Model):
     """Article Model"""
     title = models.CharField(
-        verbose_name=_(u'标题'),
-        help_text=_(u' '),
+        verbose_name=_('标题'),
+        help_text=_(' '),
         max_length=255
     )
     slug = models.SlugField(
-        verbose_name=_(u'固定链接'),
-        help_text=_(u'本文章的短网址(Uri identifier).'),
+        verbose_name=_('固定链接'),
+        help_text=_('本文章的短网址(Uri identifier).'),
         max_length=255,
         unique=True
     )
     cover = models.ImageField(
-        verbose_name=_(u'封面'),
-        help_text=_(u'若留空, 则使用默认图片'),
+        verbose_name=_('封面'),
+        help_text=_('若留空, 则使用默认图片'),
         upload_to='blogs/images/%Y/%m/%d',
         null=True,
         blank=True
     )
     excerpt = models.TextField(
-        verbose_name=_(u'摘要'),
-        help_text=_(u' '),
+        verbose_name=_('摘要'),
+        help_text=_(' '),
         blank=True
     )
-    author = models.ForeignKey(User, verbose_name=_(u'作者'))
+    author = models.ForeignKey(User, verbose_name=_('作者'))
     content_markdown = models.TextField(
-        verbose_name=_(u'内容 (Markdown)'),
-        help_text=_(u' '),
+        verbose_name=_('内容 (Markdown)'),
+        help_text=_(' '),
     )
     content_markup = models.TextField(
-        verbose_name=_(u'内容 (Markup)'),
-        help_text=_(u' '),
+        verbose_name=_('内容 (Markup)'),
+        help_text=_(' '),
     )
     categories = models.ManyToManyField(
         Category,
-        verbose_name=_(u'分类'),
-        help_text=_(u' '),
+        verbose_name=_('分类'),
+        help_text=_(' '),
         blank=True
     )
     date_publish = models.DateTimeField(
-        verbose_name=_(u'发布日期'),
-        help_text=_(u' ')
+        verbose_name=_('发布日期'),
+        help_text=_(' ')
     )
     is_public = models.BooleanField(
-        verbose_name=_(u'公开博客'),
+        verbose_name=_('公开博客'),
         default=False
     )
     is_approved = models.BooleanField(
-        verbose_name=_(u'通过审核'),
+        verbose_name=_('通过审核'),
         default=False
     )
     enable_comments = models.BooleanField(
-        verbose_name=_(u'允许评论'),
+        verbose_name=_('允许评论'),
         default=True
     )
 
@@ -160,9 +160,9 @@ class Article(models.Model):
         return reverse('blog:single_post', kwargs={'slug': self.slug})
 
     class Meta:
-        app_label = _(u'blog')
-        verbose_name = _(u'Article')
-        verbose_name_plural = _(u'Articles')
+        app_label = _('blog')
+        verbose_name = _('Article')
+        verbose_name_plural = _('Articles')
         ordering = ['-date_publish']
 
     def save(self, *args, **kwargs):
@@ -177,7 +177,7 @@ class Article(models.Model):
         super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
-        return u'%s' % (self.title,)
+        return '%s' % (self.title,)
 
 
 class ArticleForm(forms.ModelForm):
@@ -223,8 +223,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     token = models.IntegerField(default=0)
     avatar = models.ImageField(
-        verbose_name=_(u'本地头像图片'),
-        help_text=_(u'若留空, 则使用默认图片'),
+        verbose_name=_('本地头像图片'),
+        help_text=_('若留空, 则使用默认图片'),
         upload_to='avatars/%Y/%m/%d',
         null=True,
         blank=True
@@ -275,7 +275,7 @@ class ArticleModerator(CommentModerator):
             return
         recipient_list = [manager_tuple[1] for manager_tuple in settings.MANAGERS]
         site = get_current_site(request)
-        subject = u'[%s] New comment posted on "%s"' % (site.name, content_object)
+        subject = '[%s] New comment posted on "%s"' % (site.name, content_object)
         message = render_to_string(
             'comments/comment_notification_email.txt',
             {

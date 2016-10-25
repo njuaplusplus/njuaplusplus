@@ -37,7 +37,7 @@ def ip(request):
         'HTTP_VIA',
         'REMOTE_ADDR',
     )
-    result = ['%s\t%s' % (k,v) for k,v in request.META.items() if k in IPWARE_META_PRECEDENCE_ORDER]
+    result = ['%s\t%s' % (k,v) for k,v in list(request.META.items()) if k in IPWARE_META_PRECEDENCE_ORDER]
     return HttpResponse('\n'.join(result))
 
 
@@ -155,9 +155,9 @@ def category_view(request):
     categories = get_top_categories()
     category_urls = {}
     for c in categories:
-        category_urls[u'%s (%d)' % (c.title, c.article_set.count())] = reverse('blog:category_archive_view',
+        category_urls['%s (%d)' % (c.title, c.article_set.count())] = reverse('blog:category_archive_view',
                                                                                args=(c.slug,))
-    category_list = [[u'%s (%d)' % (c.title, c.article_set.count()), c.article_set.count() + 1] for c in categories]
+    category_list = [['%s (%d)' % (c.title, c.article_set.count()), c.article_set.count() + 1] for c in categories]
     return render(
         request,
         'blog/default/category.html',

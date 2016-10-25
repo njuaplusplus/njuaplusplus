@@ -13,18 +13,18 @@ from django.contrib.auth.models import User
 class Photo(models.Model):
     """Basic Photo Model"""
     title = models.CharField(
-        verbose_name=_(u'名称'),
-        help_text=_(u'不超过 255 个字符'),
+        verbose_name=_('名称'),
+        help_text=_('不超过 255 个字符'),
         max_length=255
     )
     width = models.IntegerField(
-        verbose_name=_(u'宽度'),
-        help_text=_(u'占用的栏数, 取值1-4'),
+        verbose_name=_('宽度'),
+        help_text=_('占用的栏数, 取值1-4'),
         default=1
     )
     xlarge_image = ProcessedImageField(
-        verbose_name=_(u'大图'),
-        help_text=_(u'长宽都要大于 2880'),
+        verbose_name=_('大图'),
+        help_text=_('长宽都要大于 2880'),
         upload_to='photos/images/%Y/%m/%d',
         processors=[ResizeToFit(2880, 65535, False)],
         format='JPEG',
@@ -45,11 +45,11 @@ class Photo(models.Model):
         processors=[ResizeToFit(512, 65535, False)],
         format='JPEG'
     )
-    uploader = models.ForeignKey(User, verbose_name=_(u'上传者'))
+    uploader = models.ForeignKey(User, verbose_name=_('上传者'))
     date_upload = models.DateTimeField(
-        verbose_name=_(u'上传日期'),
-        help_text=_(u' ')
+        verbose_name=_('上传日期'),
+        help_text=_(' ')
     )
 
     def __str__(self):
-        return u"t:%s w:%s" % (self.title, self.width)
+        return "t:%s w:%s" % (self.title, self.width)
