@@ -1,0 +1,59 @@
+{% extends 'blog/default/base.html' %}
+{% load answ_tags staticfiles %}
+
+{% block title %}
+    上传照片 | 博客 | 安好
+{% endblock %}
+
+{% block mainContent %}
+<div id="wrap">
+    <div class="container">
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-12">
+                <div id="container">
+                    <button type="button" id="pickfiles" class="btn btn-default btn-lg">
+                        <span class="glyphicon glyphicon-plus"></span> 选择文件
+                    </button>
+                </div>
+            </div>
+            <div style="display:none" id="success" class="col-md-12">
+                <div class="alert alert-success" role="alert">
+                    队列全部文件处理完毕
+                </div>
+            </div>
+            <input type="hidden" id="domain" value="{{ domain }}">
+            <input type="hidden" id="media-root" value="{{ media_root }}">
+            <input type="hidden" id="uptoken_url" value="{% url 'photos:get_token' %}">
+            <input type="hidden" id="uploader_username" value="{{ user.username }}">
+        </div>
+        <!-- /.row -->
+        <div id="fsUploadProgress"></div>
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#wrap -->
+<!-- Footer -->
+<footer>
+    <div class="container text-center">
+    <div class="row">
+        <div class="col-lg-12">
+            <p class="text-muted">Copyright &copy; answ.me</p>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    </div>
+</footer>
+{% endblock mainContent %}
+
+{% block extScriptFile %}
+{#    <script src="http://cdn.staticfile.org/plupload/2.1.9/plupload.full.min.js"></script>#}
+    <script src="http://cdn.staticfile.org/plupload/2.1.9/moxie.js"></script>
+    <script src="http://cdn.staticfile.org/plupload/2.1.9/plupload.dev.js"></script>
+    <script src="http://cdn.staticfile.org/plupload/2.1.9/i18n/zh_CN.js"></script>
+    <script src="http://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.js"></script>
+    <script src="{% static 'photos/js/file_progress.js' %}?ver=1.0.0.6"></script>
+    <script src="{% static 'photos/js/upload.js' %}?ver=1.0.0.12"></script>
+{% endblock %}
+

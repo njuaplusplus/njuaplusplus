@@ -3,10 +3,10 @@
 
 {% block title %}
 修改信息:
-{% if author.first_name or author.last_name %}
-    {{ author.last_name|add_str:author.first_name|truncatechars:9  }}
+{% if user.first_name or user.last_name %}
+    {{ user.last_name|add_str:user.first_name|truncatechars:9  }}
 {% else %}
-    {{ author.username|truncatechars:9 }}
+    {{ user.username|truncatechars:9 }}
 {% endif %}
 | 博客 | 安好
 {% endblock %}

@@ -57,51 +57,51 @@
                         {% if photo.width == 1 %}
                         <div class="masonry-brick w1">
                             <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
-                                <img src="{{ photo.small_image.url }}" alt="{{ photo.title }}">
+                                <img src="{{ qiniu_domain }}{{ photo.small_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% elif photo.width == 2 %}
                         <div class="masonry-brick w2">
                             <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
-                            <img src="{{ photo.medium_image.url }}" alt="{{ photo.title }}">
+                            <img src="{{ qiniu_domain }}{{ photo.large_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% elif photo.width == 3 %}
                         <div class="masonry-brick w3">
                             <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
-                            <img src="{{ photo.large_image.url }}" alt="{{ photo.title }}">
+                            <img src="{{ qiniu_domain }}{{ photo.large_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% else %}
                         <div class="masonry-brick w4">
                             <a data-tooltip aria-haspopup="true" class="has-tip" title="{{ photo.title }}">
-                            <img src="{{ photo.xlarge_image.url }}" alt="{{ photo.title }}">
+                            <img src="{{ qiniu_domain }}{{ photo.large_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% endif %}
                     {% else %}
                         {% if photo.width == 1 %}
                         <div class="masonry-brick w1">
-                            <a class="fancybox" href="{{ photo.xlarge_image.url }}" data-fancybox-group="gallery" title="{{ photo.title }}">
-                            <img src="{{ photo.small_image.url }}" alt="{{ photo.title }}">
+                            <a class="fancybox" href="{{ qiniu_domain }}{{ photo.large_image}}" data-fancybox-group="gallery" title="{{ photo.title }}">
+                            <img src="{{ qiniu_domain }}{{ photo.small_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% elif photo.width == 2 %}
                         <div class="masonry-brick w2">
-                            <a class="fancybox" href="{{ photo.xlarge_image.url }}" data-fancybox-group="gallery" title="{{ photo.title }}">
-                            <img src="{{ photo.medium_image.url }}" alt="{{ photo.title }}">
+                            <a class="fancybox" href="{{ qiniu_domain }}{{ photo.large_image}}" data-fancybox-group="gallery" title="{{ photo.title }}">
+                            <img src="{{ qiniu_domain }}{{ photo.large_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% elif photo.width == 3 %}
                         <div class="masonry-brick w3">
-                            <a class="fancybox" href="{{ photo.xlarge_image.url }}" data-fancybox-group="gallery" title="{{ photo.title }}">
+                            <a class="fancybox" href="{{ qiniu_domain }}{{ photo.large_image}}" data-fancybox-group="gallery" title="{{ photo.title }}">
                             <img src="{{ photo.large_image.url }}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% else %}
                         <div class="masonry-brick w4">
-                            <a class="fancybox" href="{{ photo.xlarge_image.url }}" data-fancybox-group="gallery" title="{{ photo.title }}">
-                            <img src="{{ photo.xlarge_image.url }}" alt="{{ photo.title }}">
+                            <a class="fancybox" href="{{ qiniu_domain }}{{ photo.large_image}}" data-fancybox-group="gallery" title="{{ photo.title }}">
+                            <img src="{{ qiniu_domain }}{{ photo.large_image}}" alt="{{ photo.title }}">
                             </a>
                         </div>
                         {% endif %}
