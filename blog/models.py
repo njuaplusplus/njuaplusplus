@@ -265,6 +265,25 @@ class ArticleModerator(CommentModerator):
     email_notification = True
     enable_field = 'enable_comments'
 
+    def allow(self, comment, content_object, request):
+        if comment.ip_address == "b''":
+            IPWARE_META_PRECEDENCE_ORDER = (
+                'HTTP_X_FORWARDED_FOR', 'X_FORWARDED_FOR',  # client, proxy1, proxy2
+                'HTTP_CLIENT_IP',
+                'HTTP_X_REAL_IP',
+                'HTTP_X_FORWARDED',
+                'HTTP_X_CLUSTER_CLIENT_IP',
+                'HTTP_FORWARDED_FOR',
+                'HTTP_FORWARDED',
+                'HTTP_VIA',
+                'REMOTE_ADDR',
+            )
+            result = ['%s\t%s' % (k, v) for k, v in list(request.META.items()) if k in IPWARE_META_PRECEDENCE_ORDER]
+            print('Strange Comment IP:', result)
+            return False
+        else:
+            return super(ArticleModerator, self).allow(comment, content_object, request)
+
     def email(self, comment, content_object, request):
         """
         Send email notification of a new comment to site staff when email
