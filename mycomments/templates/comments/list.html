@@ -37,7 +37,7 @@
     <div class="media">
         <a class="pull-left" href="#">
             {% if comment.user and comment.user.profile.avatar %}
-                <img class="media-object" src="{{ comment.user.profile.avatar.url }}" alt="">
+                <img class="media-object" src="{{ comment.user.profile.avatar.url }}-64x64" alt="">
             {% else %}
             <img class="media-object" src="{% static 'blog/img/placeholder_64x64.png' %}" alt="">
             {% endif %}
