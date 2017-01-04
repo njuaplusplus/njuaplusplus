@@ -48,13 +48,14 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class MyImageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'image')
+    list_display = ('title', 'user', 'origin_image', )
     search_fields = ('title', 'user', )
     fieldsets = (
         (
             None,
             {
-                'fields': ('title', 'user', 'image', 'is_public', 'description', 'date_upload', )
+                'fields': ('title', 'user', 'origin_image', 'large_image', 'small_image',
+                           'is_public', 'description', 'date_upload', )
             }
         ),
     )

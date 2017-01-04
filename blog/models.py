@@ -68,6 +68,23 @@ class MyImage(models.Model):
         verbose_name=_('图片'),
         help_text=_(' '),
         upload_to='blogs/images/%Y/%m/%d',
+        null=True,
+        blank=True
+    )
+    origin_image = models.CharField(
+        verbose_name=_('原图的七牛key'),
+        help_text=_('不超过 255 个字符'),
+        max_length=255
+    )
+    large_image = models.CharField(
+        verbose_name=_('1024x的七牛key'),
+        help_text=_('不超过 255 个字符'),
+        max_length=255
+    )
+    small_image = models.CharField(
+        verbose_name=_('256x的七牛key'),
+        help_text=_('不超过 255 个字符'),
+        max_length=255
     )
     title = models.CharField(
         verbose_name=_('标题'),
@@ -203,10 +220,11 @@ class MyImageForm(forms.ModelForm):
     class Meta:
         model = MyImage
         widgets = {
+            'origin_image': forms.HiddenInput(),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
-        exclude = ['user', 'date_upload', ]
+        fields = ['origin_image', 'title', 'description', 'is_public', ]
 
 
 class CategoryForm(forms.ModelForm):

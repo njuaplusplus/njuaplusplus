@@ -25,5 +25,7 @@ urlpatterns = [
     url(r'^upload-image/ajax/$', views.upload_image_ajax, name='upload_image_ajax'),
     url(r'^add-category/ajax/$', views.add_category_ajax, name='add_category_ajax'),
     url(r'^user-profile/$', views.user_profile_view, name='user_profile_view'),
+    url(r'^get-image-token/$', views.get_image_token, name='get_image_token'),
+    url(r'^search-image/$', views.search_image, name='search_image'),
     # url(r'^ip/$', views.ip),
 ]

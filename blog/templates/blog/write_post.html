@@ -38,7 +38,7 @@
     <link href='http://fonts.useso.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     -->
-    <link href="{% static 'blog/css/my-blog.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/css/my-blog.css' %}?ver=201701041442" rel="stylesheet">
     <!-- select 2 -->
     <link href="{% static 'select2/css/select2.css' %}" rel="stylesheet">
     <link href="{% static 'select2/css/select2-bootstrap.css' %}" rel="stylesheet">
@@ -166,6 +166,10 @@
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body hidden">
+                                <div id="div_file" class="form-group">
+                                    <label for="id_file">图片:</label>
+                                    <input id="id_file" name="file" type="file">
+                                </div>
                                 {% for field in my_image_form.visible_fields %}
                                 <div id="div_{{ field.html_name }}"
                                     class="form-group{% if field.errors %} has-error{% endif %}">
@@ -184,6 +188,8 @@
                                 {% for hidden in my_image_form.hidden_fields %}
                                     {{ hidden }}
                                 {% endfor %}
+                                <input type="hidden" id="qiniu_domain" value="{{ qiniu_domain }}">
+                                <input type="hidden" id="uptoken_url" value="{% url 'blog:get_image_token' %}">
                             </div>
                             <!-- /.panel-body -->
                             <div class="panel-footer hidden">
@@ -194,10 +200,38 @@
                         <!-- /.panel -->
                     </form>
                     <!-- /form -->
+                    <form id="search-image-form" role="form" method="GET" data-ajax-action="{% url 'blog:search_image' %}">
+                        <div class="panel panel-default my-panel-can-close my-panel-closed">
+                            <div class="panel-heading">
+                                搜索已有图片
+                                <span class="glyphicon glyphicon-menu-down pull-right my-menu-open" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-menu-up pull-right my-menu-close hidden" aria-hidden="true"></span>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body hidden">
+                                <div id="div_search_image" class="form-group">
+                                    <label for="id_search_image">关键字:</label>
+                                    <input class="form-control" id="id_search_image" name="queryString" type="text">
+                                </div>
+                            </div>
+                            <!-- /.panel-body -->
+                            <div class="panel-footer hidden">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                            </div>
+                            <!-- /.panel-footer -->
+                        </div>
+                        <!-- /.panel -->
+                    </form>
+                    <!-- /form -->
+                    <div id="search-image-result">
+                    </div>
                     <div id="wrap-my-images">
+                        <h4>最近上传</h4>
                         {% for image in my_images %}
-                            <img class="img-responsive insert_my_image hcenter" src="{{ image.image.url }}"
-                                 alt="{{ image.title }}" title="{{ image.title }}">
+                            <img class="img-responsive insert_my_image hcenter" src="{{ qiniu_domain }}{{ image.small_image }}"
+                                 alt="{{ image.title }}" title="{{ image.title }}"
+                                 data-origin-image="{{ qiniu_domain }}{{ image.origin_image }}"
+                                 data-large-image="{{ qiniu_domain }}{{ image.large_image }}">
                         {% endfor %}
                     </div>
                 </div>
@@ -223,7 +257,7 @@
         <!-- Select2 JavaScript -->
         <script src="{% static 'select2/js/select2.js' %}"></script>
         <script src="{% static 'select2/js/i18n/zh-CN.js' %}"></script>
-        <script src="{% static 'blog/js/write-post.js' %}"></script>
+        <script src="{% static 'blog/js/write-post.js' %}?ver=201701041512"></script>
 
         {% block extScriptFile %}{% endblock %}
         <script type="text/javascript">

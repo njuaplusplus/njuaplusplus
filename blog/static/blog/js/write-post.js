@@ -4,6 +4,7 @@
 jQuery(function ($) {
     var active_input = '';
     var preview_tab = '';
+    var qiniu_domain = $('#qiniu_domain').val();
 
      $.fn.ready(function() {
          $('body').on('click', 'img.insert_my_image', insert_my_image);
@@ -21,6 +22,10 @@ jQuery(function ($) {
          var $add_category_form = $('#add-category-form');
          if ($add_category_form.length > 0) {
              $add_category_form.submit(on_add_category_form_submit);
+         }
+         var $search_image_form = $('#search-image-form');
+         if ($search_image_form.length > 0) {
+             $search_image_form.submit(on_search_image_form_submit);
          }
 
          $('.my-panel-can-close .panel-heading').click(panel_open_or_close);
@@ -83,7 +88,7 @@ jQuery(function ($) {
                     console.error(response);
                 }
 
-                alert("Internal CMS error: failed to post comment data!");    // can't yet rely on $.ajaxError
+                alert("Internal CMS error: failed to post blog data!");    // can't yet rely on $.ajaxError
 
                 // Submit as non-ajax instead
                 //$form.unbind('submit').submit();
@@ -124,7 +129,7 @@ jQuery(function ($) {
     
     function insert_my_image() {
         var $this = $(this);
-        var text = '![' + $this.attr('alt') + '](' + $this.attr('src') + ' "' + $this.attr('title') +'")';
+        var text = '![' + $this.attr('alt') + '](' + $this.data('large-image') + ' "' + $this.attr('title') +'")';
         insert_text($('#id_content_markdown'), text);
     }
     
@@ -141,15 +146,91 @@ jQuery(function ($) {
         upload_image(event.target);
         return false;
     }
-    
+
+    function get_image_token(uptoken_url) {
+        var uptoken = '';
+        $.ajax({
+            url: uptoken_url,
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                uptoken = data.uptoken;
+            }
+        });
+        return uptoken;
+    }
+
     function upload_image(form) {
-        if (form.preview_busy) {
+        if (form.upload_busy) {
             return false;
         }
 
-        form.preview_busy = true;
+        form.upload_busy = true;
         var $form = $(form);
-        var my_image = new FormData($form[0]);
+        var file_field = $("#id_file")[0]
+        if (file_field.files.length < 1) {
+            form.upload_busy = false;
+            return false;
+        }
+        var file = file_field.files[0];
+
+        var ajaxurl = "http://upload.qiniu.com";
+        var uptoken_url = $('#uptoken_url').val();
+        var token = get_image_token(uptoken_url);
+
+        if (token == '') {
+            form.upload_busy = false;
+            return false;
+        }
+
+        var filename = file.name.substring(0, file.name.lastIndexOf('.')).toLowerCase();
+        var file_suffix = file.name.substring(file.name.lastIndexOf('.')+1).toLowerCase();
+        var formData = new FormData();
+        formData.append('token', token);
+        formData.append('file', file);
+        formData.append('x:filename', filename);
+        formData.append('x:file_suffix', file_suffix);
+
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                remove_errors($form);
+                if (data['key']) {
+                    $('#id_origin_image').val(data['key']);
+                    save_my_image($form);
+
+                } else{
+                    var $closet_form_group = $("#id_file").closest('.form-group');
+                    $closet_form_group.append(
+                        '<div class="help-block">' + data['error'] + '</div>'
+                    );
+                    $closet_form_group.addClass('has-error');
+                }
+            },
+            error: function(xhr) {
+                form.upload_busy = false;
+
+                var response = xhr.responseText;
+                if(response && window.console && response.indexOf('DJANGO_SETTINGS_MODULE') != -1) {
+                    console.error(response);
+                }
+
+                alert("Internal CMS error: failed to upload image to qiniu!");    // can't yet rely on $.ajaxError
+            }
+        })
+
+    }
+    
+    function save_my_image($form) {
+
+        var form = $form[0]
+        var my_image = new FormData(form);
+        my_image.delete('file');
         var ajaxurl = $form.data('ajax-action');
 
         $.ajax({
@@ -160,7 +241,7 @@ jQuery(function ($) {
             processData: false,
             contentType: false,
             success: function(data) {
-                form.preview_busy = false;
+                form.upload_busy = false;
                 remove_errors($form);
                 
                 if (data['success']) {
@@ -170,14 +251,14 @@ jQuery(function ($) {
                 }
             },
             error: function(xhr) {
-                form.preview_busy = false;
+                form.upload_busy = false;
 
                 var response = xhr.responseText;
                 if(response && window.console && response.indexOf('DJANGO_SETTINGS_MODULE') != -1) {
                     console.error(response);
                 }
 
-                alert("Internal CMS error: failed to post comment data!");    // can't yet rely on $.ajaxError
+                alert("Internal CMS error: failed to save image data!");    // can't yet rely on $.ajaxError
 
                 // Submit as non-ajax instead
                 //$form.unbind('submit').submit();
@@ -186,7 +267,8 @@ jQuery(function ($) {
     }
 
     function reset_upload_image_form($form) {
-        $($form[0].elements['image']).val('');
+        $($form[0].elements['file']).val('');
+        $($form[0].elements['origin_image']).val('');
         $($form[0].elements['title']).val('');
         $($form[0].elements['description']).val('');
         $($form[0].elements['is_public']).prop('checked', false);
@@ -195,8 +277,10 @@ jQuery(function ($) {
     function upload_image_success($form, data) {
         reset_upload_image_form($form);
         var $wrap_my_images = $('#wrap-my-images');
-        $wrap_my_images.prepend('<img class="img-responsive insert_my_image hcenter" src="' +
-            data['image_url'] + '" alt="' + data['image_title'] + '" title="' +  data['image_title'] +'">');
+        $wrap_my_images.prepend('<img class="img-responsive insert_my_image hcenter" src="' + qiniu_domain +
+            data['small_image_url'] + '" alt="' + data['image_title'] + '" title="' +  data['image_title'] +
+            '" data-origin-image="' + qiniu_domain + data['origin_image_url'] +
+            '" data-large-image="' + qiniu_domain + data['large_image_url']  + '">');
     }
 
     function upload_image_failure(data) {
@@ -256,7 +340,7 @@ jQuery(function ($) {
                     console.error(response);
                 }
 
-                alert("Internal CMS error: failed to post comment data!");    // can't yet rely on $.ajaxError
+                alert("Internal CMS error: failed to add category data!");    // can't yet rely on $.ajaxError
 
                 // Submit as non-ajax instead
                 //$form.unbind('submit').submit();
@@ -296,6 +380,59 @@ jQuery(function ($) {
     function reset_add_category_form($form) {
         $($form[0].elements['title']).val('');
         $($form[0].elements['slug']).val('');
+    }
+
+    function on_search_image_form_submit(event) {
+        event.preventDefault();
+        search_image(event.target);
+        return false;
+    }
+
+    function search_image(form) {
+        if (form.search_busy) {
+            return false;
+        }
+
+        form.search_busy = true;
+        var $form = $(form);
+        var data = $form.serialize();
+        var ajaxurl = $form.data('ajax-action');
+
+        $.ajax({
+            type: 'GET',
+            url: ajaxurl,
+            data: data,
+            dataType: 'json',
+            success: function(data) {
+                form.search_busy = false;
+                remove_errors($form);
+                var $search_image_result = $('#search-image-result');
+                if (data['success'] && data['images'] && data['images'].length > 0) {
+                    $search_image_result.html('<h4>搜索结果</h4>');
+                    var images = data['images'];
+                    for (var i = 0; i< images.length; i++) {
+                        $search_image_result.append('<img class="img-responsive insert_my_image hcenter" src="' + qiniu_domain +
+                            images[i]['small_image_url'] + '" alt="' + images[i]['image_title'] + '" title="' +  images[i]['image_title'] +
+                            '" data-origin-image="' + qiniu_domain + images[i]['origin_image_url'] +
+                            '" data-large-image="' + qiniu_domain + images[i]['large_image_url']  + '">');
+                    }
+
+                } else {
+                    $search_image_result.html('<h4>没有找到相关图片</h4>');
+                }
+                $search_image_result.append('<hr>');
+            },
+            error: function(xhr) {
+                form.search_busy = false;
+
+                var response = xhr.responseText;
+                if(response && window.console && response.indexOf('DJANGO_SETTINGS_MODULE') != -1) {
+                    console.error(response);
+                }
+
+                alert("Internal CMS error: failed to search images!");    // can't yet rely on $.ajaxError
+            }
+        });
     }
     
 });

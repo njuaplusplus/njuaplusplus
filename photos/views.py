@@ -72,7 +72,7 @@ def upload_photo(request):
         }
     )
 
-
+@login_required
 def get_token(request):
     fops = (
         (
@@ -89,7 +89,6 @@ def get_token(request):
     )
     print(persistent_ops)
     policy = {
-        # 'saveKey':             settings.MEDIA_ROOT + datetime.date.today().strftime('/photos/images/%Y/%m/%d/$(fname)'),
         'persistentOps':       persistent_ops,
         'persistentPipeline':  'mytest',
         'persistentNotifyUrl': settings.QINIU_CALLBACK_DOMAIN + 'photos/callback/',

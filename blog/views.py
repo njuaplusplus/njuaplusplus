@@ -24,6 +24,13 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from qiniu import Auth, urlsafe_base64_encode
+
+QINIU_ACCESS_KEY = settings.QINIU_ACCESS_KEY
+QINIU_SECRET_KEY = settings.QINIU_SECRET_KEY
+QINIU_BUCKET_NAME = settings.QINIU_BUCKET_NAME
+QINIU_BUCKET_DOMAIN = settings.QINIU_BUCKET_DOMAIN.rstrip('/')
+
 
 def ip(request):
     IPWARE_META_PRECEDENCE_ORDER = (
@@ -255,14 +262,15 @@ def write_post_view(request):
         if request.user.is_superuser:
             my_images = MyImage.objects.all()[:3]
         else:
-            my_images = [ x for x in MyImage.objects.all() if x.user == request.user or x.is_public][:3]
+            my_images = [x for x in MyImage.objects.all() if x.user == request.user or x.is_public][:3]
         return render(
             request,
             'blog/write_post.html',
             {
-                'article_form': article_form,
-                'my_images': my_images,
-                'my_image_form': my_image_form,
+                'article_form':      article_form,
+                'qiniu_domain':      'http://%s/' % QINIU_BUCKET_DOMAIN,
+                'my_images':         my_images,
+                'my_image_form':     my_image_form,
                 'add_category_form': add_category_form,
              }
         )
@@ -315,6 +323,10 @@ def upload_image_ajax(request):
     my_image_form = MyImageForm(request.POST, request.FILES)
     if my_image_form.is_valid():
         my_image = my_image_form.save(commit=False)
+        file_key, file_suffix = my_image.origin_image.rsplit('.', 1)
+        file_key = '/CACHE/'.join(file_key.split('/', 1))
+        my_image.large_image = '%s-1024x.%s' % (file_key, file_suffix)
+        my_image.small_image = '%s-256x.%s' % (file_key, file_suffix)
         my_image.user = request.user
         my_image.date_upload = timezone.now()
         my_image.save()
@@ -353,7 +365,9 @@ def _ajax_result(request, form, image=None, category=None):
 
     if image is not None:
         json_return.update({
-            'image_url': image.image.url,
+            'origin_image_url': image.origin_image,
+            'large_image_url': image.large_image,
+            'small_image_url': image.small_image,
             'image_title': image.title,
         })
 
@@ -381,14 +395,21 @@ def edit_post_view(request, post_id):
     else:
         article_form = ArticleForm(instance=article)
         my_image_form = MyImageForm()
+        add_category_form = CategoryForm()
+        if request.user.is_superuser:
+            my_images = MyImage.objects.all()[:3]
+        else:
+            my_images = [x for x in MyImage.objects.all() if x.user == request.user or x.is_public][:3]
     return render(
         request,
         'blog/write_post.html',
         {
-            'article_form': article_form,
-            'article_id': post_id,
-            'my_images': MyImage.objects.all(),
-            'my_image_form': my_image_form,
+            'article_form':      article_form,
+            'article_id':        post_id,
+            'qiniu_domain':      'http://%s/' % QINIU_BUCKET_DOMAIN,
+            'my_images':         my_images,
+            'my_image_form':     my_image_form,
+            'add_category_form': add_category_form,
         }
     )
 
@@ -517,5 +538,64 @@ def user_profile_view(request):
         {
             'user_form':    user_form,
             'profile_form': profile_form,
+        }
+    )
+
+
+@login_required
+def search_image(request):
+    if not request.is_ajax():
+        return HttpResponseBadRequest('Expecting Ajax call')
+
+    query_string = request.GET.get('queryString', '')
+    found_images = None
+    if query_string:
+        image_query = get_query(query_string, ['title', 'description'])
+        found_images = MyImage.objects.filter(image_query)
+
+    result = {}
+    if found_images:
+        result['success'] = True
+        result['images'] = [
+            {
+                'image_title': x.title,
+                'origin_image_url': x.origin_image,
+                'large_image_url': x.large_image,
+                'small_image_url': x.small_image,
+            }
+            for x in found_images if x.user == request.user or x.is_public]
+    else:
+        result['status'] = False
+
+    return JsonResponse(result)
+
+
+@login_required
+def get_image_token(request):
+    fops = (
+        (
+            'imageView2/2/w/1024|saveas/',
+            '/CACHE/blog/images/%s/$(x:filename)-1024x.$(x:file_suffix)' % (request.user.username, )
+        ),
+        (
+            'imageView2/2/w/256|saveas/',
+            '/CACHE/blog/images/%s/$(x:filename)-256x.$(x:file_suffix)' % (request.user.username, )
+        ),
+    )
+    persistent_ops = ';'.join(
+        (x[0] + urlsafe_base64_encode('%s:%s%s' % (QINIU_BUCKET_NAME, settings.MEDIA_ROOT, x[1])) for x in fops)
+    )
+    policy = {
+        'saveKey': '%s/blog/images/%s/$(x:filename).$(x:file_suffix)' % (settings.MEDIA_ROOT, request.user.username),
+        'persistentOps':       persistent_ops,
+        'persistentPipeline':  'mytest',
+        'mimeLimit':           'image/*',
+
+    }
+    qiniu_auth = Auth(QINIU_ACCESS_KEY, QINIU_SECRET_KEY)
+    upload_token = qiniu_auth.upload_token(QINIU_BUCKET_NAME, policy=policy)
+    return JsonResponse(
+        {
+            'uptoken': upload_token,
         }
     )
