@@ -572,21 +572,23 @@ def search_image(request):
 
 @login_required
 def get_image_token(request):
+    date_str = datetime.date.today().strftime('%Y/%m/%d')
     fops = (
         (
             'imageView2/2/w/1024|saveas/',
-            '/CACHE/blog/images/%s/$(x:filename)-1024x.$(x:file_suffix)' % (request.user.username, )
+            '/CACHE/blog/images/%s/$(x:filename)-1024x.$(x:file_suffix)' % (date_str, )
         ),
         (
             'imageView2/2/w/256|saveas/',
-            '/CACHE/blog/images/%s/$(x:filename)-256x.$(x:file_suffix)' % (request.user.username, )
+            '/CACHE/blog/images/%s/$(x:filename)-256x.$(x:file_suffix)' % (date_str, )
         ),
     )
     persistent_ops = ';'.join(
         (x[0] + urlsafe_base64_encode('%s:%s%s' % (QINIU_BUCKET_NAME, settings.MEDIA_ROOT, x[1])) for x in fops)
     )
     policy = {
-        'saveKey': '%s/blog/images/%s/$(x:filename).$(x:file_suffix)' % (settings.MEDIA_ROOT, request.user.username),
+        'saveKey': '%s/blog/images/%s/$(x:filename).$(x:file_suffix)' % (
+                        settings.MEDIA_ROOT, date_str),
         'persistentOps':       persistent_ops,
         'persistentPipeline':  'mytest',
         'mimeLimit':           'image/*',
