@@ -51,12 +51,13 @@ article img {
 }
 
 .codehilitetable {
-    font: 12px/20px "Source Code Pro",monospace;
+    font: 12px/20px "Source Code Pro",Menlo,Monaco,Consolas,"Courier New",monospace;
     overflow-x: auto;
     display: block;
     border-left: 3px solid #FF8000;
     border-radius: 2px;
     padding: .8em 0;
+    margin-bottom: 10px;
 }
 
 .codehilitetable tbody tr {
