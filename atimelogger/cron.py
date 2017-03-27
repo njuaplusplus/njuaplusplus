@@ -66,7 +66,6 @@ def update_types(profile=None):
         res = requests.get(url, params=params, headers={'Authorization': 'bearer ' + profile.access_token})
         if res.status_code == 200:
             res = res.json()
-            print(res)
             for t in res['types']:
                 ActivityType.objects.update_or_create(
                     {
