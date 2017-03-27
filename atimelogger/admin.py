@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import ATimeLoggerProfile, ActivityType, Interval
 
-# Register your models here.
+
+admin.site.register(ATimeLoggerProfile)
+admin.site.register(ActivityType)
+admin.site.register(Interval)

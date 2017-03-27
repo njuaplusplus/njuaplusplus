@@ -5,12 +5,29 @@
 {% block title %} 首页 | 博客 | 安好 {% endblock %}
 
 {% block blogColumn %}
-    <ul>
-    {% for interval in intervals %}
-        <li>
-            {{ interval.start }} - {{ interval.end }} : {{ interval.type.name }}
-        </li>
+    <h1 class="page-header">
+        今天做了什么
+        <small>每5分钟更新</small>
+    </h1>
+    {% for atime_user, intervals in user_with_intervals %}
+        <h3>
+            {% if atime_user.first_name or atime_user.last_name %}
+            {{ atime_user.last_name|add_str:atime_user.first_name|truncatechars:9  }}
+            {% else %}
+            {{ atime_user.username|truncatechars:9 }}
+            {% endif %}
+        </h3>
+        {% if intervals %}
+            <ul>
+                {% for interval in intervals %}
+                <li>
+                    {{ interval.start_time }} - {{ interval.end_time }} : {{ interval.type.name }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>还没有记录什么。。</p>
+        {% endif %}
     {% endfor %}
-    </ul>
 
 {% endblock blogColumn %}

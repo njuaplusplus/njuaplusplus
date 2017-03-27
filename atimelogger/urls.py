@@ -6,5 +6,5 @@ from django.conf.urls import url
 from atimelogger import views
 
 urlpatterns = [
-    url(r'^intervals/$', views.intervals, name="intervals"),
+    url(r'^intervals/$', views.intervals_view, name="intervals_view"),
 ]
