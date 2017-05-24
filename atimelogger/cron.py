@@ -98,6 +98,10 @@ def get_or_refresh_token(profile=None):
         else:  # refresh the token
             url = BASE_URL + '/oauth/token?refresh_token=%s&grant_type=refresh_token' % profile.refresh_token
         res = requests.post(url, auth=(client_id, client_secret))
+        if res.status_code == 400:
+            # refresh token has expired
+            url = BASE_URL + '/oauth/token?username=%s&password=%s&grant_type=password' % (profile.username, profile.password)
+            res = requests.post(url, auth=(client_id, client_secret))
         if res.status_code == 200:
             res = res.json()
             profile.access_token = res['access_token']
